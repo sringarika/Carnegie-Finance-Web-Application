@@ -5,13 +5,25 @@
 <%@ include file="header.jsp" %>
   <main>
     <h2>Change Password</h2>
-    <p>
-      <span class="label label-primary">TODO</span>
-      Logged in customers can change their own passwords.
-    </p>
-    <p>
-      <span class="label label-primary">TODO</span>
-      Logged-in employees can change their own passwords.
-    </p>
+	<form action="pwdChangeSuccess.jsp" method="POST">
+      <div class="form-group">
+        <label for="password">Current Password</label>
+        <input type="password" class="form-control" id="pPassword" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="password">New Password</label>
+        <input type="password" class="form-control" id="password" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="password">Confirm New Password</label>
+        <input type="password" class="form-control" id="password" placeholder="">
+      </div>
+      <button type="submit" class="btn btn-default">Change Password</button>
+    </form>
+    <c:if test="${(!empty error)}">
+      <div class="alert alert-danger">
+        ${fn:escapeXml(error)}
+      </div>
+    </c:if>
   </main>
 <%@ include file="footer.jsp" %>
