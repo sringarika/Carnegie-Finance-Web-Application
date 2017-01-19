@@ -5,13 +5,25 @@
 <%@ include file="header.jsp" %>
   <main>
     <h2>Request Check</h2>
-    <p>
-      <span class="label label-primary">TODO</span>
-Logged-in customers can withdraw money from their cash
-balances by requesting a check. You must check to ensure that this transaction
-(plus other pending check requests and buy orders) will not cause the cash
-balance to go negative. If there are no errors, the check request is queued as a
-pending transaction
-    </p>
+
+    <table class="table">
+    <thead>
+      <tr class="table-light-grey">
+        <th>Cash Balance</th>
+        <th>Available Cash</th>
+      </tr>
+    </thead>
+    <tr>
+      <td>$1,000,000</td>
+      <td>$666,000</td>
+    </tr>
+    </table>
+    <div class="form-group">
+        <label for="amount">Amount to withdraw (in dollars)</label>
+        <div class="input-group">
+        <div class="input-group-addon">$</div>
+        <input type="number" class="form-control" id="amount" name="amount" placeholder="12.34" step="0.01" min="0.01" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Request</button>
   </main>
 <%@ include file="footer.jsp" %>
