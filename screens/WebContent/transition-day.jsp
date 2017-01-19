@@ -5,6 +5,10 @@
 <%@ include file="header.jsp" %>
   <main>
     <h2>Transition Day</h2>
+    <p class="alert alert-info">
+      There are <a href="transaction-list.jsp">42 transactions</a> pending.
+      <a href="transaction-list.jsp">Show details...</a>
+    </p>
     <p>
       <span class="label label-primary">TODO</span>
       To simulate trading days, a logged-in employee “transitions

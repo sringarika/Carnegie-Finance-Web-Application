@@ -47,17 +47,8 @@
               <li><a href="sell.jsp">Sell</a></li>
               <li><a href="request-check.jsp">Request Check</a></li>
               <li><a href="transaction-history.jsp">Transaction History</a></li>
+              <li><a href="research-fund.jsp">Research Funds</a></li>
             </ul>
-            <form class="navbar-form navbar-left" action="research-fund.jsp" method="POST">
-              <div class="form-group">
-                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Fund name/symbol...">
-                  <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit">Research</button>
-                  </span>
-                </div><!-- /input-group -->
-              </div>
-            </form>
             
             <ul class="nav navbar-nav navbar-right">
               <li class="dropdown">
@@ -83,17 +74,8 @@
               <li><a href="deposit-check.jsp">Deposit Check</a></li>
               <li><a href="create-fund.jsp">Create Fund</a></li>
               <li><a href="transition-day.jsp">Transition Day</a></li>
+              <li><a href="customer-list.jsp">Customers</a></li>
             </ul>
-            <form class="navbar-form navbar-left" action="view-customer.jsp" method="POST">
-              <div class="form-group">
-                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Customer username...">
-                  <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit">Search</button>
-                  </span>
-                </div><!-- /input-group -->
-              </div>
-            </form>
             
             <ul class="nav navbar-nav navbar-right">
               <li class="dropdown">
