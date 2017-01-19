@@ -5,14 +5,22 @@
 <%@ include file="header.jsp" %>
   <main>
     <h2>Sell Funds</h2>
-    <p>
-      <span class="label label-primary">TODO</span>
-Logged-in customers can sell shares of a mutual fund they own. The
-customer specifies the fund and the number of shares to sell. You must check to
-ensure that this transaction (plus other pending sell orders) will not cause the
-share balance to go negative for the customer’s position in this fund. If there are
-no errors, the sell order is queued as a pending transaction. Proceeds from the
-sale go into the selling customer's cash balance when the transaction is processed. 
-    </p>
+    <form action="account.jsp" method="POST">
+      <div class="form-group">
+        <label for="fundId">Fund</label>
+        <select class="form-control" id="fundId" name="fundId" required>
+          <option value="1">EBIZC - ebConsultants Fund</option>
+          <option value="2">CMUMC - CMU Math Club Fund</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="shares">Shares</label>
+        <input type="number" class="form-control" id="shares" name="shares" placeholder="12.345" step="0.001" min="0.001" required>
+      </div>
+      <div class="alert alert-info" role="alert">
+        The transaction will be processed on the end of the trading day. The cash amount depends on the closing price of the fund at that time.
+      </div>
+      <button type="submit" class="btn btn-primary">Sell</button>
+    </form>
   </main>
 <%@ include file="footer.jsp" %>

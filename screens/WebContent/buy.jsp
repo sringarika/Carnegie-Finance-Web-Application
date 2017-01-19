@@ -5,19 +5,25 @@
 <%@ include file="header.jsp" %>
   <main>
     <h2>Buy Funds</h2>
-    <p>
-      <span class="label label-primary">TODO</span>
-      Logged-in customers can buy shares a mutual fund. These funds are
-created by employees. Customers can buy shares in funds they do not already own
-as well as additional shares in a fund they already own. The customer specifies
-the fund he wishes to purchase and the dollar amount. The number of shares
-purchased depends on the closing price of the fund that night. The money used to
-buy the shares comes out of the buying customer's cash balance when the
-transaction is processed. (Cash is created when an employee deposits into a
-customer's account.) You must ensure that this transaction (plus other pending
-buy orders and check requests) will not cause the cash balance to go negative. If
-there are no errors, the buy order is queued as a pending transaction. (See the
-“Transition Day” use case for details on the processing of pending transactions.) 
-    </p>
+    <form action="account.jsp" method="POST">
+      <div class="form-group">
+        <label for="fundId">Fund</label>
+        <select class="form-control" id="fundId" name="fundId" required>
+          <option value="1">EBIZC - ebConsultants Fund</option>
+          <option value="2">CMUMC - CMU Math Club Fund</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="amount">Amount (in dollars)</label>
+        <div class="input-group">
+          <div class="input-group-addon">$</div>
+          <input type="number" class="form-control" id="amount" name="amount" placeholder="12.34" step="0.01" min="0.01" required>
+        </div>
+      </div>
+      <div class="alert alert-info" role="alert">
+        The transaction will be processed on the end of the trading day. The number of shares purchased depends on the closing price of the fund at that time.
+      </div>
+      <button type="submit" class="btn btn-primary">Buy</button>
+    </form>
   </main>
 <%@ include file="footer.jsp" %>

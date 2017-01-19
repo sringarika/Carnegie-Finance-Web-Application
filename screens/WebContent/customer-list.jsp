@@ -61,7 +61,7 @@
           <td>${fn:escapeXml(customer.lastname)}</td>
           <td>
             <a class="btn btn-primary" href="view-customer.jsp?customerId=${fn:escapeXml(customer.customerId)}">View Details</a>
-            <a class="btn btn-default" href="transaction-history.jsp?customerId=${fn:escapeXml(customer.customerId)}">Transaction History</a>
+            <a class="btn btn-info" href="transaction-history.jsp?customerId=${fn:escapeXml(customer.customerId)}">Transaction History</a>
             <a class="btn btn-warning" href="reset-password.jsp?customerId=${fn:escapeXml(customer.customerId)}">Reset Password</a>
           </td>
         </tr>
