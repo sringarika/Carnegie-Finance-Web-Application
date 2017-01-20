@@ -22,7 +22,7 @@
         The transaction will be processed on the end of the trading day.
       </div>
      <p>
-      <a href="deposit.jsp" class="btn btn-primary" role="button">Deposit Fund</a>
+      <a href="confirmdepositcheck.jsp" class="btn btn-primary" role="button">Deposit Fund</a>
     </p>
     
   </main>
