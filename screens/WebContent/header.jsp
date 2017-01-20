@@ -74,7 +74,7 @@
               <li><a href="deposit-check.jsp">Deposit Check</a></li>
               <li><a href="create-fund.jsp">Create Fund</a></li>
               <li><a href="transition-day.jsp">Transition Day</a></li>
-              <li><a href="customer-list.jsp">Customers</a></li>
+              <li><a href="customer-list.jsp">Manage Customers</a></li>
             </ul>
             
             <ul class="nav navbar-nav navbar-right">
