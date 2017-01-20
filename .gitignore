@@ -30,3 +30,5 @@ local.properties
 
 # Code Recommenders
 .recommenders/
+
+screens/WebContent/account.jsp
