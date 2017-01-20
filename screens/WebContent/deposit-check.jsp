@@ -6,10 +6,14 @@
   <main>
     <h2>Deposit Check</h2>
     <p>
-      <span class="label label-primary">TODO</span>
-      When the company receives a check from a customer, a loggedin
-employee deposits the cash into the customer's account. This operation is
-queued as a pending transaction which will be processed during Transition Day. 
+      <span class="label label-primary"></span>
+      Name : John Doe
+      <br>
+      Amount to be deposited: 100$
+      <br>
+      </p>
+     <p>
+      <a href="deposit.jsp" class="btn btn-primary" role="button">Deposit Fund</a>
     </p>
   </main>
 <%@ include file="footer.jsp" %>
