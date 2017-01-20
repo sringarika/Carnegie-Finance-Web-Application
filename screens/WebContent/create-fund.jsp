@@ -15,7 +15,7 @@
         The first closing day price for the fund is not provided until the next Transition Day.
       </div>
      <p>
-      <a href="create.jsp" class="btn btn-primary" role="button">Create Fund</a>
+      <a href="confirmfund.jsp" class="btn btn-primary" role="button">Create Fund</a>
     </p>
   </main>
 <%@ include file="footer.jsp" %>
