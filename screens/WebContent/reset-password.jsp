@@ -6,10 +6,7 @@
   <main>
     <h2>Reset Password</h2>
 	<form action="pwd-change-success.jsp" method="POST">
-      <div class="form-group">
-        <label for="password">Enter Customer's Old Password</label>
-        <input type="password" class="form-control" id="pPassword" placeholder="">
-      </div>
+      
       <div class="form-group">
         <label for="password">Enter Customer's New Password</label>
         <input type="password" class="form-control" id="password" placeholder="">
@@ -18,7 +15,7 @@
         <label for="password">Confirm New Password</label>
         <input type="password" class="form-control" id="password" placeholder="">
       </div>
-      <button type="submit" class="btn btn-default">Reset Password</button>
+      <button type="submit" class="btn btn-primary">Reset Password</button>
     </form>
     <c:if test="${(!empty error)}">
       <div class="alert alert-danger">
