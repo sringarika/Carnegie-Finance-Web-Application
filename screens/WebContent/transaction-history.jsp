@@ -8,17 +8,19 @@
     <table class="table table-bordered">
   	  <thead>
 	  <tr>
+	   <th>ID</th>
 	    <th>Transaction Date</th>
 	    <th>Transaction Type</th>
 	    <th>Fund</th>
 	    <th>Shares</th>
 	    <th>Price</th>
 	    <th>Total Amount</th>
-	    <th>Transaction Condition</th>
+	    <th>Transaction Status</th>
 	  </tr>
 	  </thead>
 	  <tbody>
 	  <tr>
+	  	<td>01</td>
 	    <td>01/19/2017</td>
 	    <td>Buy</td>
 	    <td>EBIZC - ebConsultants Fund</td>
@@ -28,6 +30,7 @@
 	    <td>Finished</td>
 	  </tr>
 	  <tr>
+	  	<td>02</td>
 	    <td>01/20/2017</td>
 	    <td>Buy</td>
 	    <td>CMUMC - CMU Math Club Fund</td>
