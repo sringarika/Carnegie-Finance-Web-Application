@@ -10,27 +10,29 @@
       <a href="transaction-list.jsp">Show details...</a>
     </p>
     <div>
-      <p>Date: 01/20/2017</p>
+      <p>Last Closing Date: 01/19/2017</p>
+      <p>Current Closing Date: <input type="text" class="form-control" name="price" value=""></p>
     </div>
     <table class="table table-striped table-bordered">
     <tr>
       <th>Fund ID</th>
       <th>Fund Name</th>
       <th>Ticker</th>
-      <th>Price(As of last trading day)</th>
+      <th>Last Closing Price</th>
     </tr>
     <tr>
       <td>1</td>
       <td>ebConsultants Fund</td>
       <td>EBIZC</td>
-      <td><input type="text" name="price" value="  "></td>
+      <td><input type="text" class="form-control" name="price" value=""></td>
     </tr>
     <tr>
       <td>2</td>
       <td>CMU Math Club Fund</td>
       <td>CMUMC</td>
-      <td><input type="text" name="price" value="  "></td>
+      <td><input type="text" class="form-control" name="price" value=""></td>
     </tr>
     </table>
+    <button type="submit" class="btn btn-primary">Transition Day</button>
   </main>
 <%@ include file="footer.jsp" %>
