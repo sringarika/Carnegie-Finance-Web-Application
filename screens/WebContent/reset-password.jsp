@@ -4,10 +4,26 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="header.jsp" %>
   <main>
-    <h2>Reset Customer Password</h2>
-    <p>
-      <span class="label label-primary">TODO</span>
-      Logged-in employees can reset the password for a customer's account.
-    </p>
+    <h2>Reset Password</h2>
+	<form action="pwd-change-success.jsp" method="POST">
+      <div class="form-group">
+        <label for="password">Enter Customer's Old Password</label>
+        <input type="password" class="form-control" id="pPassword" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="password">Enter Customer's New Password</label>
+        <input type="password" class="form-control" id="password" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="password">Confirm New Password</label>
+        <input type="password" class="form-control" id="password" placeholder="">
+      </div>
+      <button type="submit" class="btn btn-default">Reset Password</button>
+    </form>
+    <c:if test="${(!empty error)}">
+      <div class="alert alert-danger">
+        ${fn:escapeXml(error)}
+      </div>
+    </c:if>
   </main>
 <%@ include file="footer.jsp" %>
