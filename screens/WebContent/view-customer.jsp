@@ -39,14 +39,25 @@ th, td {
   <tr>
     <th>UTI Mutual Fund</th>
     <th>100</th> 
-    <th>1000$</th>
+    <th>$1000</th>
+  </tr>
+  <tr>
+    <th>Black Rock Mutual Fund</th>
+    <th>10</th> 
+    <th>$100</th>
+  </tr>
+  <tr>
+    <th>SBI Mutual Fund</th>
+    <th>40</th> 
+    <th>$567.01</th>
+  </tr>
+  <tr>
+    <th>CitiBank Mutual Fund</th>
+    <th>400</th> 
+    <th>$2785.81</th>
   </tr>
   </table>
       
-    </p>
-    <p>
-      <a href="transaction-history.jsp" class="btn btn-primary" role="button">View Transaction History</a>
-      <a href="reset-password.jsp" class="btn btn-default" role="button">Reset Password</a>
     </p>
   </main>
 <%@ include file="footer.jsp" %>
