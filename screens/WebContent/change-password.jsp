@@ -18,7 +18,7 @@
         <label for="password">Confirm New Password</label>
         <input type="password" class="form-control" id="password" placeholder="">
       </div>
-      <button type="submit" class="btn btn-default">Change Password</button>
+      <button type="submit" class="btn btn-primary">Change Password</button>
     </form>
     <c:if test="${(!empty error)}">
       <div class="alert alert-danger">
