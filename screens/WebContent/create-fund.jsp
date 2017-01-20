@@ -5,14 +5,14 @@
 <%@ include file="header.jsp" %>
   <main>
     <h2>Create Fund</h2>
-    <p>
-      <span class="label label-primary">TODO</span>
-      Logged-in employees can create new mutual funds. The
-employee is prompted for the fund name and its ticker (a short one to five
-character identifier which may be used when entering orders or displaying
-positions in a concise format). The fund is created immediately, although the first
-closing day price for the fund is not provided until the next Transition Day. So
-immediately after creating a fund, customers can queue up buy transactions.
+      <span class="label label-primary"></span>
+      Fund Name : Google
+      <br>
+      Ticker: Googl
+      <br>
+      </p>
+     <p>
+      <a href="create.jsp" class="btn btn-primary" role="button">Create Fund</a>
     </p>
   </main>
 <%@ include file="footer.jsp" %>
