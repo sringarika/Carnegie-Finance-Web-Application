@@ -6,11 +6,14 @@
   <main>
     <h2>Create Fund</h2>
       <span class="label label-primary"></span>
-      Fund Name : Google
+      Fund Name: <input type="text" name="NewFundName" value="Google"><br>
       <br>
-      Ticker: Googl
+      Ticker: <input type="text" name="NewFundTicker" value="Googl"><br>
       <br>
       </p>
+        <div class="alert alert-info" role="alert">
+        The first closing day price for the fund is not provided until the next Transition Day.
+      </div>
      <p>
       <a href="create.jsp" class="btn btn-primary" role="button">Create Fund</a>
     </p>
