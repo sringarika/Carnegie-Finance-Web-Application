@@ -54,6 +54,8 @@
     };
     request.setAttribute("funds", funds);
 %>
+<div>
+</div>
     <table class="table table-striped">
       <thread>
          <tr class="table-light-grey">

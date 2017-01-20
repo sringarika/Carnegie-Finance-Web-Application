@@ -24,6 +24,9 @@
         <div class="input-group-addon">$</div>
         <input type="number" class="form-control" id="amount" name="amount" placeholder="12.34" step="0.01" min="0.01" required>
     </div>
+    <div>
+      
+    </div>
     <button type="submit" class="btn btn-primary">Submit Request</button>
   </main>
 <%@ include file="footer.jsp" %>
