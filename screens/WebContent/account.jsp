@@ -10,7 +10,7 @@
     <table class="table table-striped table-bordered">
     <tr>
       <td>Name</td>
-      <td>Michael Shamos</td>
+      <td>John Doe</td>
     </tr>
     <tr>
       <td>Address</td>
@@ -22,7 +22,7 @@
     </tr>
     <tr>
       <td>Cash Balance</td>
-      <td>$1,000,000</td>
+      <td>$1,000,000.00</td>
     </tr>
     </table>
 
@@ -34,11 +34,11 @@
     private int fundId;
     private String fundName;
     private String ticker;
-    private int numOfShares;
+    private double numOfShares;
     private double price;
     private double value;
     
-    public CusFund(int fundId, String fundName, String ticker, int numOfShares, double price) {
+    public CusFund(int fundId, String fundName, String ticker, double numOfShares, double price) {
         this.fundId = fundId;
         this.fundName = fundName;
         this.ticker = ticker;
@@ -59,7 +59,7 @@
         return ticker;
     }
     
-    public int getNumOfShares() {
+    public double getNumOfShares() {
         return numOfShares;
     }
     public double getPrice() {
@@ -72,9 +72,9 @@
 %>
 <%
     CusFund[] cusFunds = {
-            new CusFund(1, "Long-Term Treasury", "LTT", 1000, 11.88),
-            new CusFund(2, "Index Admiral Shares", "IAS", 1000, 209.79),
-            new CusFund(3, "Strategic Equity", "SE", 5000, 32.88),
+            new CusFund(1, "Long-Term Treasury", "LTT", 1000.000, 11.88),
+            new CusFund(2, "Index Admiral Shares", "IAS", 1000.000, 209.79),
+            new CusFund(3, "Strategic Equity", "SE", 5000.000, 32.88),
     };
     request.setAttribute("cusFunds", cusFunds);
 %>
@@ -85,8 +85,8 @@
         <th>Fund Name</th>
         <th>Ticker</th>
         <th>Number of shares</th>
-        <th>Price(As of last trading day)</th>
-        <th>Value</th>
+        <th>Last Closing Price</th>
+        <th>Total Value</th>
       </tr>
     </thead>
     <c:forEach var="cusFund" items="${cusFunds}">
