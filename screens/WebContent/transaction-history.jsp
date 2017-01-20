@@ -20,7 +20,7 @@
 	  </thead>
 	  <tbody>
 	  <tr>
-	  	<td>01</td>
+	  	<td>1</td>
 	    <td>01/19/2017</td>
 	    <td>Buy</td>
 	    <td>EBIZC - ebConsultants Fund</td>
@@ -30,7 +30,7 @@
 	    <td>Finished</td>
 	  </tr>
 	  <tr>
-	  	<td>02</td>
+	  	<td>2</td>
 	    <td>01/20/2017</td>
 	    <td>Buy</td>
 	    <td>CMUMC - CMU Math Club Fund</td>
