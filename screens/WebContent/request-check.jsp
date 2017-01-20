@@ -9,12 +9,9 @@
     <table class="table">
     <thead>
       <tr class="table-light-grey">
-        <th>Available Cash</th>
+        <th>Available Cash: $666,000.00</th>
       </tr>
     </thead>
-    <tr>
-      <td>$666,000</td>
-    </tr>
     </table>
     <div class="form-group">
         <label for="amount">Amount to withdraw (in dollars)</label>

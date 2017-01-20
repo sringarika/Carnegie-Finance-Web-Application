@@ -56,7 +56,7 @@
 %>
 <div>
 </div>
-    <table class="table table-striped">
+    <table class="table table-bordered table-striped">
       <thread>
          <tr class="table-light-grey">
          <th>ID</th>

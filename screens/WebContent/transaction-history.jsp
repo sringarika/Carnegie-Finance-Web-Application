@@ -5,7 +5,7 @@
 <%@ include file="header.jsp" %>
   <main>
     <h2>Transaction History</h2>
-    <table class="table table-bordered">
+    <table class="table table-bordered table-striped">
   	  <thead>
 	  <tr>
 	   <th>ID</th>
