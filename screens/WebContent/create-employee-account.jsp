@@ -11,7 +11,7 @@
         <input type="text" class="form-control" id="name" placeholder="">
       </div>
       <div class="form-group">
-        <label for="username">Userame</label>
+        <label for="username">Username</label>
         <input type="text" class="form-control" id="username" placeholder="">
       </div>
       <div class="form-group">
@@ -21,6 +21,10 @@
       <div class="form-group">
         <label for="password">Password </label>
         <input type="password" class="form-control" id="password" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="password">Confirm Password </label>
+        <input type="password" class="form-control" id="confpassword" placeholder="">
       </div>
       <button type="submit" class="btn btn-default">Create Employee Account</button>
     </form>
