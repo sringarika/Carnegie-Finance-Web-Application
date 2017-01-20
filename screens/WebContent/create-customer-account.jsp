@@ -26,7 +26,7 @@
         <label for="password">Confirm Password </label>
         <input type="password" class="form-control" id="confpassword" placeholder="">
       </div>
-      <button type="submit" class="btn btn-default">Create Customer Account</button>
+      <button type="submit" class="btn btn-primary">Create Customer Account</button>
     </form>
     <c:if test="${(!empty error)}">
       <div class="alert alert-danger">
