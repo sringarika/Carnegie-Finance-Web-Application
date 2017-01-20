@@ -5,9 +5,9 @@
 <% request.getSession().setAttribute("userType", "employee"); %>
 <%@ include file="header.jsp" %>
   <main>
-    <h2>Login Successful</h2>
+    <h2>Welcome</h2>
     <p>
-      You are now logged in as an employee!
+      Please choose an option from the navigation bar to get started.
     </p>
   </main>
 <%@ include file="footer.jsp" %>
