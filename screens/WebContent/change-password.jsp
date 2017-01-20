@@ -5,7 +5,7 @@
 <%@ include file="header.jsp" %>
   <main>
     <h2>Change Password</h2>
-	<form action="pwdChangeSuccess.jsp" method="POST">
+	<form action="pwd-change-success.jsp" method="POST">
       <div class="form-group">
         <label for="password">Current Password</label>
         <input type="password" class="form-control" id="pPassword" placeholder="">

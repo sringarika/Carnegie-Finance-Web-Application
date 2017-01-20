@@ -6,7 +6,7 @@
 <%@ include file="header.jsp" %>
   <main>
     <h2>Welcome to CFS Mutual Funds</h2>
-    <img src="mutual_funds.png" alt="welcome page" style="width:700px;height:280px;">
+    <img src="mutual_funds.png" alt="welcome page" style="width:80%;height:100%;">
     <h3> </h3>
     <form action="account.jsp" method="POST">
       <div class="form-group">
