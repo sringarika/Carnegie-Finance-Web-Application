@@ -13,16 +13,12 @@
     private String firstName;
     private String lastName;
     
-    public Customer(int customerId, String userName, String firstName, String lastName) {
-        this.customerId = customerId;
+    public Customer(String userName, String firstName, String lastName) {
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
     }
     
-    public int getCustomerId() {
-        return customerId;
-    }
     
     public String getUsername() {
         return userName;
@@ -39,36 +35,16 @@
 %>
 <%
   Customer[] customers = {
-          new Customer(1, "bobama", "Barack", "Obama"),
-          new Customer(2, "hclinton", "Hillary", "Clinton"),
-          new Customer(3, "makeamericagreatagain", "Donald", "Trump"),
+          new Customer("bobama", "Barack", "Obama")
           };
   request.setAttribute("customers", customers);
 %>
   <main>
-    <h2>Customer List</h2>
-    
-    <table class="table table-bordered table-striped">
-      <tr>
-        <th>ID</th>
-        <th>Username</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Action</th>
-      </tr>
-      <c:forEach var="customer" items="${customers}">
-        <tr>
-          <td>${fn:escapeXml(customer.customerId)}</td>
-          <td>${fn:escapeXml(customer.username)}</td>
-          <td>${fn:escapeXml(customer.firstname)}</td>
-          <td>${fn:escapeXml(customer.lastname)}</td>
-          <td>
-            <a class="btn btn-primary" href="?customerId=${fn:escapeXml(customer.customerId)}">Select Customer</a>
-          </td>
-        </tr>
-      </c:forEach>
-    </table>
-    
+      <div class="form-group">
+     <b>Depost Check for</b>: Barack Obama
+     </div>
+     <br>
+ 
       <div class="form-group">
         <label for="amount">Amount to be deposited(in dollars)</label>
         <div class="input-group">
