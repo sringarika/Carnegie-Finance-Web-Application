@@ -13,6 +13,9 @@
           <option value="2">CMUMC - CMU Math Club Fund</option>
         </select>
       </div>
+      <div>
+        <label for="shares">Current Shares holding: </label>
+      </div>
       <div class="form-group">
         <label for="shares">Shares</label>
         <input type="number" class="form-control" id="shares" name="shares" placeholder="12.345" step="0.001" min="0.001" required>

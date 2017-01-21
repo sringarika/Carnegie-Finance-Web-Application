@@ -63,6 +63,8 @@
             <a class="btn btn-primary" href="view-customer.jsp?customerId=${fn:escapeXml(customer.customerId)}">View Details</a>
             <a class="btn btn-info" href="transaction-history.jsp?customerId=${fn:escapeXml(customer.customerId)}">Transaction History</a>
             <a class="btn btn-warning" href="reset-password.jsp?customerId=${fn:escapeXml(customer.customerId)}">Reset Password</a>
+            <a class="btn btn-danger" href="deposit-check.jsp?customerId=${fn:escapeXml(customer.customerId)}">Deposit Check</a>
+            
           </td>
         </tr>
       </c:forEach>

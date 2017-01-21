@@ -26,6 +26,13 @@
         <label for="password">Confirm Password </label>
         <input type="password" class="form-control" id="confpassword" placeholder="">
       </div>
+      <div class="form-group">
+        <label for="deposit">Initial Deposit </label>
+        <div class="input-group">
+        <div class="input-group-addon">$</div>
+        <input type="number" class="form-control" id="deposit" placeholder="1,000.00" required>
+        </div>
+      </div>
       <button type="submit" class="btn btn-primary">Create Customer Account</button>
     </form>
     <c:if test="${(!empty error)}">

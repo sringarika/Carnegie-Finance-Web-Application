@@ -20,6 +20,9 @@
           <input type="number" class="form-control" id="amount" name="amount" placeholder="12.34" step="0.01" min="0.01" required>
         </div>
       </div>
+      <div>
+        <label for="cash">Available Cash: $666,000</label>
+      </div>
       <div class="alert alert-info" role="alert">
         The transaction will be processed on the end of the trading day. The number of shares purchased depends on the closing price of the fund at that time.
       </div>

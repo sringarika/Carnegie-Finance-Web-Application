@@ -9,20 +9,19 @@
     <table class="table">
     <thead>
       <tr class="table-light-grey">
-        <th>Cash Balance</th>
-        <th>Available Cash</th>
+        <th>Available Cash: $666,000.00</th>
       </tr>
     </thead>
-    <tr>
-      <td>$1,000,000</td>
-      <td>$666,000</td>
-    </tr>
     </table>
     <div class="form-group">
         <label for="amount">Amount to withdraw (in dollars)</label>
         <div class="input-group">
         <div class="input-group-addon">$</div>
         <input type="number" class="form-control" id="amount" name="amount" placeholder="12.34" step="0.01" min="0.01" required>
+    </div>
+     <h3> </h3>
+    <div class="alert alert-info" role="alert">
+        The amount you withdraw cannot exceed the available cash.
     </div>
     <h3> </h3>
     <button type="submit" class="btn btn-primary">Submit Request</button>

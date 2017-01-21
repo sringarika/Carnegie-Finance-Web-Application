@@ -9,18 +9,30 @@
       There are <a href="transaction-list.jsp">42 transactions</a> pending.
       <a href="transaction-list.jsp">Show details...</a>
     </p>
-    <p>
-      <span class="label label-primary">TODO</span>
-      To simulate trading days, a logged-in employee “transitions
-the system” to end each trading day. The employee enters the date of the trading
-day that has just ended (greater than the date of previously ended trading day).
-The employee also provides the closing prices for each fund for this trading day.
-Pending transactions are then executed in the order in which they were queued
-using the new closing fund prices and this trading date. The database is updated
-accordingly. (The database should store a null execution date to indicate that a
-transaction is pending. When a pending transaction is processed, the transaction
-date is changed to this trading day’s date and the customer’s cash balance and
-share balance in the effected fund are updated accordingly.) 
-    </p>
+    <div>
+      <p>Last Closing Date: 01/19/2017</p>
+      <p>Current Closing Date: <input type="text" class="form-control" name="price" value=""></p>
+    </div>
+    <table class="table table-striped table-bordered">
+    <tr>
+      <th>Fund ID</th>
+      <th>Fund Name</th>
+      <th>Ticker</th>
+      <th>Last Closing Price</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>ebConsultants Fund</td>
+      <td>EBIZC</td>
+      <td><input type="text" class="form-control" name="price" value=""></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>CMU Math Club Fund</td>
+      <td>CMUMC</td>
+      <td><input type="text" class="form-control" name="price" value=""></td>
+    </tr>
+    </table>
+    <button type="submit" class="btn btn-primary">Transition Day</button>
   </main>
 <%@ include file="footer.jsp" %>
