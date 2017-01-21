@@ -45,6 +45,7 @@
           </c:if>
           <c:if test='${!empty employee}'>
             <ul class="nav navbar-nav">
+              <li><a href="customer-list.do">Manage Customers</a></li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Create Account <span class="caret"></span></a>
                 <ul class="dropdown-menu">
@@ -52,10 +53,8 @@
                   <li><a href="create-employee.do">Create Employee Account</a></li>
                 </ul>
               </li>
-              <li><a href="deposit-check.do">Deposit Check</a></li>
               <li><a href="create-fund.do">Create Fund</a></li>
               <li><a href="transition-day.do">Transition Day</a></li>
-              <li><a href="customer-list.do">Manage Customers</a></li>
             </ul>
           </c:if>
           <c:if test="${!empty customer or !empty employee}">

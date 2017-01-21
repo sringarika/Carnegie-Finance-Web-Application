@@ -17,8 +17,18 @@ public class DepositCheckAction extends Action {
 
     @Override
     public String perform(HttpServletRequest request) {
+        int customerId;
+        String customerIdStr = request.getParameter("customerId");
+        try {
+            customerId = Integer.parseInt(customerIdStr);
+        } catch (Exception e) {
+            request.setAttribute("error", "Invalid customerId!");
+            return "error.jsp";
+        }
+        request.setAttribute("customerId", customerId);
+        
         if (request.getMethod().equals("GET")) {
-            // TODO: Maybe fetch the customer list for reference?
+            // TODO: Get some information (e.g. name) for display using DAO.
             return "deposit-check.jsp";
         } else if (request.getMethod().equals("POST")) {
             // TODO
