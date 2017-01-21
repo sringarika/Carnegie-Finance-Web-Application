@@ -18,6 +18,7 @@ public class BuyFundAction extends Action {
     @Override
     public String perform(HttpServletRequest request) {
         if (request.getMethod().equals("GET")) {
+            request.setAttribute("availableCash", 33);
             return "buy-fund.jsp";
         } else if (request.getMethod().equals("POST")) {
             // TODO

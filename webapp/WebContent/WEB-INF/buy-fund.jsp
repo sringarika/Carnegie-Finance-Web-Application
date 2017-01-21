@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="header.jsp" %>
   <main>
     <h2>Buy Funds</h2>
@@ -19,6 +20,9 @@
           <div class="input-group-addon">$</div>
           <input type="number" class="form-control" id="amount" name="amount" placeholder="12.34" step="0.01" min="0.01" required>
         </div>
+      </div>
+      <div>
+        <label for="cash">Available Cash: <fmt:formatNumber value="${availableCash}" type="currency"/></label>
       </div>
       <div class="alert alert-info" role="alert">
         The transaction will be processed on the end of the trading day. The number of shares purchased depends on the closing price of the fund at that time.
