@@ -24,7 +24,7 @@
 	    <td>01/19/2017</td>
 	    <td>Buy</td>
 	    <td>EBIZC - ebConsultants Fund</td>
-	    <td>2</td>
+	    <td>2.000</td>
 	    <td>$12.34</td>
 	    <td>$24.68</td>
 	    <td>Finished</td>

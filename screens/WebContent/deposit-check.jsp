@@ -73,7 +73,7 @@
         <label for="amount">Amount to be deposited(in dollars)</label>
         <div class="input-group">
           <div class="input-group-addon">$</div>
-          <input type="number" class="form-control" id="amount" name="amount" placeholder="1.000" step="0.001" min="0.001" required>
+          <input type="number" class="form-control" id="amount" name="amount" placeholder="1.00" step="0.01" min="0.01" required>
         </div>
       <br>
       </p>

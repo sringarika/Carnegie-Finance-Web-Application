@@ -32,9 +32,9 @@
 <%
 
   Customeracct[] customeracct = {
-          new Customeracct("UTI", "100.000", "100.000"),
-          new Customeracct("SBI","10.000", "200.000"),
-          new Customeracct("DSP Black Rock", "40.000","37.000"),
+          new Customeracct("UTI", "100.000", "100.00"),
+          new Customeracct("SBI","10.000", "200.00"),
+          new Customeracct("DSP Black Rock", "40.000","37.00"),
           };
   request.setAttribute("customeracct", customeracct);
 %>
@@ -57,7 +57,7 @@
     </tr>
     <tr>
       <td>Cash Balance</td>
-      <td>$1,000,000.000</td>
+      <td>$1,000,000.00</td>
     </tr>
     </table>
     
