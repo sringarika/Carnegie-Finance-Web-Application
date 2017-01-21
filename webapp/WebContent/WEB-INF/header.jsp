@@ -36,8 +36,8 @@
           <c:if test='${!empty customer}'>
             <ul class="nav navbar-nav">
               <li class="active"><a href="account.do">Account <span class="sr-only">(current)</span></a></li>
-              <li><a href="buy.do">Buy</a></li>
-              <li><a href="sell.do">Sell</a></li>
+              <li><a href="buy-fund.do">Buy</a></li>
+              <li><a href="sell-fund.do">Sell</a></li>
               <li><a href="request-check.do">Request Check</a></li>
               <li><a href="transaction-history.do">Transaction History</a></li>
               <li><a href="research-fund.do">Research Funds</a></li>
@@ -48,8 +48,8 @@
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Create Account <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                  <li><a href="create-customer-account.do">Create Customer Account</a></li>
-                  <li><a href="create-employee-account.do">Create Employee Account</a></li>
+                  <li><a href="create-customer.do">Create Customer Account</a></li>
+                  <li><a href="create-employee.do">Create Employee Account</a></li>
                 </ul>
               </li>
               <li><a href="deposit-check.do">Deposit Check</a></li>

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import cfs.databean.Customer;
 import cfs.model.Model;
 
 public class Controller extends HttpServlet {
@@ -23,6 +24,21 @@ public class Controller extends HttpServlet {
         Action.add(new LogoutAction(model));
         Action.add(new AccountAction(model));
         Action.add(new EmployeeHomeAction(model));
+        Action.add(new CreateCustomerAction(model));
+        Action.add(new CreateEmployeeAction(model));
+        Action.add(new DepositCheckAction(model));
+        Action.add(new CreateFundAction(model));
+        Action.add(new TransitionDayAction(model));
+        Action.add(new TransactionListAction(model));
+        Action.add(new CustomerListAction(model));
+        Action.add(new ViewCustomerAction(model));
+        Action.add(new ResetPasswordAction(model));
+        Action.add(new ChangePasswordAction(model));
+        Action.add(new BuyFundAction(model));
+        Action.add(new SellFundAction(model));
+        Action.add(new RequestCheckAction(model));
+        Action.add(new TransactionHistoryAction(model));
+        Action.add(new ResearchFundAction(model));
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -60,8 +76,9 @@ public class Controller extends HttpServlet {
         Integer customerId = (Integer) session.getAttribute("customerId");
         if (customerId != null) {
             // TODO: Get customer using DAO.
-            request.setAttribute("customer", new Object());
-            request.setAttribute("greeting", "Carl Customer");
+            Customer customer = new Customer(23, "carl", "Carl", "Customer");
+            request.setAttribute("customer", customer);
+            request.setAttribute("greeting", customer.getFirstname() + " " + customer.getLastname());
         }
 
         return Action.perform(action, request);
