@@ -39,6 +39,7 @@ public class Controller extends HttpServlet {
         Action.add(new RequestCheckAction(model));
         Action.add(new TransactionHistoryAction(model));
         Action.add(new ResearchFundAction(model));
+        //add default (formbean)
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response)
