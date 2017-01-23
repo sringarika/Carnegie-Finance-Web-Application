@@ -10,9 +10,6 @@
 	  <tr>
 <<<<<<< HEAD
 	   <th>ID</th>
-=======
-	  	<th>ID</th>
->>>>>>> youjiaz
 	    <th>Transaction Date</th>
 	    <th>Transaction Type</th>
 	    <th>Fund</th>
@@ -47,9 +44,6 @@
 	  <tr>
 	  	<td>3</td>
 	    <td></td>
-=======
-	    <td>01/20/2017</td>
->>>>>>> youjiaz
 	    <td>Buy</td>
 	    <td>CMUMC - CMU Math Club Fund</td>
 	    <td></td>
