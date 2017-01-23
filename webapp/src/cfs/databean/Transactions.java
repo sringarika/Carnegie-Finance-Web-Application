@@ -3,7 +3,7 @@ package cfs.databean;
 import org.genericdao.PrimaryKey;
 
 @PrimaryKey("transactionId")
-public class Transaction {
+public class Transactions {
     private int transactionId;
     private int customerId;
     private int fundId;
@@ -13,13 +13,13 @@ public class Transaction {
     private String executeDate;
     private String status;
     
-    public Transaction() {
+    public Transactions() {
     }
     
     // when a transaction is created, required input should include all three ids and the amount
     // the shares and price will be available after transition day
     // status should be pending when a transaction is created
-    public Transaction(int customerId, int fundId, double amount) {
+    public Transactions(int customerId, int fundId, double amount) {
         this.customerId = customerId;
         this.fundId = fundId;
         this.amount = amount;
