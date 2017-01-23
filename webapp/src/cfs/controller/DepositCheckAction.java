@@ -1,7 +1,13 @@
 package cfs.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.mybeans.form.FormBeanFactory;
+
+import cfs.formbean.ChangePasswordForm;
+import cfs.formbean.DepositCheckForm;
 import cfs.model.Model;
 
 public class DepositCheckAction extends Action {
@@ -32,31 +38,20 @@ public class DepositCheckAction extends Action {
         } else if (request.getMethod().equals("POST")) {
             // TODO
         	System.out.println(request.getParameter("amount"));
-        
-        	if(request.getParameter("amount").trim().length() == 0) {
-    			request.setAttribute("error", "Amount cannot be left blank!");
-                return "deposit-check.jsp";	
-    		}
-        	
-        	double a = 0;
         	try {
-        		a = Double.parseDouble(request.getParameter("amount"));
-        		if(a < 0) {
-        			request.setAttribute("error", "Amount must be greater than zero!");
-                    return "deposit-check.jsp";	
-        		}
-        		if(a > Integer.MAX_VALUE) {
-        			request.setAttribute("error", "Amount cannot be greater than $2147483647!");
-                    return "deposit-check.jsp";	
-        		}
-        	} catch(NumberFormatException num){
-                request.setAttribute("error", "Amount must be a valid number!");
-                return "deposit-check.jsp";
-        	}
+                DepositCheckForm form = FormBeanFactory.getInstance(DepositCheckForm.class).create(request);
+                List<String> validationErrors = form.getValidationErrors();
+                if (validationErrors.size() > 0) {
+                    throw new Exception(validationErrors.get(0));
+                }
         	
             request.setAttribute("message", "Check deposited successfully! The transaction will be processed by the end of the business day.");
             return "confirmdepositcheck.jsp";
-        } else {
+        } catch (Exception e) {
+            request.setAttribute("error", e.getMessage());
+            return "deposit-check.jsp";
+        }
+        }else {
             return null;
         }
     }
