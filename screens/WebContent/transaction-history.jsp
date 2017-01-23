@@ -8,7 +8,6 @@
     <table class="table table-bordered table-striped">
   	  <thead>
 	  <tr>
-<<<<<<< HEAD
 	   <th>ID</th>
 	    <th>Transaction Date</th>
 	    <th>Transaction Type</th>
@@ -32,7 +31,6 @@
 	  </tr>
 	  <tr>
 	  	<td>2</td>
-<<<<<<< HEAD
 	    <td>01/19/2017</td>
 	    <td>Buy</td>
 	    <td>EBIZC - ebConsultants Fund</td>
