@@ -32,13 +32,13 @@ public class ChangePasswordForm extends FormBean {
     @Override
     public List<String> getValidationErrors() {
         if (oldPassword == null || oldPassword.isEmpty()) {
-            return Collections.singletonList("Old password is required!");
+            return Collections.singletonList("Current password is required!");
         }
         if (newPassword == null || newPassword.isEmpty()) {
             return Collections.singletonList("New password is required!");
         }
         if (confirmPassword == null || confirmPassword.isEmpty()) {
-            return Collections.singletonList("Confirm password is reqquired!");
+            return Collections.singletonList("Confirm password is required!");
         }
         if (!newPassword.equals(confirmPassword)) {
             return Collections.singletonList("Confirm password does not match new password!");
