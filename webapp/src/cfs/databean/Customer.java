@@ -19,6 +19,7 @@ public class Customer {
     public Customer() {
     }
     
+    // constructor is written as this for initial testing
     public Customer(int customerId, String username, String firstname, String lastname) {
         this.customerId = customerId;
         this.username = username;

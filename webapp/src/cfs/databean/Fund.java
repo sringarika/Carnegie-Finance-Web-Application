@@ -11,8 +11,7 @@ public class Fund {
     public Fund() {
     }
     
-    public Fund(int fundId, String name, String symbol) {
-        this.fundId = fundId;
+    public Fund(String name, String symbol) {
         this.name = name;
         this.symbol = symbol;
     }

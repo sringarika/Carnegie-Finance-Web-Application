@@ -19,8 +19,7 @@ public class Transaction {
     // when a transaction is created, required input should include all three ids and the amount
     // the shares and price will be available after transition day
     // status should be pending when a transaction is created
-    public Transaction(int transactionId, int customerId, int fundId, double amount) {
-        this.transactionId = transactionId;
+    public Transaction(int customerId, int fundId, double amount) {
         this.customerId = customerId;
         this.fundId = fundId;
         this.amount = amount;
