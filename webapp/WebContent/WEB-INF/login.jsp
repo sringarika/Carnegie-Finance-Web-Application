@@ -21,7 +21,7 @@
         <label for="password">Password</label>
         <input type="password" class="form-control" id="password" name="password" placeholder="Use 'secret'" required>
       </div>
-      <button type="submit" class="btn btn-primary">Login</button>
+      <button type="submit" name = "loginbutton" class="btn btn-primary">Login</button>
     </form>
   </main>
 <%@ include file="footer.jsp" %>

@@ -51,22 +51,32 @@
     </table>
     
     
-	<form action="create-fund.jsp" method="POST">
+	<form action="create-fund.do" method="POST">
       <div class="form-group">
         <label for="username">Fund Name</label>
-        <input type="text" class="form-control" id="fundname" placeholder="">
+        <input type="text" class="form-control" id="fund" name = "fund" placeholder="">
       </div>
       <div class="form-group">
         <label for="username">Ticker</label>
-        <input type="text" class="form-control" id="ticker" placeholder="">
+        <input type="text" class="form-control" id="ticker" name = "ticker" placeholder="">
       </div>
-      </p>
+      <br>
+      	     <c:if test="${(!empty error)}">
+      <div class="alert alert-danger">
+        ${fn:escapeXml(error)}
+      </div>
+    </c:if>
+    <br>
+    
         <div class="alert alert-info" role="alert">
-        The first closing day price for the fund is not provided until the next Transition Day.
+        Disclaimer:The first closing day price for the fund is not provided until the next Transition Day.
       </div>
      <p>
-      <a href="confirmfund.jsp" class="btn btn-primary" role="button">Create Fund</a>
+     <br>
+     
+           <button type="submit" class="btn btn-primary">Create Fund</button>
+     
     </p>
-
+</form>
   </main>
 <%@ include file="footer.jsp" %>
