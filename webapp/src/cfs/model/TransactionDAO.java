@@ -22,20 +22,32 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     		return;
     	}
     	for (Transactions transaction : pendings) {
-    		if (closingPrice.get(transaction.getFundId()) == null) {
-    			throw new RollbackException("Error!!!");
-    		}
-    		transaction.setPrice(closingPrice.get(transaction.getFundId()));
-    		transaction.setExecuteDate(transitionDate);
-    		double shares = transaction.getAmount() / transaction.getPrice();
-    		String s = String.format("#.###", shares);
-    		shares = Double.valueOf(s);
-    		if (shares > 0) {
-    			transaction.setShares(shares);
+    		if (transaction.getType() == "Deposit Check" || transaction.getType() == "Request Check" ) {
+    			transaction.setExecuteDate(transitionDate);
     			transaction.setStatus("Processed");
+    		} else if (transaction.getType() == "Sell") {
+    			if (closingPrice.get(transaction.getFundId()) == null) {
+        			throw new RollbackException("Error!!!");
+        		}
+    			transaction.setExecuteDate(transitionDate);
+    			transaction.setStatus("Processed");
+    			double amount = closingPrice.get(transaction.getFundId()) * transaction.getShares();
+    			transaction.setAmount(amount);
     		} else {
-    			transaction.setStatus("Rejected");
-    			// need to return the reserved money back to the customer
+    			if (closingPrice.get(transaction.getFundId()) == null) {
+        			throw new RollbackException("Error!!!");
+        		}
+        		transaction.setPrice(closingPrice.get(transaction.getFundId()));
+        		transaction.setExecuteDate(transitionDate);
+        		double shares = transaction.getAmount() / transaction.getPrice();
+        		String s = String.format("#.###", shares);
+        		shares = Double.valueOf(s);
+        		if (shares > 0) {
+        			transaction.setShares(shares);
+        			transaction.setStatus("Processed");
+        		} else {
+        			transaction.setStatus("Rejected");
+        		}
     		}
     		try {
 	    		Transaction.begin();
@@ -44,6 +56,7 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     		} finally {
                 if (Transaction.isActive()) Transaction.rollback();
             }
+    		// update the customer's available cash
     	}
     }
 }
