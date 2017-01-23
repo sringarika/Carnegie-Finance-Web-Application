@@ -4,8 +4,8 @@ import java.util.Collections;
 import java.util.List;
 import org.mybeans.form.FormBean;
 public class CreateCustomer extends FormBean {
-    private String newPassword;
-    private String confirmPassword;
+    private String password;
+    private String confPassword;
     private String firstName;
     private String lastName;
     private String username;
@@ -14,17 +14,17 @@ public class CreateCustomer extends FormBean {
     private String amount;
     private String button;
     
-    public String getNewPassword() {
-        return newPassword;
+    public String getPassword() {
+        return password;
     }
     public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
+        this.password = newPassword;
     }
     public String getConfirmPassword() {
-        return confirmPassword;
+        return confPassword;
     }
     public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
+        this.confPassword = confirmPassword;
     }
     public String getUsername() {
         return username;
@@ -65,6 +65,7 @@ public class CreateCustomer extends FormBean {
     }
     
     public String getAmount() {
+        System.out.println(amount);
         return amount;
     }
 
@@ -79,13 +80,13 @@ public class CreateCustomer extends FormBean {
 
     public List<String> getValidationErrors() {
         //List<String> errors = new ArrayList<String>();
-        if (newPassword == null || newPassword.isEmpty()) {
+        if (password == null || password.isEmpty()) {
             return Collections.singletonList("New password is required!");
         }
-        if (confirmPassword == null || confirmPassword.isEmpty()) {
+        if (confPassword == null || confPassword.isEmpty()) {
             return Collections.singletonList("Confirm password is required!");
         }
-        if (!newPassword.equals(confirmPassword)) {
+        if (!password.equals(confPassword)) {
             return Collections.singletonList("Confirm password does not match new password!");
         }
         if (username == null || username.isEmpty()) {
@@ -121,13 +122,13 @@ public class CreateCustomer extends FormBean {
         if (amount == null || amount.trim().length() == 0)
             return Collections.singletonList("Amount is required");
         
-        double a = 0;
+        double a;
         try {
             a = Double.parseDouble(amount);
             if(a < 1.00) {
                 return Collections.singletonList("Amount must atleast be $1.00!");
             }
-            
+            System.out.println(a);
             if(a > 1000000.00) {
                 return Collections.singletonList("Amount cannot be greater than $1,000,000.00!");
             }

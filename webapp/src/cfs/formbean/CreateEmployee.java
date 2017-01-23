@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.mybeans.form.FormBean;
-public class createEmployee extends FormBean{
+public class CreateEmployee extends FormBean{
     private String newPassword;
     private String confirmPassword;
     private String firstName;

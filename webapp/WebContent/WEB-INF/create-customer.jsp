@@ -12,27 +12,36 @@
       </div>
       <div class="form-group">
         <label for="firstname">First Name</label>
-        <input type="text" class="form-control" id="firstname" placeholder="">
+        <input type="text" class="form-control" id="firstName" placeholder="">
       </div>
       <div class="form-group">
         <label for="lastname">Last Name</label>
         <input type="text" class="form-control" id="lastname" placeholder="">
       </div>
       <div class="form-group">
+        <label for="amount">Amount to be deposited(in dollars)</label>
+        <div class="input-group">
+          <div class="input-group-addon">$</div>
+          <fmt:formatNumber var="maxAmountStr" value="${availableCash>1000000.00 ? 1000000.00 : availableCash}" groupingUsed="false" minFractionDigits="2" maxFractionDigits="2"/>
+          <input type="number" class="form-control" id="amount" name="amount" placeholder="${maxAmountStr}" step="0.01" min="1.00" max="1000000.00" required>
+        </div>
+      </div>
+      <div class="form-group">
         <label for="address">Current Address</label>
-        <input type="text" class="form-control" id="address" placeholder="">
+        <input type="text" class="form-control" id="address1" placeholder="">
       </div>
       <div class="form-group">
         <label for="address2">Address Line 2</label>
         <input type="text" class="form-control" id="address2" placeholder="">
       </div>
+      
       <div class="form-group">
         <label for="password">Password </label>
         <input type="password" class="form-control" id="password" placeholder="">
       </div>
       <div class="form-group">
         <label for="password">Confirm Password </label>
-        <input type="password" class="form-control" id="confpassword" placeholder="">
+        <input type="password" class="form-control" id="confPassword" placeholder="">
       </div>
       <button type="submit" class="btn btn-primary">Create Customer Account</button>
     </form>
