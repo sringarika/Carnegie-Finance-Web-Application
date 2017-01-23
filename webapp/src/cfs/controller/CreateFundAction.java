@@ -1,7 +1,12 @@
 package cfs.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.mybeans.form.FormBeanFactory;
+
+import cfs.formbean.CreateFundForm;
 import cfs.model.Model;
 
 public class CreateFundAction extends Action {
@@ -22,23 +27,19 @@ public class CreateFundAction extends Action {
             return "create-fund.jsp";
         } else if (request.getMethod().equals("POST")) {
             // TODO        	
-        			
-        	if(request.getParameter("fundname").length() == 0) {
-                request.setAttribute("error","Fundname cannot be empty!");
-                return "create-fund.jsp";
-             }
-        	if(request.getParameter("tickername").trim().length()==0 ) {
-        		request.setAttribute("error", "Tickername cannot be empty!");
-                return "create-fund.jsp";
-        	}
-        	
-        	if (request.getParameter("tickername").trim().length() < 1 || request.getParameter("tickername").trim().length() > 5) {
-        		request.setAttribute("error", "Ticker Name should be between 1-5 characters");
-                return "create-fund.jsp";
-            }
+        	try {
+                CreateFundForm form = FormBeanFactory.getInstance(CreateFundForm.class).create(request);
+                List<String> validationErrors = form.getValidationErrors();
+                if (validationErrors.size() > 0) {
+                    throw new Exception(validationErrors.get(0));
+                }
             request.setAttribute("message", "Fund created successfully!");
             return "success.jsp";
-        } else {
+        } catch (Exception e) {
+            request.setAttribute("error", e.getMessage());
+            return "create-fund.jsp";
+        }
+        }else {
             return null;
         }
     }

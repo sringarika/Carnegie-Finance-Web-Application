@@ -35,7 +35,7 @@ public class LoginAction extends Action {
               //  System.out.println("UserName:" + form.getUsername());
                // System.out.println("Password:" + form.getPassword());
                 
-                if(!form.getPassword().equals("password")) {
+                if(!form.getPassword().equals("secret")) {
                 	request.setAttribute("error", "Wrong password!");
                     return "login.jsp";
                 }
@@ -44,7 +44,7 @@ public class LoginAction extends Action {
                 	request.getSession().removeAttribute("customerId");
                     request.getSession().setAttribute("employeeId", 1);
                     return "employee.do";
-                }else if(form.getUsername().equals("batman")) {
+                }else if(form.getUsername().equals("carl")) {
                 	request.getSession().removeAttribute("employeeId");
                     request.getSession().setAttribute("customerId", 2);
                     return "account.do";

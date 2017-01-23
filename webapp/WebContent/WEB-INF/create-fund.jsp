@@ -54,11 +54,11 @@
 	<form action="create-fund.do" method="POST">
       <div class="form-group">
         <label for="username">Fund Name</label>
-        <input type="text" class="form-control" id="fundname" name = "fundname" placeholder="">
+        <input type="text" class="form-control" id="fund" name = "fund" placeholder="">
       </div>
       <div class="form-group">
         <label for="username">Ticker</label>
-        <input type="text" class="form-control" id="tickername" name = "tickername" placeholder="">
+        <input type="text" class="form-control" id="ticker" name = "ticker" placeholder="">
       </div>
       <br>
       	     <c:if test="${(!empty error)}">
