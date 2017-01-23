@@ -17,8 +17,8 @@ public class DepositCheckAction extends Action {
 
     @Override
     public String perform(HttpServletRequest request) {
-        int customerId;
-    /*    String customerIdStr = request.getParameter("customerId");
+    /*    int customerId;
+        String customerIdStr = request.getParameter("customerId");
         try {
             customerId = Integer.parseInt(customerIdStr);
         } catch (Exception e) {

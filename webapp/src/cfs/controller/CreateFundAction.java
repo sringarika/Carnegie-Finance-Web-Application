@@ -22,11 +22,16 @@ public class CreateFundAction extends Action {
             return "create-fund.jsp";
         } else if (request.getMethod().equals("POST")) {
             // TODO        	
-        	
-        	if(request.getParameter("tickername").trim().length()==0 || request.getParameter("fundname").length() == 0) {
-        		request.setAttribute("error", "Please provide a valid input");
+        			
+        	if(request.getParameter("fundname").length() == 0) {
+                request.setAttribute("error","Fundname cannot be empty!");
+                return "create-fund.jsp";
+             }
+        	if(request.getParameter("tickername").trim().length()==0 ) {
+        		request.setAttribute("error", "Tickername cannot be empty!");
                 return "create-fund.jsp";
         	}
+        	
         	if (request.getParameter("tickername").trim().length() < 1 || request.getParameter("tickername").trim().length() > 5) {
         		request.setAttribute("error", "Ticker Name should be between 1-5 characters");
                 return "create-fund.jsp";

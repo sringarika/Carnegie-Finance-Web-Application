@@ -41,7 +41,7 @@
 %>
   <main>
       <div class="form-group">
-     <b>Deposit Check for</b>: Barack Obama
+     <b>Deposit Check for:</b> Barack Obama
      </div>
      <br>
  

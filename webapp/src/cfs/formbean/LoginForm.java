@@ -3,19 +3,33 @@ package cfs.formbean;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpServletRequest;
 
-public class LoginForm {
+import org.mybeans.form.FormBean;
+
+public class LoginForm extends FormBean{
 	private String username; 
 	private String password;
 	private String button;
-
-	public LoginForm(HttpServletRequest request) {
+	
+	/*public LoginForm(HttpServletRequest request) {
 		username = request.getParameter("username");
 		password = request.getParameter("password");
-		button = request.getParameter("Loginbutton");
-
+		button = request.getParameter("loginbutton");
+	}*/
+	
+	public void setUsername(String username) {
+		this.username = username;
 	}
+	
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public void setButton(String button) {
+		this.button = button;
+	}
+	
 	public String getUsername() {
 		return username;
 	}
@@ -36,10 +50,8 @@ public class LoginForm {
 
 		if (username == null || username.trim().length() == 0)
 			errors.add("Username is required");
-		if (password == null || password.length() == 0)
+		if (password == null || password.trim().length() == 0)
 			errors.add("Password is required");
-		if (button == null)
-			errors.add("Button is required");
 
 		if (errors.size() > 0)
 			return errors;
