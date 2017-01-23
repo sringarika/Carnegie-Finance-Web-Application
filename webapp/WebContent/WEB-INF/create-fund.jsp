@@ -74,7 +74,7 @@
      <p>
      <br>
      
-           <button type="submit" class="btn btn-primary">Login</button>
+           <button type="submit" class="btn btn-primary">Create Fund</button>
      
     </p>
 </form>

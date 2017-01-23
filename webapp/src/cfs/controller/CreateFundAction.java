@@ -19,7 +19,6 @@ public class CreateFundAction extends Action {
     public String perform(HttpServletRequest request) {
         if (request.getMethod().equals("GET")) {
             // TODO: Maybe get the existing fund list for reference?
-        	System.out.println("here");
             return "create-fund.jsp";
         } else if (request.getMethod().equals("POST")) {
             // TODO        	
