@@ -8,6 +8,7 @@ import org.genericdao.DAOException;
 import org.genericdao.RollbackException;
 
 import cfs.databean.Customer;
+import cfs.databean.Employee;
 
 public class Model {
     private CustomerDAO customerDAO;
@@ -21,9 +22,9 @@ public class Model {
         try {
             String jdbcDriver = config.getInitParameter("jdbcDriverName");
             String jdbcURL    = config.getInitParameter("jdbcURL");
-            
+
             ConnectionPool pool = new ConnectionPool(jdbcDriver,jdbcURL);
-            
+
             customerDAO = new CustomerDAO(pool, "customer");
             transactionDAO = new TransactionDAO(pool, "transactions");
             customerPositionDAO = new CustomerPositionDAO(pool, "position");
@@ -38,15 +39,15 @@ public class Model {
     public CustomerDAO getCustomerDAO() {
         return customerDAO;
     }
-    
+
     public TransactionDAO getTransactionDAO() {
         return transactionDAO;
     }
-    
+
     public CustomerPositionDAO getCustomerPositionDAO() {
         return customerPositionDAO;
     }
-    
+
     public FundPriceHistoryDAO getFundPriceHistoryDAO() {
         return fundPriceHistoryDAO;
     }
@@ -54,16 +55,29 @@ public class Model {
     public FundDAO getFundDAO() {
         return fundDAO;
     }
-    
+
     public EmployeeDAO getEmployeeDAO() {
         return employeeDAO;
     }
-    
+
     public void seed() {
         try {
-            Customer customer = new Customer(0, "carl@example.com", "Carl", "Customer");
-            customer.setPassword("secret");
-            customerDAO.create(customer);
+            if (customerDAO.findByUsername("carl") == null) {
+                Customer customer = new Customer();
+                customer.setUsername("carl");
+                customer.setFirstname("Carl");
+                customer.setLastname("Customer");
+                customer.setPassword("secret");
+                customerDAO.create(customer);
+            }
+            if (employeeDAO.findByUsername("admin") == null) {
+                Employee employee = new Employee();
+                employee.setUsername("admin");
+                employee.setFirstname("Alice");
+                employee.setLastname("Admin");
+                employee.setPassword("secret");
+                employeeDAO.create(employee);
+            }
         } catch (RollbackException e) {
             // Probably exists.
         }
