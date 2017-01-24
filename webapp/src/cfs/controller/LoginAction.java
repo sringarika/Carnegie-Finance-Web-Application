@@ -1,18 +1,29 @@
 package cfs.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.mybeans.form.FormBeanFactory;
 
+import cfs.databean.Customer;
 import cfs.formbean.LoginForm;
+import cfs.model.CustomerDAO;
 import cfs.model.Model;
 
 public class LoginAction extends Action {
+	
+    private FormBeanFactory<LoginForm> formBeanFactory = FormBeanFactory.getInstance(LoginForm.class);
 
+    private CustomerDAO customerDAO;
+    
+    //private EmployeeDAO employeeDAO;
+    
     public LoginAction(Model model) {
-        // TODO Auto-generated constructor stub
+    	customerDAO = model.getCustomerDAO();
+    	//employeeDAO = model.getEmployeeDAO();
     }
 
     @Override
@@ -25,33 +36,54 @@ public class LoginAction extends Action {
         if (request.getMethod().equals("GET")) {
             return "login.jsp";
         } else if (request.getMethod().equals("POST")) {
-            // TODO: Use DAO to login.
+        	HttpSession session = request.getSession();
+        	// if someone already logged in, switch to the account page
+            if (session.getAttribute("user") != null) {
+            	if (session.getAttribute("user").getClass().equals(new Customer())) {
+            		return "account.do";
+            	} else {
+            		return "employee.do";
+            	}
+                
+            }
+            // check for any input errors
+            ArrayList<String> errors = new ArrayList<String>();
+            request.setAttribute("errors", errors);
             try {
-                LoginForm form = FormBeanFactory.getInstance(LoginForm.class).create(request);
+                LoginForm form = formBeanFactory.create(request);
                 List<String> validationErrors = form.getValidationErrors();
                 if (validationErrors.size() > 0) {
-                    throw new Exception(validationErrors.get(0));
-                }
-              //  System.out.println("UserName:" + form.getUsername());
-               // System.out.println("Password:" + form.getPassword());
-                
-                if(!form.getPassword().equals("secret")) {
-                	request.setAttribute("error", "Wrong password!");
-                    return "login.jsp";
+                	errors.addAll(validationErrors);
+                	return "login.jsp";
                 }
                 
-                if(form.getUsername().equals("admin")) {
-                	request.getSession().removeAttribute("customerId");
-                    request.getSession().setAttribute("employeeId", 1);
-                    return "employee.do";
-                }else if(form.getUsername().equals("carl")) {
-                	request.getSession().removeAttribute("employeeId");
-                    request.getSession().setAttribute("customerId", 2);
-                    return "account.do";
-                } else {
-                	request.setAttribute("error", "User does not exist!");
+                // check for login validation
+                if (customerDAO.read(form.getUsername()) == null) {
+                	//&& employeeDAO.read(form.getUsername()) == null) {
+                	errors.add("The user doesn't exist.");
                     return "login.jsp";
-                }                
+                }
+                if (customerDAO.read(form.getUsername()) != null) {
+                	if (customerDAO.read(form.getUsername()).getPassword() != form.getPassword()) {
+                		request.setAttribute("error", "Wrong password!");
+                        return "login.jsp";
+                	} else {
+                		request.getSession().removeAttribute("employeeId");
+                        request.getSession().setAttribute("customerId", customerDAO.read(form.getUsername()).getCustomerId());
+                        return "account.do";
+                	}
+                }
+//                if (employeeDAO.read(form.getUsername()) != null) {
+//                	if (employeeDAO.read(form.getUsername()).getPassword() != form.getPassword()) {
+//                		request.setAttribute("error", "Wrong password!");
+//                        return "login.jsp";
+//                	} else {
+//                		request.getSession().removeAttribute("customerId");
+//                        request.getSession().setAttribute("rmployeeId", employeeDAO.read(form.getUsername()).getEmployeeId());
+//                        return "employee.do";
+//                	}
+//                } 
+                return "employee.do";
             } catch (Exception e) {
                 request.setAttribute("error", e.getMessage());
                 return "login.jsp";

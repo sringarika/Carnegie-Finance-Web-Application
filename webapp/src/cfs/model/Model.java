@@ -14,6 +14,8 @@ public class Model {
     private TransactionDAO transactionDAO;
     private CustomerPositionDAO customerPositionDAO;
     private FundPriceHistoryDAO fundPriceHistoryDAO;
+    //private FundDAO fundDAO;
+    //private EmployeeDAO employeeDAO;
 
     public Model(ServletConfig config) throws ServletException {
         try {
@@ -26,6 +28,8 @@ public class Model {
             transactionDAO = new TransactionDAO(pool, "transactions");
             customerPositionDAO = new CustomerPositionDAO(pool, "Customer's Positions");
             fundPriceHistoryDAO = new FundPriceHistoryDAO(pool, "Fund Price History");
+//            fundDAO = new FundDAO(pool, "Fund");
+//            employeeDAO = new EmployeeDAO(pool, "Employee");
         } catch (DAOException e) {
             throw new ServletException(e);
         }
@@ -47,6 +51,14 @@ public class Model {
         return fundPriceHistoryDAO;
     }
 
+//    public FundDAO getFundDAO() {
+//        return fundDAO;
+//    }
+//    
+//    public EmployeeDAO getEmployeeDAO() {
+//        return employeeDAO;
+//    }
+    
     public void seed() {
         try {
             Customer customer = new Customer(0, "carl@example.com", "Carl", "Customer");
