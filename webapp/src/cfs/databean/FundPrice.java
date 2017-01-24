@@ -34,7 +34,7 @@ public class FundPrice {
     public double getPrice() {
         return price;
     }
-    public void setShares(double price) {
+    public void setPrices(double price) {
         this.price = price;
     }
 }

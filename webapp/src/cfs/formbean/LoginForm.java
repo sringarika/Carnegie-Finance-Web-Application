@@ -3,20 +3,20 @@ package cfs.formbean;
 import java.util.ArrayList;
 import java.util.List;
 
-//import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.mybeans.form.FormBean;
 
-public class LoginForm extends FormBean{
+public class LoginForm extends FormBean {
 	private String username; 
 	private String password;
 	private String button;
 	
-	/*public LoginForm(HttpServletRequest request) {
+	public LoginForm(HttpServletRequest request) {
 		username = request.getParameter("username");
 		password = request.getParameter("password");
 		button = request.getParameter("loginbutton");
-	}*/
+	}
 	
 	public void setUsername(String username) {
 		this.username = username;

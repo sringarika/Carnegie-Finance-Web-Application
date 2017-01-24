@@ -9,6 +9,7 @@ import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 import org.genericdao.Transaction;
 
+import cfs.databean.Customer;
 import cfs.databean.Transactions;
 
 public class TransactionDAO extends GenericDAO<Transactions> {
@@ -16,7 +17,12 @@ public class TransactionDAO extends GenericDAO<Transactions> {
         super(Transactions.class, tableName, cp);
     }
     
-    public void processTransaction(Map<Integer, Double> closingPrice, String transitionDate) throws RollbackException {
+    public Transactions[] showHistory(int CustomerId) throws RollbackException {
+    	Transactions[] history = match(MatchArg.equals("customerId", CustomerId));
+    	return history;
+    }
+    public void processTransaction(Map<Integer, Double> closingPrice, String transitionDate,
+    		CustomerDAO customerDAO, CustomerPositionDAO customerPositionDAO) throws RollbackException {
     	Transactions[] pendings = match(MatchArg.equals("status", "Pending"));
     	if (pendings == null) {
     		return;
@@ -33,6 +39,8 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     			transaction.setStatus("Processed");
     			double amount = closingPrice.get(transaction.getFundId()) * transaction.getShares();
     			transaction.setAmount(amount);
+    			Customer customer = customerDAO.read(transaction.getCustomerId());
+    			customer.setCash(customer.getCash() + amount);
     		} else {
     			if (closingPrice.get(transaction.getFundId()) == null) {
         			throw new RollbackException("Error!!!");
@@ -47,6 +55,8 @@ public class TransactionDAO extends GenericDAO<Transactions> {
         			transaction.setStatus("Processed");
         		} else {
         			transaction.setStatus("Rejected");
+        			Customer customer = customerDAO.read(transaction.getCustomerId());
+        			customer.setCash(customer.getCash() + transaction.getAmount());
         		}
     		}
     		try {
@@ -56,7 +66,7 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     		} finally {
                 if (Transaction.isActive()) Transaction.rollback();
             }
-    		// update the customer's available cash
+    		
     	}
     }
 }

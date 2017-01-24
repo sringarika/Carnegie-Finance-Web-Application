@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 
 import org.mybeans.form.FormBeanFactory;
 
-import cfs.databean.Customer;
 import cfs.formbean.LoginForm;
 import cfs.model.CustomerDAO;
 import cfs.model.EmployeeDAO;
@@ -39,14 +38,11 @@ public class LoginAction extends Action {
         } else if (request.getMethod().equals("POST")) {
         	HttpSession session = request.getSession();
         	// if someone already logged in, switch to the account page
-            if (session.getAttribute("user") != null) {
-            	if (session.getAttribute("user").getClass().equals(new Customer())) {
-            		return "account.do";
-            	} else {
-            		return "employee.do";
-            	}
-                
-            }
+            if (session.getAttribute("customer") != null) {
+        		return "account.do";
+        	} else if (session.getAttribute("employee") != null) {
+        		return "employee.do";
+        	}
             // check for any input errors
             ArrayList<String> errors = new ArrayList<String>();
             request.setAttribute("errors", errors);
@@ -57,7 +53,6 @@ public class LoginAction extends Action {
                 	errors.addAll(validationErrors);
                 	return "login.jsp";
                 }
-                
                 // check for login validation
                 if (customerDAO.read(form.getUsername()) == null && employeeDAO.read(form.getUsername()) == null) {
                 	errors.add("The user doesn't exist.");
@@ -68,8 +63,7 @@ public class LoginAction extends Action {
                 		request.setAttribute("error", "Wrong password!");
                         return "login.jsp";
                 	} else {
-                		request.getSession().removeAttribute("employee");
-                        request.getSession().setAttribute("customerId", customerDAO.read(form.getUsername()).getCustomerId());
+                        request.getSession().setAttribute("customer", customerDAO.read(form.getUsername()));
                         return "account.do";
                 	}
                 } else {
@@ -77,8 +71,7 @@ public class LoginAction extends Action {
                 		request.setAttribute("error", "Wrong password!");
                         return "login.jsp";
                 	} else {
-                		request.getSession().removeAttribute("customerId");
-                        request.getSession().setAttribute("employee", employeeDAO.read(form.getUsername()).getUsername());
+                        request.getSession().setAttribute("employee", employeeDAO.read(form.getUsername()));
                         return "employee.do";
                 	}
                 }

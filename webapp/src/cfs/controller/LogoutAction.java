@@ -7,7 +7,6 @@ import cfs.model.Model;
 public class LogoutAction extends Action {
 
     public LogoutAction(Model model) {
-        // TODO Auto-generated constructor stub
     }
 
     @Override
