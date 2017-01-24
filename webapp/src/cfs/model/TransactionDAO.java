@@ -41,6 +41,13 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     			transaction.setAmount(amount);
     			Customer customer = customerDAO.read(transaction.getCustomerId());
     			customer.setCash(customer.getCash() + amount);
+    			try {
+    	    		Transaction.begin();
+    	    		customerDAO.update(customer);
+    	    		Transaction.commit();
+        		} finally {
+                    if (Transaction.isActive()) Transaction.rollback();
+                }
     		} else {
     			if (closingPrice.get(transaction.getFundId()) == null) {
         			throw new RollbackException("Error!!!");
@@ -54,9 +61,16 @@ public class TransactionDAO extends GenericDAO<Transactions> {
         			transaction.setShares(shares);
         			transaction.setStatus("Processed");
         		} else {
-        			transaction.setStatus("Rejected");
         			Customer customer = customerDAO.read(transaction.getCustomerId());
         			customer.setCash(customer.getCash() + transaction.getAmount());
+        			transaction.setStatus("Rejected");
+        			try {
+        	    		Transaction.begin();
+        	    		customerDAO.update(customer);
+        	    		Transaction.commit();
+            		} finally {
+                        if (Transaction.isActive()) Transaction.rollback();
+                    }
         		}
     		}
     		try {
