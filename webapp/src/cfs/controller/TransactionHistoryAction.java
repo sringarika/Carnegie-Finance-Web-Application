@@ -4,11 +4,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import cfs.databean.Customer;
 import cfs.model.Model;
+import cfs.model.TransactionDAO;
 
 public class TransactionHistoryAction extends Action {
+	
+	private TransactionDAO transactionDAO;
 
     public TransactionHistoryAction(Model model) {
-        // TODO Auto-generated constructor stub
+    	transactionDAO = model.getTransactionDAO();
     }
 
     @Override
