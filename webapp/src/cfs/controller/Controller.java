@@ -10,11 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.genericdao.RollbackException;
-import org.genericdao.Transaction;
 
 import cfs.databean.Customer;
-import cfs.model.CustomerDAO;
-import cfs.model.EmployeeDAO;
+import cfs.databean.Employee;
 import cfs.model.Model;
 
 
@@ -122,9 +120,15 @@ public class Controller extends HttpServlet {
         
         Integer employeeId = (Integer) session.getAttribute("employeeId");
         if (employeeId != null) {
-            // TODO: Get employee using DAO.
-            request.setAttribute("employee", new Object());
-            request.setAttribute("greeting", "Alice Admin");
+        	Employee employee;
+			try {
+				employee = model.getEmployeeDAO().read(employeeId);
+				request.setAttribute("employee", employee);
+	            request.setAttribute("greeting", employee.getFirstname() + " " + employee.getLastname());
+			} catch (RollbackException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
         
         Integer customerId = (Integer) session.getAttribute("customerId");

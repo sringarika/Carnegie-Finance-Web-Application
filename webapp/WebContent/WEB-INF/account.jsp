@@ -8,27 +8,27 @@
 
     <table class="table table-striped table-bordered">
     <tr>
-      <td>Name</td>
-      <td>John Doe</td>
+      <th>Name</th>
+      <td>${firstName} ${lastName}</td>
     </tr>
     <tr>
       <td>Address</td>
-      <td>6707 Gates-Hillman Complex</td>
+      <td>${address}</td>
     </tr>
     <tr>
       <td>Last Trading Day</td>
-      <td>01/19/2017</td>
+      <td></td>
     </tr>
     <tr>
       <td>Cash Balance</td>
-      <td>$1,000,000.00</td>
+      <td>${cash}</td>
     </tr>
     </table>
 
 <div>
 <h3>Funds</h3>
 
-<%!
+<%-- <%!
   public class CusFund {
     private int fundId;
     private String fundName;
@@ -76,11 +76,11 @@
             new CusFund(3, "Strategic Equity", "SE", 5000.000, 32.88),
     };
     request.setAttribute("cusFunds", cusFunds);
-%>
+%> --%>
+
   <table class="table table-hoverable">
     <thead>
       <tr class="table-light-grey">
-        <th>ID</th>
         <th>Fund Name</th>
         <th>Ticker</th>
         <th>Number of shares</th>
@@ -88,14 +88,13 @@
         <th>Total Value</th>
       </tr>
     </thead>
-    <c:forEach var="cusFund" items="${cusFunds}">
+    <c:forEach var="position" items="${positions}">
     <tr>
-          <td>${fn:escapeXml(cusFund.fundId)}</td>
-          <td>${fn:escapeXml(cusFund.fundName)}</td>
-          <td>${fn:escapeXml(cusFund.ticker)}</td>
-          <td>${fn:escapeXml(cusFund.numOfShares)}</td>
-          <td>${fn:escapeXml(cusFund.price)}</td>
-          <td>${fn:escapeXml(cusFund.value)}</td>
+       <td>${position.}</td>
+       <td>${position.}</td>
+       <td>${position.shares}</td>
+       <td>${position.}</td>
+       <td>${position.}</td>
     </tr>
     </c:forEach>
   </table>
