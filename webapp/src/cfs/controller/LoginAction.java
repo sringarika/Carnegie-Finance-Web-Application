@@ -8,6 +8,8 @@ import javax.servlet.http.HttpSession;
 
 import org.mybeans.form.FormBeanFactory;
 
+import cfs.databean.Customer;
+import cfs.databean.Employee;
 import cfs.formbean.LoginForm;
 import cfs.model.CustomerDAO;
 import cfs.model.EmployeeDAO;
@@ -59,21 +61,23 @@ public class LoginAction extends Action {
                     return "login.jsp";
                 }
                 if (customerDAO.findByUsername(form.getUsername()) != null) {
-                	if (customerDAO.findByUsername(form.getUsername()).getPassword() != form.getPassword()) {
+                	Customer customer = customerDAO.findByUsername(form.getUsername());
+                	if (customer.getPassword() != form.getPassword()) {
                 		request.setAttribute("error", "Wrong password!");
                         return "login.jsp";
                 	} else {
                 		request.getSession().removeAttribute("employeeId");
-                        request.getSession().setAttribute("customerId", customerDAO.findByUsername(form.getUsername()).getCustomerId());
+                        request.getSession().setAttribute("customerId", customer.getCustomerId());
                         return "account.do";
                 	}
                 } else {
-                	if (employeeDAO.findByUsername(form.getUsername()).getPassword() != form.getPassword()) {
+                	Employee employee = employeeDAO.findByUsername(form.getUsername());
+                	if (employee.getPassword() != form.getPassword()) {
                 		request.setAttribute("error", "Wrong password!");
                         return "login.jsp";
                 	} else {
                 		request.getSession().removeAttribute("customerId");
-                        request.getSession().setAttribute("employeeId", employeeDAO.findByUsername(form.getUsername()).getEmployeeId());
+                        request.getSession().setAttribute("employeeId", employee.getEmployeeId());
                         return "employee.do";
                 	}
                 }

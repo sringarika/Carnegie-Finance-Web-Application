@@ -16,11 +16,11 @@ public class CustomerDAO extends GenericDAO<Customer> {
     
     
     public Customer findByUsername(String username) throws RollbackException {
-    	Customer[] Customer = match(MatchArg.equals("username", username));
-		if (Customer.length == 0) {
+    	Customer[] customer = match(MatchArg.equals("username", username));
+		if (customer.length == 0) {
 			return null;
 		} else {
-			return Customer[0];
+			return customer[0];
 		}
     }
     
