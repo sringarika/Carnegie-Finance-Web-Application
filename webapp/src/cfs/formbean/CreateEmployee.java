@@ -9,9 +9,6 @@ public class CreateEmployee extends FormBean{
     private String firstName;
     private String lastName;
     private String username;
-    
-    private String button;
-    
     public String getNewPassword() {
         return newPassword;
     }
@@ -42,20 +39,6 @@ public class CreateEmployee extends FormBean{
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    
-    public void setButton(String button) {
-        this.button = button;
-    }
-
-    public String getButton() {
-        return button;
-    }
-
-    public boolean isPresent() {        
-        if(button == null) return false;
-        return true;
-    }
-
     public List<String> getValidationErrors() {
         //List<String> errors = new ArrayList<String>();
         if (newPassword == null || newPassword.isEmpty()) {
@@ -89,12 +72,6 @@ public class CreateEmployee extends FormBean{
             return Collections.singletonList("Last Name cannot contain special characters.");
             
         }
-        
-
-//        if (errors.size() > 0)
-//            return errors;
-
-        //return errors;
         return Collections.emptyList();
 }
 }
