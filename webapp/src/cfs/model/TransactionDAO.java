@@ -83,7 +83,10 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     		} finally {
                 if (Transaction.isActive()) Transaction.rollback();
             }
-    		
+    		// TODO 
+    		// update customer's position according to the type of the transaction
+    		// if position for this customer and this fund exists, update it
+    		// otherwise, create a position for the customer and fund
     	}
     }
 }
