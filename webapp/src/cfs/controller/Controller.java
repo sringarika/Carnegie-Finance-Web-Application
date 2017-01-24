@@ -21,9 +21,11 @@ import cfs.model.Model;
 public class Controller extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    
+    private Model model;
 
     public void init() throws ServletException {
-        Model model = new Model(getServletConfig());
+        model = new Model(getServletConfig());
         model.seed();
 
         Action.add(new LoginAction(model));
@@ -127,10 +129,15 @@ public class Controller extends HttpServlet {
         
         Integer customerId = (Integer) session.getAttribute("customerId");
         if (customerId != null) {
-            // TODO: Get customer using DAO.
-            Customer customer = new Customer(23, "carl", "Carl", "Customer");
-            request.setAttribute("customer", customer);
-            request.setAttribute("greeting", customer.getFirstname() + " " + customer.getLastname());
+            Customer customer;
+			try {
+				customer = model.getCustomerDAO().read(customerId);
+				request.setAttribute("customer", customer);
+	            request.setAttribute("greeting", customer.getFirstname() + " " + customer.getLastname());
+			} catch (RollbackException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
 
         return Action.perform(action, request);

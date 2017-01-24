@@ -62,20 +62,12 @@ public class Model {
 
     public void seed() {
         try {
-            if (customerDAO.findByUsername("carl") == null) {
-                Customer customer = new Customer();
-                customer.setUsername("carl");
-                customer.setFirstname("Carl");
-                customer.setLastname("Customer");
-                customer.setPassword("secret");
+            if (customerDAO.findByUsername("bob") == null) {
+                Customer customer = new Customer("bob", "Bob", "Brown", "1");
                 customerDAO.create(customer);
             }
             if (employeeDAO.findByUsername("admin") == null) {
-                Employee employee = new Employee();
-                employee.setUsername("admin");
-                employee.setFirstname("Alice");
-                employee.setLastname("Admin");
-                employee.setPassword("secret");
+                Employee employee = new Employee("admin", "Alice", "Admin", "1");
                 employeeDAO.create(employee);
             }
         } catch (RollbackException e) {

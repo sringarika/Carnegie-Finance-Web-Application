@@ -19,12 +19,12 @@ public class Customer {
     public Customer() {
     }
     
-    // constructor is written as this for initial testing
-    public Customer(int customerId, String username, String firstname, String lastname) {
-        this.customerId = customerId;
+    // constructor for creating a customer, the rest fields are optional
+    public Customer(String username, String firstname, String lastname, String password) {
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
+        this.password = password;
     }
     
     public int getCustomerId() {

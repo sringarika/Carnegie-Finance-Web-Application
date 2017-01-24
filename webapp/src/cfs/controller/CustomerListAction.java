@@ -20,9 +20,9 @@ public class CustomerListAction extends Action {
     public String perform(HttpServletRequest request) {
         // TODO: Use DAO to get customers.
         Customer[] customers = {
-                new Customer(1, "bobama", "Barack", "Obama"),
-                new Customer(2, "hclinton", "Hillary", "Clinton"),
-                new Customer(3, "makeamericagreatagain", "Donald", "Trump"),
+                new Customer("bobama", "Barack", "Obama", "1"),
+                new Customer("hclinton", "Hillary", "Clinton", "1"),
+                new Customer("makeamericagreatagain", "Donald", "Trump", "1"),
                 };
         request.setAttribute("customers", customers);
         return "customer-list.jsp";
