@@ -26,10 +26,10 @@ public class Model {
             
             customerDAO = new CustomerDAO(pool, "customer");
             transactionDAO = new TransactionDAO(pool, "transactions");
-            customerPositionDAO = new CustomerPositionDAO(pool, "Customer's Positions");
-            fundPriceHistoryDAO = new FundPriceHistoryDAO(pool, "Fund Price History");
-            fundDAO = new FundDAO(pool, "Fund");
-            employeeDAO = new EmployeeDAO(pool, "Employee");
+            customerPositionDAO = new CustomerPositionDAO(pool, "position");
+            fundPriceHistoryDAO = new FundPriceHistoryDAO(pool, "fundprice");
+            fundDAO = new FundDAO(pool, "fund");
+            employeeDAO = new EmployeeDAO(pool, "employee");
         } catch (DAOException e) {
             throw new ServletException(e);
         }
