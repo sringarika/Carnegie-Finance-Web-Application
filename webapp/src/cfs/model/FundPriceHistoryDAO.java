@@ -16,13 +16,22 @@ public class FundPriceHistoryDAO extends GenericDAO <FundPriceHistory> {
         super(FundPriceHistory.class, tableName, cp);
     }
     
-    // return the latest price of each fund for the given last transition date
+    // return the latest price of each fund for the given last transition date -- research fund
     public FundPriceHistory[] researchFund(String lastTransitionDate) throws RollbackException {
     	FundPriceHistory[] fundPrice = match(MatchArg.equals("executeDate", lastTransitionDate));
     	if (fundPrice == null) {
     		return null;
     	}
     	return fundPrice;
+    }
+    
+    // return the  price history of input fund -- display trend
+    public FundPriceHistory[] priceTrend(int fundId) throws RollbackException {
+    	FundPriceHistory[] prices= match(MatchArg.equals("fundId", fundId));
+    	if (prices == null) {
+    		return null;
+    	}
+    	return prices;
     }
     
     public void updatePrice (Map<Integer, Double> closingPrice, String transitionDate) throws RollbackException {
