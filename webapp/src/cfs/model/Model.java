@@ -11,6 +11,9 @@ import cfs.databean.Customer;
 
 public class Model {
     private CustomerDAO customerDAO;
+    private TransactionDAO transactionDAO;
+    private CustomerPositionDAO customerPositionDAO;
+    private FundPriceHistoryDAO fundPriceHistoryDAO;
 
     public Model(ServletConfig config) throws ServletException {
         try {
@@ -20,6 +23,9 @@ public class Model {
             ConnectionPool pool = new ConnectionPool(jdbcDriver,jdbcURL);
             
             customerDAO = new CustomerDAO(pool, "customer");
+            transactionDAO = new TransactionDAO(pool, "transactions");
+            customerPositionDAO = new CustomerPositionDAO(pool, "Customer's Positions");
+            fundPriceHistoryDAO = new FundPriceHistoryDAO(pool, "Fund Price History");
         } catch (DAOException e) {
             throw new ServletException(e);
         }
@@ -29,6 +35,18 @@ public class Model {
         return customerDAO;
     }
     
+    public TransactionDAO getTransactionDAO() {
+        return transactionDAO;
+    }
+    
+    public CustomerPositionDAO getCustomerPositionDAO() {
+        return customerPositionDAO;
+    }
+    
+    public FundPriceHistoryDAO getFundPriceHistoryDAO() {
+        return fundPriceHistoryDAO;
+    }
+
     public void seed() {
         try {
             Customer customer = new Customer(0, "carl@example.com", "Carl", "Customer");
