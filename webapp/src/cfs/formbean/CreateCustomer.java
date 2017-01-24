@@ -12,7 +12,7 @@ public class CreateCustomer extends FormBean {
     private String address1;
     private String address2;
     private String amount;
-    private String button;
+    //private String button;
     
     public String getPassword() {
         return password;
@@ -60,24 +60,14 @@ public class CreateCustomer extends FormBean {
         this.amount = amount;
     }
     
-    public void setButton(String button) {
-        this.button = button;
-    }
+//    public void setButton(String button) {
+//        this.button = button;
+//    }
     
     public String getAmount() {
         System.out.println(amount);
         return amount;
     }
-
-    public String getButton() {
-        return button;
-    }
-
-    public boolean isPresent() {        
-        if(button == null) return false;
-        return true;
-    }
-
     public List<String> getValidationErrors() {
         //List<String> errors = new ArrayList<String>();
         if (password == null || password.isEmpty()) {
