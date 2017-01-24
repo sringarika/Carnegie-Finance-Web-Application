@@ -9,19 +9,19 @@
     <table class="table table-striped table-bordered">
     <tr>
       <td>Name</td>
-      <td>John Doe</td>
+      <td>${firstName} ${lastName}</td>
     </tr>
     <tr>
       <td>Address</td>
-      <td>6707 Gates-Hillman Complex</td>
+      <td>${addrLine1} ${addrLine2}</td>
     </tr>
     <tr>
       <td>Last Trading Day</td>
       <td>01/19/2017</td>
     </tr>
     <tr>
-      <td>Cash Balance</td>
-      <td>$1,000,000.00</td>
+      <td>Available Cash</td>
+      <td>${cash}</td>
     </tr>
     </table>
 

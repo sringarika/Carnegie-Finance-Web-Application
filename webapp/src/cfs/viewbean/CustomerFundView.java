@@ -20,22 +20,38 @@ public class CustomerFundView {
 	    public int getFundId() {
 	        return fundId;
 	    }
+	    public void setFundId(int id) {
+	        this.fundId = id;
+	    }
 	    
 	    public String getFundName() {
 	        return fundName;
 	    }
-	    
+	    public void setFundName(String name) {
+	        this.fundName = name;
+	    }
 	    public String getSymbol() {
 	        return symbol;
 	    }
-	    
+	    public void setSymbol(String symbol) {
+	        this.symbol = symbol;
+	    }
 	    public double getNumOfShares() {
 	        return numOfShares;
 	    }
+	    public void setNumOfShares(double share) {
+	        this.numOfShares = share;
+	    }
 	    public double getPrice() {
-	      return price;
+	        return price;
 	    }
+	    public void setPrice(double price) {
+		    this.price = price;
+		}
 	    public double getValue() {
-	      return value;
+	        return value;
 	    }
+	    public void setValue(double value) {
+		    this.value = value;
+		}
 }
