@@ -2,8 +2,9 @@ package cfs.databean;
 
 import org.genericdao.PrimaryKey;
 
-@PrimaryKey("username")
+@PrimaryKey("employeeId")
 public class Employee {
+	private int employeeId;
     private String username;
     private String password;
     private String firstname;
@@ -19,6 +20,13 @@ public class Employee {
         this.lastname = lastname;
     }
 
+    public int getEmployeeId() {
+        return employeeId;
+    }
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
+    }
+    
     public String getUsername() {
         return username;
     }

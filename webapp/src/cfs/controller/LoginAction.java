@@ -63,7 +63,8 @@ public class LoginAction extends Action {
                 		request.setAttribute("error", "Wrong password!");
                         return "login.jsp";
                 	} else {
-                        request.getSession().setAttribute("customer", customerDAO.findByUsername(form.getUsername()));
+                		request.getSession().removeAttribute("employeeId");
+                        request.getSession().setAttribute("customerId", customerDAO.findByUsername(form.getUsername()).getCustomerId());
                         return "account.do";
                 	}
                 } else {
@@ -71,7 +72,8 @@ public class LoginAction extends Action {
                 		request.setAttribute("error", "Wrong password!");
                         return "login.jsp";
                 	} else {
-                        request.getSession().setAttribute("employee", employeeDAO.findByUsername(form.getUsername()));
+                		request.getSession().removeAttribute("customerId");
+                        request.getSession().setAttribute("employeeId", employeeDAO.findByUsername(form.getUsername()).getEmployeeId());
                         return "employee.do";
                 	}
                 }
