@@ -2,7 +2,7 @@ package cfs.databean;
 
 import org.genericdao.PrimaryKey;
 
-@PrimaryKey("fundId, executeDate")
+@PrimaryKey("fundId,executeDate")
 public class FundPrice {
 	private String executeDate;
 	private int fundId;
@@ -34,7 +34,7 @@ public class FundPrice {
     public double getPrice() {
         return price;
     }
-    public void setPrices(double price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 }

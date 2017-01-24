@@ -32,7 +32,7 @@ public class FundPriceHistoryDAO extends GenericDAO <FundPrice> {
     			throw new RollbackException("Error!!!");
     		} else {
     			fundPrice.setExecuteDate(transitionDate);
-    			fundPrice.setPrices(closingPrice.get(fundPrice.getFundId()));
+    			fundPrice.setPrice(closingPrice.get(fundPrice.getFundId()));
     			try {
     	    		Transaction.begin();
     	    		super.update(fundPrice);

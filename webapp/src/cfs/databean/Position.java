@@ -2,7 +2,7 @@ package cfs.databean;
 
 import org.genericdao.PrimaryKey;
 
-@PrimaryKey("customerId, fundId")
+@PrimaryKey("customerId,fundId")
 public class Position {
 	private int customerId;
 	private int fundId;
