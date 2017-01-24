@@ -8,6 +8,7 @@ import org.genericdao.DAOException;
 import org.genericdao.RollbackException;
 
 import cfs.databean.Customer;
+import cfs.databean.Employee;
 
 public class Model {
     private CustomerDAO customerDAO;
@@ -68,6 +69,14 @@ public class Model {
                 customer.setLastname("Customer");
                 customer.setPassword("secret");
                 customerDAO.create(customer);
+            }
+            if (employeeDAO.findByUsername("admin") == null) {
+                Employee employee = new Employee();
+                employee.setUsername("admin");
+                employee.setFirstname("Alice");
+                employee.setLastname("Admin");
+                employee.setPassword("secret");
+                employeeDAO.create(employee);
             }
         } catch (RollbackException e) {
             // Probably exists.
