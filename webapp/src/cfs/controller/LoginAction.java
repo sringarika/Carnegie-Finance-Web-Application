@@ -54,24 +54,24 @@ public class LoginAction extends Action {
                 	return "login.jsp";
                 }
                 // check for login validation
-                if (customerDAO.read(form.getUsername()) == null && employeeDAO.read(form.getUsername()) == null) {
+                if (customerDAO.findByUsername(form.getUsername()) == null && employeeDAO.findByUsername(form.getUsername()) == null) {
                 	errors.add("The user doesn't exist.");
                     return "login.jsp";
                 }
-                if (customerDAO.read(form.getUsername()) != null) {
-                	if (customerDAO.read(form.getUsername()).getPassword() != form.getPassword()) {
+                if (customerDAO.findByUsername(form.getUsername()) != null) {
+                	if (customerDAO.findByUsername(form.getUsername()).getPassword() != form.getPassword()) {
                 		request.setAttribute("error", "Wrong password!");
                         return "login.jsp";
                 	} else {
-                        request.getSession().setAttribute("customer", customerDAO.read(form.getUsername()));
+                        request.getSession().setAttribute("customer", customerDAO.findByUsername(form.getUsername()));
                         return "account.do";
                 	}
                 } else {
-                	if (employeeDAO.read(form.getUsername()).getPassword() != form.getPassword()) {
+                	if (employeeDAO.findByUsername(form.getUsername()).getPassword() != form.getPassword()) {
                 		request.setAttribute("error", "Wrong password!");
                         return "login.jsp";
                 	} else {
-                        request.getSession().setAttribute("employee", employeeDAO.read(form.getUsername()));
+                        request.getSession().setAttribute("employee", employeeDAO.findByUsername(form.getUsername()));
                         return "employee.do";
                 	}
                 }

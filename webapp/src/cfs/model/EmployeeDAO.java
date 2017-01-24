@@ -18,7 +18,7 @@ public class EmployeeDAO extends GenericDAO<Employee> {
     /*
      * Check if employee exists
      */
-    public Employee read(String username) throws RollbackException {
+    public Employee findByUsername(String username) throws RollbackException {
     	Employee[] employee = match(MatchArg.equals("username", username));
 		if (employee.length == 0) {
 			return null;
