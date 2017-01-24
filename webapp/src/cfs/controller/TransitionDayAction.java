@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.mybeans.form.FormBeanFactory;
-
 import cfs.formbean.TransitionDayForm;
 import cfs.model.CustomerDAO;
 import cfs.model.CustomerPositionDAO;
@@ -17,12 +15,12 @@ import cfs.model.TransactionDAO;
 
 public class TransitionDayAction extends Action {
 
-	private FormBeanFactory<TransitionDayForm> formBeanFactory = FormBeanFactory.getInstance(TransitionDayForm.class);
+	// private FormBeanFactory<TransitionDayForm> formBeanFactory = FormBeanFactory.getInstance(TransitionDayForm.class);
 	private TransactionDAO transactionDAO;
 	private CustomerDAO customerDAO;
 	private FundPriceHistoryDAO fundPriceHistoryDAO;
 	private CustomerPositionDAO customerPositionDAO;
-	
+
     public TransitionDayAction(Model model) {
     	transactionDAO = model.getTransactionDAO();
     	customerDAO = model.getCustomerDAO();
@@ -42,7 +40,7 @@ public class TransitionDayAction extends Action {
         	ArrayList<String> errors = new ArrayList<String>();
             request.setAttribute("errors", errors);
             try {
-            	TransitionDayForm form = formBeanFactory.create(request);
+            	TransitionDayForm form = null; // TODO
                 List<String> validationErrors = form.getValidationErrors();
                 if (validationErrors.size() > 0) {
                 	errors.addAll(validationErrors);

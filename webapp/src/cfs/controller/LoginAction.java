@@ -1,6 +1,5 @@
 package cfs.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,13 +15,13 @@ import cfs.model.EmployeeDAO;
 import cfs.model.Model;
 
 public class LoginAction extends Action {
-	
+
     private FormBeanFactory<LoginForm> formBeanFactory = FormBeanFactory.getInstance(LoginForm.class);
 
     private CustomerDAO customerDAO;
-    
+
     private EmployeeDAO employeeDAO;
-    
+
     public LoginAction(Model model) {
     	customerDAO = model.getCustomerDAO();
     	employeeDAO = model.getEmployeeDAO();
@@ -45,24 +44,21 @@ public class LoginAction extends Action {
         	} else if (session.getAttribute("employee") != null) {
         		return "employee.do";
         	}
-            // check for any input errors
-            ArrayList<String> errors = new ArrayList<String>();
-            request.setAttribute("errors", errors);
             try {
                 LoginForm form = formBeanFactory.create(request);
                 List<String> validationErrors = form.getValidationErrors();
                 if (validationErrors.size() > 0) {
-                	errors.addAll(validationErrors);
+                    request.setAttribute("error", validationErrors.get(0));
                 	return "login.jsp";
                 }
                 // check for login validation
                 if (customerDAO.findByUsername(form.getUsername()) == null && employeeDAO.findByUsername(form.getUsername()) == null) {
-                	errors.add("The user doesn't exist.");
+                    request.setAttribute("error", "The user doesn't exist.");
                     return "login.jsp";
                 }
                 if (customerDAO.findByUsername(form.getUsername()) != null) {
                 	Customer customer = customerDAO.findByUsername(form.getUsername());
-                	if (customer.getPassword() != form.getPassword()) {
+                	if (!customer.getPassword().equals(form.getPassword())) {
                 		request.setAttribute("error", "Wrong password!");
                         return "login.jsp";
                 	} else {
@@ -72,7 +68,7 @@ public class LoginAction extends Action {
                 	}
                 } else {
                 	Employee employee = employeeDAO.findByUsername(form.getUsername());
-                	if (employee.getPassword() != form.getPassword()) {
+                	if (!employee.getPassword().equals(form.getPassword())) {
                 		request.setAttribute("error", "Wrong password!");
                         return "login.jsp";
                 	} else {
