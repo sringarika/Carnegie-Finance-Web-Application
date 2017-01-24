@@ -17,8 +17,10 @@ public class TransactionDAO extends GenericDAO<Transactions> {
         super(Transactions.class, tableName, cp);
     }
     
+    // show the transaction history for a given customer ID
     public Transactions[] showHistory(int CustomerId) throws RollbackException {
     	Transactions[] history = match(MatchArg.equals("customerId", CustomerId));
+    	//should we sort the history based on the date?
     	return history;
     }
     public void processTransaction(Map<Integer, Double> closingPrice, String transitionDate,

@@ -6,15 +6,18 @@ import org.genericdao.RollbackException;
 
 import cfs.databean.Customer;
 import cfs.databean.Transactions;
+import cfs.model.CustomerDAO;
 import cfs.model.Model;
 import cfs.model.TransactionDAO;
 
 public class TransactionHistoryAction extends Action {
 	
 	private TransactionDAO transactionDAO;
+	private CustomerDAO customerDAO;
 
     public TransactionHistoryAction(Model model) {
     	transactionDAO = model.getTransactionDAO();
+    	customerDAO = model.getCustomerDAO();
     }
 
     @Override
@@ -34,12 +37,16 @@ public class TransactionHistoryAction extends Action {
                 return "error.jsp";
             }
         } else {
-            Customer customer = (Customer) request.getAttribute("customer");
-            customerId = customer.getCustomerId();
+            customerId = (int) request.getAttribute("customerId");
         }
         try {
-			Transactions[] history= transactionDAO.showHistory(customerId);
-			request.setAttribute("history", history);
+			Transactions[] transactions= transactionDAO.showHistory(customerId);
+			Customer customer = customerDAO.read(customerId);
+			String firstName = customer.getFirstname();
+			String lastName = customer.getFirstname();
+			request.setAttribute("transactions", transactions);
+			request.setAttribute("firstName", firstName);
+			request.setAttribute("lastName", lastName);
 		} catch (RollbackException e) {
 			request.setAttribute("error", e.getMessage());
             return "transaction-history.jsp";
