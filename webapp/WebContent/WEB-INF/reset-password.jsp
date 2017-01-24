@@ -9,7 +9,7 @@
       <input type="hidden" name="customerId" value="${fn:escapeXml(customerId)}">
       <div class="form-group">
         <label for="password">Enter Customer's New Password</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="">
+        <input type="password" class="form-control" id="password" name="newPassword" placeholder="">
       </div>
       <div class="form-group">
         <label for="confirmPassword">Confirm New Password</label>
