@@ -11,6 +11,7 @@ import org.mybeans.form.FormBeanFactory;
 import cfs.databean.Customer;
 import cfs.formbean.LoginForm;
 import cfs.model.CustomerDAO;
+import cfs.model.EmployeeDAO;
 import cfs.model.Model;
 
 public class LoginAction extends Action {
@@ -19,11 +20,11 @@ public class LoginAction extends Action {
 
     private CustomerDAO customerDAO;
     
-    //private EmployeeDAO employeeDAO;
+    private EmployeeDAO employeeDAO;
     
     public LoginAction(Model model) {
     	customerDAO = model.getCustomerDAO();
-    	//employeeDAO = model.getEmployeeDAO();
+    	employeeDAO = model.getEmployeeDAO();
     }
 
     @Override
@@ -58,8 +59,7 @@ public class LoginAction extends Action {
                 }
                 
                 // check for login validation
-                if (customerDAO.read(form.getUsername()) == null) {
-                	//&& employeeDAO.read(form.getUsername()) == null) {
+                if (customerDAO.read(form.getUsername()) == null && employeeDAO.read(form.getUsername()) == null) {
                 	errors.add("The user doesn't exist.");
                     return "login.jsp";
                 }
@@ -68,22 +68,20 @@ public class LoginAction extends Action {
                 		request.setAttribute("error", "Wrong password!");
                         return "login.jsp";
                 	} else {
-                		request.getSession().removeAttribute("employeeId");
+                		request.getSession().removeAttribute("employee");
                         request.getSession().setAttribute("customerId", customerDAO.read(form.getUsername()).getCustomerId());
                         return "account.do";
                 	}
+                } else {
+                	if (employeeDAO.read(form.getUsername()).getPassword() != form.getPassword()) {
+                		request.setAttribute("error", "Wrong password!");
+                        return "login.jsp";
+                	} else {
+                		request.getSession().removeAttribute("customerId");
+                        request.getSession().setAttribute("employee", employeeDAO.read(form.getUsername()).getUsername());
+                        return "employee.do";
+                	}
                 }
-//                if (employeeDAO.read(form.getUsername()) != null) {
-//                	if (employeeDAO.read(form.getUsername()).getPassword() != form.getPassword()) {
-//                		request.setAttribute("error", "Wrong password!");
-//                        return "login.jsp";
-//                	} else {
-//                		request.getSession().removeAttribute("customerId");
-//                        request.getSession().setAttribute("rmployeeId", employeeDAO.read(form.getUsername()).getEmployeeId());
-//                        return "employee.do";
-//                	}
-//                } 
-                return "employee.do";
             } catch (Exception e) {
                 request.setAttribute("error", e.getMessage());
                 return "login.jsp";
