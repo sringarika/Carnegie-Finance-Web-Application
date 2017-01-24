@@ -9,16 +9,16 @@ import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 import org.genericdao.Transaction;
 
-import cfs.databean.FundPrice;
+import cfs.databean.FundPriceHistory;
 
-public class FundPriceHistoryDAO extends GenericDAO <FundPrice> {
+public class FundPriceHistoryDAO extends GenericDAO <FundPriceHistory> {
     public FundPriceHistoryDAO(ConnectionPool cp, String tableName) throws DAOException {
-        super(FundPrice.class, tableName, cp);
+        super(FundPriceHistory.class, tableName, cp);
     }
     
     // return the latest price of each fund for the given last transition date
-    public FundPrice[] researchFund(String lastTransitionDate) throws RollbackException {
-    	FundPrice[] fundPrice = match(MatchArg.equals("executeDate", lastTransitionDate));
+    public FundPriceHistory[] researchFund(String lastTransitionDate) throws RollbackException {
+    	FundPriceHistory[] fundPrice = match(MatchArg.equals("executeDate", lastTransitionDate));
     	if (fundPrice == null) {
     		return null;
     	}
@@ -26,8 +26,8 @@ public class FundPriceHistoryDAO extends GenericDAO <FundPrice> {
     }
     
     public void updatePrice (Map<Integer, Double> closingPrice, String transitionDate) throws RollbackException {
-    	FundPrice[] fundPrices = match();
-    	for (FundPrice fundPrice : fundPrices) {
+    	FundPriceHistory[] fundPrices = match();
+    	for (FundPriceHistory fundPrice : fundPrices) {
     		if (closingPrice.get(fundPrice.getFundId()) == null) {
     			throw new RollbackException("Error!!!");
     		} else {

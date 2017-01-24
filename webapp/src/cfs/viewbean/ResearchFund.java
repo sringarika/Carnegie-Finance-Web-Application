@@ -3,7 +3,7 @@ package cfs.viewbean;
 import java.util.List;
 
 import cfs.databean.Fund;
-import cfs.databean.FundPrice;
+import cfs.databean.FundPriceHistory;
 
 public class ResearchFund {
 	 private int fundId;

@@ -39,7 +39,7 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     			transaction.setStatus("Processed");
     			double amount = closingPrice.get(transaction.getFundId()) * transaction.getShares();
     			transaction.setAmount(amount);
-    			Customer customer = customerDAO.read(transaction.getCustomerId());
+    			Customer customer = customerDAO.findByUsername(String.valueOf(transaction.getCustomerId()));
     			customer.setCash(customer.getCash() + amount);
     			try {
     	    		Transaction.begin();
@@ -55,13 +55,14 @@ public class TransactionDAO extends GenericDAO<Transactions> {
         		transaction.setPrice(closingPrice.get(transaction.getFundId()));
         		transaction.setExecuteDate(transitionDate);
         		double shares = transaction.getAmount() / transaction.getPrice();
+        		// ask Jeff about rounding here
         		String s = String.format("#.###", shares);
         		shares = Double.valueOf(s);
         		if (shares > 0) {
         			transaction.setShares(shares);
         			transaction.setStatus("Processed");
         		} else {
-        			Customer customer = customerDAO.read(transaction.getCustomerId());
+        			Customer customer = customerDAO.findByUsername(String.valueOf(transaction.getCustomerId()));
         			customer.setCash(customer.getCash() + transaction.getAmount());
         			transaction.setStatus("Rejected");
         			try {
