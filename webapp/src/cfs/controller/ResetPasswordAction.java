@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.mybeans.form.FormBeanFactory;
 
+import cfs.databean.Customer;
 import cfs.formbean.ChangePasswordForm;
 import cfs.model.CustomerDAO;
 import cfs.model.Model;
@@ -37,6 +38,17 @@ public class ResetPasswordAction extends Action {
         if (request.getMethod().equals("GET")) {
             
             // TODO: Maybe get some information (e.g. name) for display?
+            try {
+            Customer customer = customerdao.read(customerId);
+            String firstName = customer.getFirstname();
+            String lastName = customer.getLastname();
+            request.setAttribute("firstName", firstName);
+            request.setAttribute("lastName", lastName);
+            } catch (Exception e) {
+                e.printStackTrace();
+                request.setAttribute("error", e.getMessage());
+                return "reset-password.jsp";
+            }
             return "reset-password.jsp";
         } else if (request.getMethod().equals("POST")) {
             // TODO: Validate password & confirmPassword.
