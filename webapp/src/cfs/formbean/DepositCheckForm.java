@@ -47,12 +47,12 @@ public class DepositCheckForm extends FormBean{
 		double a = 0;
     	try {
     		a = Double.parseDouble(amount);
-    		if(a < 0) {
+    		if(a <= 0) {
     			errors.add("Amount must be greater than zero!");
     		}
     		
-    		if(a > Integer.MAX_VALUE) {
-    			errors.add("Amount cannot be greater than $2147483647!");
+    		if(a > 1000000) {
+    			errors.add("Amount cannot be greater than $1,000,000.00!");
     		}
     	} catch(NumberFormatException num){
             errors.add("Amount must be a valid number!");
