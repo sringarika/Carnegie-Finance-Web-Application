@@ -75,7 +75,7 @@ public class Model {
                 Fund fund = new Fund("Long-Term Treasury", "LTT");
                 fundDAO.create(fund);
                 Position position = new Position(customerDAO.findByUsername("bob").getCustomerId(),
-                		fundDAO.findIdByName("Long-Term Treasury"), 1000.00);
+                		fundDAO.findIdByName("Long-Term Treasury"), 1000.000);
                 customerPositionDAO.create(position);
             }
             if (employeeDAO.findByUsername("admin") == null) {
@@ -83,7 +83,7 @@ public class Model {
                 employeeDAO.create(employee);
             }
         } catch (RollbackException e) {
-            // Probably exists.
+            System.out.println("something is wrong");
         }
     }
 }
