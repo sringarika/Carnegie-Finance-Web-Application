@@ -52,7 +52,7 @@ public class ResetPasswordAction extends Action {
             return "success.jsp";
             } catch (Exception e) {
                 request.setAttribute("error", e.getMessage());
-                return "change-password.jsp";
+                return "reset-password.jsp";
             }
         } else {
             return null;
