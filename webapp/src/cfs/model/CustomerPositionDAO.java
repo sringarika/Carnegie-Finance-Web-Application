@@ -24,11 +24,11 @@ public class CustomerPositionDAO extends GenericDAO<Position> {
         return positions;
     }
     
-    public void updatePos(Position p) throws RollbackException{
+    public void updatePosition(Position p) throws RollbackException{
 		try{
-		Transaction.begin();
-		super.update(p);
-		Transaction.commit();
+    		Transaction.begin();
+    		super.update(p);
+    		Transaction.commit();
 		} finally {
 			if (Transaction.isActive())
 				Transaction.rollback();
