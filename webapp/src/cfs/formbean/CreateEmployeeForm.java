@@ -3,9 +3,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.mybeans.form.FormBean;
-public class CreateEmployee extends FormBean{
+public class CreateEmployeeForm extends FormBean{
     private String newPassword;
-    private String confirmPassword;
+    private String confPassword;
     private String firstName;
     private String lastName;
     private String username;
@@ -16,10 +16,10 @@ public class CreateEmployee extends FormBean{
         this.newPassword = newPassword;
     }
     public String getConfirmPassword() {
-        return confirmPassword;
+        return confPassword;
     }
     public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
+        this.confPassword = confirmPassword;
     }
     public String getUsername() {
         return username;
@@ -44,10 +44,10 @@ public class CreateEmployee extends FormBean{
         if (newPassword == null || newPassword.isEmpty()) {
             return Collections.singletonList("New password is required!");
         }
-        if (confirmPassword == null || confirmPassword.isEmpty()) {
+        if (confPassword == null || confPassword.isEmpty()) {
             return Collections.singletonList("Confirm password is required!");
         }
-        if (!newPassword.equals(confirmPassword)) {
+        if (!newPassword.equals(confPassword)) {
             return Collections.singletonList("Confirm password does not match new password!");
         }
         if (username == null || username.isEmpty()) {

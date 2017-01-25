@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.mybeans.form.FormBean;
-public class CreateCustomer extends FormBean {
+public class CreateCustomerForm extends FormBean {
     private String password;
     private String confPassword;
     private String firstName;
@@ -59,11 +59,6 @@ public class CreateCustomer extends FormBean {
     public void setAmount(String amount) {
         this.amount = amount;
     }
-    
-//    public void setButton(String button) {
-//        this.button = button;
-//    }
-    
     public String getAmount() {
         System.out.println(amount);
         return amount;
@@ -125,12 +120,6 @@ public class CreateCustomer extends FormBean {
         } catch(NumberFormatException num){
             return Collections.singletonList("Amount must be a valid number!");
         }
-        
-
-//        if (errors.size() > 0)
-//            return errors;
-
-        //return errors;
         return Collections.emptyList();
     }
 }

@@ -1,7 +1,12 @@
 package cfs.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.mybeans.form.FormBeanFactory;
+
+import cfs.formbean.ChangePasswordForm;
 import cfs.model.Model;
 
 public class ResetPasswordAction extends Action {
@@ -28,13 +33,27 @@ public class ResetPasswordAction extends Action {
         request.setAttribute("customerId", customerId);
         
         if (request.getMethod().equals("GET")) {
+            
             // TODO: Maybe get some information (e.g. name) for display?
             return "reset-password.jsp";
         } else if (request.getMethod().equals("POST")) {
             // TODO: Validate password & confirmPassword.
             // TODO: Use DAO to reset password for customerId.
+            try {
+                ChangePasswordForm form = FormBeanFactory.getInstance(ChangePasswordForm.class).create(request);
+                List<String> validationErrors = form.getValidationErrors();
+                if (validationErrors.size() > 0) {
+                    throw new Exception(validationErrors.get(0));
+                }
+                System.out.println("New Password:" + form.getNewPassword());
+                System.out.println("Confirm Password:" + form.getConfirmPassword());
+                // TODO
             request.setAttribute("message", "Customer password reset successfully.");
             return "success.jsp";
+            } catch (Exception e) {
+                request.setAttribute("error", e.getMessage());
+                return "change-password.jsp";
+            }
         } else {
             return null;
         }
