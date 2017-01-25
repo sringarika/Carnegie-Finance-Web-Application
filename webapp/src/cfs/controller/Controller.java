@@ -9,8 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.genericdao.RollbackException;
+import org.genericdao.Transaction;
+
 import cfs.databean.Customer;
+import cfs.model.CustomerDAO;
+import cfs.model.EmployeeDAO;
 import cfs.model.Model;
+
 
 public class Controller extends HttpServlet {
 
@@ -40,8 +46,53 @@ public class Controller extends HttpServlet {
         Action.add(new TransactionHistoryAction(model));
         Action.add(new ResearchFundAction(model));
         //add default (formbean)
+        //add one user with information
+ //       CreateinitUser(model);
     }
 
+  /*  public void CreateinitUser(Model model) {
+    	CustomerDAO userDAO = model.getCustomerDAO();
+       
+        Customer[]arr = null;
+		try {
+			arr = userDAO.match();
+		} catch (RollbackException e) {
+			e.printStackTrace();
+		}
+		int len= 0;
+		if(arr != null) len = arr.length;
+		String uname = "uname";
+		String fname = "fname";
+		String lname = "lname";
+		String pwd = "pwd";
+		String addrLine1 = "abcd";
+		String addrLine2 = "efgh";
+		String city = "pittsburgh";
+		String state = "Pennsylvania";
+		String zip = "15213";
+		
+			Customer user;
+			try {
+			Transaction.begin();
+			user = new Customer();
+			user.setUsername(uname);
+			user.setFirstname(fname);
+			user.setLastname(lname);
+			user.setPassword(pwd);
+			user.setAddrLine1(addrLine1);
+			user.setAddrLine2(addrLine2);
+			user.setCity(city);
+			user.setState(state);
+			user.setZip(zip);
+			Transaction.commit();
+			CustomerDAO.create(user);
+			
+			} catch (RollbackException e) {
+				e.printStackTrace();
+			}	
+	}*/
+    
+    
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         doGet(request, response);

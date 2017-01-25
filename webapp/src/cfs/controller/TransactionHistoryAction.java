@@ -2,13 +2,19 @@ package cfs.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.genericdao.RollbackException;
+
 import cfs.databean.Customer;
+import cfs.databean.Transactions;
 import cfs.model.Model;
+import cfs.model.TransactionDAO;
 
 public class TransactionHistoryAction extends Action {
+	
+	private TransactionDAO transactionDAO;
 
     public TransactionHistoryAction(Model model) {
-        // TODO Auto-generated constructor stub
+    	transactionDAO = model.getTransactionDAO();
     }
 
     @Override
@@ -31,7 +37,13 @@ public class TransactionHistoryAction extends Action {
             Customer customer = (Customer) request.getAttribute("customer");
             customerId = customer.getCustomerId();
         }
-        // TODO: Get transaction history for customerId.
+        try {
+			Transactions[] history= transactionDAO.showHistory(customerId);
+			request.setAttribute("history", history);
+		} catch (RollbackException e) {
+			request.setAttribute("error", e.getMessage());
+            return "transaction-history.jsp";
+		}
         return "transaction-history.jsp";
     }
 

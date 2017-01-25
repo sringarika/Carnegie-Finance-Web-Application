@@ -6,15 +6,14 @@ import org.genericdao.PrimaryKey;
 public class Fund {
     private int fundId;
     private String name;
-    private String symbol;
+    private String ticker;
     
     public Fund() {
     }
     
-    public Fund(int fundId, String name, String symbol) {
-        this.fundId = fundId;
+    public Fund(String name, String ticker) {
         this.name = name;
-        this.symbol = symbol;
+        this.ticker = ticker;
     }
     
     public int getFundId() {
@@ -29,10 +28,10 @@ public class Fund {
     public void setName(String name) {
         this.name = name;
     }
-    public String getSymbol() {
-        return symbol;
+    public String getTicker() {
+        return ticker;
     }
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
+    public void setTicker(String ticker) {
+        this.ticker = ticker;
     }
 }
