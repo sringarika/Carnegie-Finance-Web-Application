@@ -1,6 +1,7 @@
 package cfs.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.genericdao.RollbackException;
 
@@ -27,8 +28,9 @@ public class TransactionHistoryAction extends Action {
 
     @Override
     public String perform(HttpServletRequest request) {
+        HttpSession session = request.getSession();
         int customerId;
-        if (request.getAttribute("employee") != null) {
+        if (session.getAttribute("employeeId") != null) {
             String customerIdStr = request.getParameter("customerId");
             try {
                 customerId = Integer.parseInt(customerIdStr);
@@ -37,7 +39,7 @@ public class TransactionHistoryAction extends Action {
                 return "error.jsp";
             }
         } else {
-            customerId = (int) request.getAttribute("customerId");
+            customerId = (int) session.getAttribute("customerId");
         }
         try {
             Transactions[] transactions= transactionDAO.showHistory(customerId);

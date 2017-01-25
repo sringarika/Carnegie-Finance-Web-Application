@@ -17,7 +17,7 @@
     </tr>
     <tr>
       <td>Last Trading Day</td>
-      <td>${address}</td>
+      <td></td>
     </tr>
     <tr>
       <td>Cash Balance</td>
