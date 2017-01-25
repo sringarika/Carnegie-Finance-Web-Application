@@ -30,10 +30,10 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     		return;
     	}
     	for (Transactions transaction : pendings) {
-    		if (transaction.getType() == "Deposit Check" || transaction.getType() == "Request Check" ) {
+    		if (transaction.getType().equals("Deposit Check") || transaction.getType().equals("Request Check")) {
     			transaction.setExecuteDate(transitionDate);
     			transaction.setStatus("Processed"); //where is the amount being added/removed?
-    		} else if (transaction.getType() == "Sell") {
+    		} else if (transaction.getType().equals("Sell")) {
     			if (closingPrice.get(transaction.getFundId()) == null) {
         			throw new RollbackException("Error!!!"); //Fund does not exist?(should specify)
         		}
@@ -92,24 +92,25 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     }
     
     //could call this method from prev code
-    public void updatepos(int custId, int fundId, double shares, String fundtrans,CustomerPositionDAO customerPositionDAO ) { //fund trans can be buy or sell
+    public void updatePos(int custId, int fundId, double shares, String fundtrans,CustomerPositionDAO customerPositionDAO ) { //fund trans can be buy or sell
 		//include this in above cases sell fund so that this happens simultaneously
     	//will be the same for any type of transaction
 			try {
-				Position[] pos = customerPositionDAO.findPositions(custId, fundId);
+				Position[] pos = customerPositionDAO.findPositionsBoth(custId, fundId);
 				if(fundtrans.equals("sell") && shares == 0) {//so deletefund 
 					Transaction.begin();
 					customerPositionDAO.delete(pos[0]);
 					Transaction.commit();
 				} else {
 				if(pos == null) {//position does not exist
-				    Position posn = new Position();
-				    posn.setShares(shares);
-				    customerPositionDAO.updatepos(posn);
+				    Position posn = new Position(custId, fundId, shares);
+				    Transaction.begin();
+				    customerPositionDAO.create(posn);
+				    Transaction.commit();
 				} else {
 				    for(Position p : pos) {
 				    	p.setShares(shares);
-				    	customerPositionDAO.updatepos(p);
+				    	customerPositionDAO.updatePos(p);
 				    }
 				}
 				}

@@ -50,7 +50,7 @@ public class AccountAction extends Action {
             	request.setAttribute("lastName", lastName);
             	request.setAttribute("address", address);
             	request.setAttribute("cash", cash);
-            	Position[] positions = customerPositionDAO.findPositionscid(customerId);
+            	Position[] positions = customerPositionDAO.findPositions(customerId);
             	request.setAttribute("positions", positions);
             	return "account.jsp";
             } catch (Exception e) {

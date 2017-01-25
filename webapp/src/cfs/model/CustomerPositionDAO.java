@@ -15,17 +15,17 @@ public class CustomerPositionDAO extends GenericDAO<Position> {
         super(Position.class, tableName, cp);
     }
     
-    public Position[] findPositions(int customerId, int fundId) throws RollbackException {
+    public Position[] findPositionsBoth(int customerId, int fundId) throws RollbackException {
         Position[] positions = match(MatchArg.and(MatchArg.equals("customerId", customerId),MatchArg.equals("fudnId", fundId)));
         return positions;
     }
     
-    public Position[] findPositionscid(int customerId) throws RollbackException {
+    public Position[] findPositions(int customerId) throws RollbackException {
         Position[] positions = match(MatchArg.equals("customerId", customerId));
         return positions;
     }
     
-    public void updatepos(Position p) throws RollbackException{
+    public void updatePos(Position p) throws RollbackException{
 		try{
 		Transaction.begin();
 		super.update(p);
