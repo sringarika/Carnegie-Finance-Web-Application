@@ -7,12 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 import org.mybeans.form.FormBeanFactory;
 
 import cfs.formbean.ChangePasswordForm;
+import cfs.model.CustomerDAO;
 import cfs.model.Model;
-
 public class ResetPasswordAction extends Action {
 
+    private CustomerDAO customerdao;
     public ResetPasswordAction(Model model) {
         // TODO Auto-generated constructor stub
+        customerdao= model.getCustomerDAO();
     }
 
     @Override
