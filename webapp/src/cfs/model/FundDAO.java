@@ -42,7 +42,7 @@ public class FundDAO extends GenericDAO<Fund> {
     }
 
 	public Integer findIdByName(String fundName) throws RollbackException {
-		Fund[] fund = match(MatchArg.equals("fundName", fundName));
+		Fund[] fund = match(MatchArg.equals("name", fundName));
 		if (fund.length == 0) {
 			return null;
 		} else {

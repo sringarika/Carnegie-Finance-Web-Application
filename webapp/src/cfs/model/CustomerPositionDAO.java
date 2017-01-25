@@ -6,7 +6,6 @@ import org.genericdao.GenericDAO;
 import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 
-import cfs.databean.Customer;
 import cfs.databean.Position;
 
 public class CustomerPositionDAO extends GenericDAO<Position> {
