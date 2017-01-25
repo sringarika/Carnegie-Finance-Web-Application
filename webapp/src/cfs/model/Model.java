@@ -81,7 +81,10 @@ public class Model {
                 customerPositionDAO.create(position);
                 Transactions transaction1 = new Transactions(customerId, "Sell", 1888.00);
                 transaction1.setStatus("Processed");
-                
+                transaction1.setExecuteDate("01/25/2016");
+                transaction1.setFundId(fundId);
+                transaction1.setPrice(1.88);
+                transaction1.setShares(1000.000);
             }
             if (employeeDAO.findByUsername("admin") == null) {
                 Employee employee = new Employee("admin", "Alice", "Admin", "1");
