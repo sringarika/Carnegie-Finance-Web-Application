@@ -11,6 +11,7 @@ import cfs.databean.Customer;
 import cfs.databean.Employee;
 import cfs.databean.Fund;
 import cfs.databean.Position;
+import cfs.databean.Transactions;
 
 public class Model {
     private CustomerDAO customerDAO;
@@ -72,11 +73,15 @@ public class Model {
                 customer.setZip("15213");
                 customer.setCash(1000.00);
                 customerDAO.create(customer);
+                int customerId = customerDAO.findByUsername("bob").getCustomerId();
                 Fund fund = new Fund("Long-Term Treasury", "LTT");
                 fundDAO.create(fund);
-                Position position = new Position(customerDAO.findByUsername("bob").getCustomerId(),
-                		fundDAO.findIdByName("Long-Term Treasury"), 1000.000);
+                int fundId = fundDAO.findIdByName("Long-Term Treasury");
+                Position position = new Position(customerId, fundId, 1000.000);
                 customerPositionDAO.create(position);
+                Transactions transaction1 = new Transactions(customerId, "Sell", 1888.00);
+                transaction1.setStatus("Processed");
+                
             }
             if (employeeDAO.findByUsername("admin") == null) {
                 Employee employee = new Employee("admin", "Alice", "Admin", "1");
