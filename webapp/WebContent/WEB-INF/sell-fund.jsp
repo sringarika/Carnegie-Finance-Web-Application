@@ -29,7 +29,7 @@
           <tr>
                 <td><input type="radio" name="fundId" value="${fn:escapeXml(cusFund.fundId)}" required></td>
                 <td>${fn:escapeXml(cusFund.fundName)}</td>
-                <td>${fn:escapeXml(cusFund.symbol)}</td>
+                <td>${fn:escapeXml(cusFund.ticker)}</td>
                 <td class="text-right"><fmt:formatNumber type="number" minFractionDigits="3" maxFractionDigits="3" value="${cusFund.numOfShares}" /></td>
                 <td class="text-right"><fmt:formatNumber value="${cusFund.price}" type="currency"/></td>
                 <td class="text-right"><fmt:formatNumber value="${cusFund.value}" type="currency"/></td>

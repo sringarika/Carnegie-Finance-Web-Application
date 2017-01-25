@@ -12,7 +12,7 @@ public class FundDAO extends GenericDAO<Fund> {
     public FundDAO(ConnectionPool cp, String tableName) throws DAOException {
         super(Fund.class, tableName, cp);
     }
-    
+
     /**
      * Fund name
      * @param fundName input param
@@ -26,15 +26,15 @@ public class FundDAO extends GenericDAO<Fund> {
     	}
     	return fundn;
     }
-    
+
     /**
      * Fund price
-     * @param fundSymbol input param
+     * @param fundTicker input param
      * @return fund price
      * @throws RollbackException
      */
-    public Fund[] fundSym(String fundSymbol) throws RollbackException {
-    	Fund[] funds = match(MatchArg.equals("symbol", fundSymbol));
+    public Fund[] fundTicker(String fundTicker) throws RollbackException {
+    	Fund[] funds = match(MatchArg.equals("ticker", fundTicker));
     	if (funds == null) {
     		return null;
     	}
