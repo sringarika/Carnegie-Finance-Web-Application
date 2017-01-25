@@ -7,6 +7,7 @@ import org.genericdao.RollbackException;
 import cfs.databean.Fund;
 import cfs.databean.FundPriceHistory;
 import cfs.model.FundDAO;
+
 import cfs.model.FundPriceHistoryDAO;
 import cfs.model.Model;
 import cfs.viewbean.ResearchFundView;

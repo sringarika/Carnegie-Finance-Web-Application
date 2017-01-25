@@ -13,7 +13,7 @@ public class Employee {
     public Employee() {
     }
     
-    public Employee(String username, String password, String firstname, String lastname) {
+    public Employee(String username, String firstname, String lastname, String password) {
         this.password = password;
         this.username = username;
         this.firstname = firstname;

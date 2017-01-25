@@ -3,15 +3,15 @@ package cfs.viewbean;
 public class CustomerFundView {
 	    private int fundId;
 	    private String fundName;
-	    private String symbol;
+	    private String ticker;
 	    private double numOfShares;
 	    private double price;
 	    private double value;
 	    
-	    public CustomerFundView(int fundId, String fundName, String symbol, double numOfShares, double price) {
+	    public CustomerFundView(int fundId, String fundName, String ticker, double numOfShares, double price) {
 	        this.fundId = fundId;
 	        this.fundName = fundName;
-	        this.symbol = symbol;
+	        this.ticker = ticker;
 	        this.numOfShares = numOfShares;
 	        this.price = price;
 	        this.value = numOfShares * price;
@@ -27,14 +27,8 @@ public class CustomerFundView {
 	    public String getFundName() {
 	        return fundName;
 	    }
-	    public void setFundName(String name) {
-	        this.fundName = name;
-	    }
-	    public String getSymbol() {
-	        return symbol;
-	    }
-	    public void setSymbol(String symbol) {
-	        this.symbol = symbol;
+	    public String getTicker() {
+	        return ticker;
 	    }
 	    public double getNumOfShares() {
 	        return numOfShares;

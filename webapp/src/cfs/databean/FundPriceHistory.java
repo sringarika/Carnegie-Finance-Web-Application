@@ -7,8 +7,6 @@ public class FundPriceHistory {
 	private String executeDate;
 	private int fundId;
 	private double price;
-	private String name;
-	private String ticker;
 
     public FundPriceHistory() {
     }
@@ -38,17 +36,5 @@ public class FundPriceHistory {
     }
     public void setPrice(double price) {
         this.price = price;
-    }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public String getTicker() {
-        return ticker;
-    }
-    public void setTicker(String ticker) {
-        this.ticker = ticker;
     }
 }

@@ -9,6 +9,9 @@ import org.genericdao.RollbackException;
 
 import cfs.databean.Customer;
 import cfs.databean.Employee;
+import cfs.databean.Fund;
+import cfs.databean.Position;
+import cfs.databean.Transactions;
 
 public class Model {
     private CustomerDAO customerDAO;
@@ -62,24 +65,33 @@ public class Model {
 
     public void seed() {
         try {
-            if (customerDAO.findByUsername("carl") == null) {
-                Customer customer = new Customer();
-                customer.setUsername("carl");
-                customer.setFirstname("Carl");
-                customer.setLastname("Customer");
-                customer.setPassword("secret");
+            if (customerDAO.findByUsername("bob") == null) {
+                Customer customer = new Customer("bob", "Bob", "Brown", "1");
+                customer.setAddrLine1("5000 Forbes Ave");
+                customer.setCity("Pittsburgh");
+                customer.setState("PA");
+                customer.setZip("15213");
+                customer.setCash(1000.00);
                 customerDAO.create(customer);
+                int customerId = customerDAO.findByUsername("bob").getCustomerId();
+                Fund fund = new Fund("Long-Term Treasury", "LTT");
+                fundDAO.create(fund);
+                int fundId = fundDAO.findIdByName("Long-Term Treasury");
+                Position position = new Position(customerId, fundId, 1000.000);
+                customerPositionDAO.create(position);
+                Transactions transaction1 = new Transactions(customerId, "Sell", 1888.00);
+                transaction1.setStatus("Processed");
+                transaction1.setExecuteDate("01/25/2016");
+                transaction1.setFundId(fundId);
+                transaction1.setPrice(1.88);
+                transaction1.setShares(1000.000);
             }
             if (employeeDAO.findByUsername("admin") == null) {
-                Employee employee = new Employee();
-                employee.setUsername("admin");
-                employee.setFirstname("Alice");
-                employee.setLastname("Admin");
-                employee.setPassword("secret");
+                Employee employee = new Employee("admin", "Alice", "Admin", "1");
                 employeeDAO.create(employee);
             }
         } catch (RollbackException e) {
-            // Probably exists.
+            System.out.println("something is wrong");
         }
     }
 }

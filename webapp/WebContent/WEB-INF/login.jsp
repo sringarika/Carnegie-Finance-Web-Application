@@ -15,11 +15,11 @@
       <div class="form-group">
         <label for="username">Username</label>
         <input type="text" class="form-control" id="username" name="username" required
-          placeholder="Use 'admin' for employee, 'carl' for customer">
+          placeholder="Use 'admin' for employee, 'bob' for customer">
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Use 'secret'" required>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Use '1'" required>
       </div>
       <button type="submit" name = "loginbutton" class="btn btn-primary">Login</button>
     </form>

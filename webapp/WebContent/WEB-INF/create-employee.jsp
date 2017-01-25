@@ -8,23 +8,23 @@
 	<form action="create-employee.do" method="POST">
       <div class="form-group">
         <label for="username">Username</label>
-        <input type="text" class="form-control" id="username" placeholder="">
+        <input type="text" class="form-control" id="username" name="username" placeholder="">
       </div>
       <div class="form-group">
         <label for="firstname">First Name</label>
-        <input type="text" class="form-control" id="firstname" placeholder="">
+        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="">
       </div>
       <div class="form-group">
         <label for="lastname">Last Name</label>
-        <input type="text" class="form-control" id="lastname" placeholder="">
+        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="">
       </div>
       <div class="form-group">
         <label for="password">Password </label>
-        <input type="password" class="form-control" id="password" placeholder="">
+        <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="">
       </div>
       <div class="form-group">
         <label for="password">Confirm Password </label>
-        <input type="password" class="form-control" id="confpassword" placeholder="">
+        <input type="password" class="form-control" id="confirmPassword" name="confPassword" placeholder="">
       </div>
       <button type="submit" class="btn btn-primary">Create Employee Account</button>
     </form>

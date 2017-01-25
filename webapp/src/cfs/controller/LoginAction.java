@@ -39,9 +39,9 @@ public class LoginAction extends Action {
         } else if (request.getMethod().equals("POST")) {
         	HttpSession session = request.getSession();
         	// if someone already logged in, switch to the account page
-            if (session.getAttribute("customer") != null) {
+            if (session.getAttribute("customerId") != null) {
         		return "account.do";
-        	} else if (session.getAttribute("employee") != null) {
+        	} else if (session.getAttribute("employeeId") != null) {
         		return "employee.do";
         	}
             try {
@@ -78,6 +78,7 @@ public class LoginAction extends Action {
                 	}
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 request.setAttribute("error", e.getMessage());
                 return "login.jsp";
             }

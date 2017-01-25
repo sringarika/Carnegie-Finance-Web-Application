@@ -4,11 +4,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="header.jsp" %>
   <main>
-    <h2>Transaction History</h2>
+    <h2>Transaction History for ${firstName} ${lastName}</h2>
+    <p style="font-size: 12pt; font-weight: bold; color: red"> ${error} </p>
     <table class="table table-bordered table-striped">
   	  <thead>
 	  <tr>
-	   <th>ID</th>
+	    <th>ID</th>
 	    <th>Transaction Date</th>
 	    <th>Transaction Type</th>
 	    <th>Fund</th>
@@ -20,35 +21,17 @@
 	  </thead>
 	  <tbody>
 	  <tr>
-	  	<td>1</td>
-	    <td>01/19/2017</td>
-	    <td>Buy</td>
-	    <td>EBIZC - ebConsultants Fund</td>
-	    <td>2.000</td>
-	    <td>$12.34</td>
-	    <td>$24.68</td>
-	    <td>Finished</td>
-	  </tr>
+	    <c:forEach var="transaction" items="${transactions}">
+	      <th>"${transaction.transactionId}"</th>
+	      <th>"${transaction.executeDate}"</th>
+	      <th>"${transaction.type}"</th>
+	      <th>"${transaction.fundName}"</th>
+	      <th>"${transaction.shares}"</th>
+	      <th>"${transaction.price}"</th>
+	      <th>"${transaction.amount}"</th>
+	      <th>"${transaction.status}"</th>
+	    </c:forEach>
 	  <tr>
-	  	<td>2</td>
-	    <td>01/19/2017</td>
-	    <td>Buy</td>
-	    <td>EBIZC - ebConsultants Fund</td>
-	    <td></td>
-	    <td>$12.34</td>
-	    <td>$0.10</td>
-	    <td>Rejected</td>
-	  </tr>
-	  <tr>
-	  	<td>3</td>
-	    <td></td>
-	    <td>Buy</td>
-	    <td>CMUMC - CMU Math Club Fund</td>
-	    <td></td>
-	    <td></td>
-	    <td>$123.40</td>
-	    <td>Pending</td>
-	  </tr>
 	  </tbody>
 	</table>
   </main>

@@ -9,30 +9,28 @@
       There are <a href="transaction-list.jsp">42 transactions</a> pending.
       <a href="transaction-list.jsp">Show details...</a>
     </p>
-    <div>
-      <p>Last Closing Date: 01/19/2017</p>
-      <p>Current Closing Date: <input type="text" class="form-control" name="price" value=""></p>
-    </div>
-    <table class="table table-striped table-bordered">
-    <tr>
-      <th>Fund ID</th>
-      <th>Fund Name</th>
-      <th>Ticker</th>
-      <th>Last Closing Price</th>
-    </tr>
-    <tr>
-      <td>1</td>
-      <td>ebConsultants Fund</td>
-      <td>EBIZC</td>
-      <td><input type="text" class="form-control" name="price" value=""></td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>CMU Math Club Fund</td>
-      <td>CMUMC</td>
-      <td><input type="text" class="form-control" name="price" value=""></td>
-    </tr>
-    </table>
-    <button type="submit" class="btn btn-primary">Transition Day</button>
+    <form action="transition-day.do" method="POST">
+      <div>
+        <p>Last Closing Date: 01/19/2017</p>
+        <p>Current Closing Date: <input type="date" class="form-control" name="closingDate" value="" required></p>
+      </div>
+      <table class="table table-striped table-bordered">
+      <tr>
+        <th>Fund ID</th>
+        <th>Fund Name</th>
+        <th>Ticker</th>
+        <th>Last Closing Price</th>
+      </tr>
+      <c:forEach var="fund" items="${funds}">
+        <tr>
+          <td>${fn:escapeXml(fund.fundId)}<input type="hidden" name="fundIds" value="${fn:escapeXml(fund.fundId)}"></td>
+          <td>${fn:escapeXml(fund.name)}</td>
+          <td>${fn:escapeXml(fund.ticker)}</td>
+          <td><input type="number" class="form-control" name="closingPrices" placeholder="10000.00" step="0.01" min="1.00" max="10000.00" required></td>
+        </tr>
+      </c:forEach>
+      </table>
+      <button type="submit" class="btn btn-primary">Transition Day</button>
+    </form>
   </main>
 <%@ include file="footer.jsp" %>

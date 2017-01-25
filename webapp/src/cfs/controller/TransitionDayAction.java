@@ -1,11 +1,12 @@
 package cfs.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import cfs.databean.Fund;
 import cfs.formbean.TransitionDayForm;
 import cfs.model.CustomerDAO;
 import cfs.model.CustomerPositionDAO;
@@ -34,20 +35,34 @@ public class TransitionDayAction extends Action {
 
     @Override
     public String perform(HttpServletRequest request) {
+        Fund[] funds = {
+                new Fund("ebConsultants Fund", "EBIZC") {{ setFundId(1); }},
+                new Fund("CMU Math Club Fund", "CMUMC") {{ setFundId(2); }},
+                new Fund("Long-Term Investment Grade", "LTIG") {{ setFundId(3); }},
+                new Fund("International Value", "IV") {{ setFundId(4); }},
+                new Fund("Pennslyvania Long-Term Tax Exempt", "PLTTE") {{ setFundId(5); }},
+                new Fund("High Yield Corporate", "HYC") {{ setFundId(6); }},
+        };
+        request.setAttribute("funds", funds);
+
         if (request.getMethod().equals("GET")) {
             return "transition-day.jsp";
         } else if (request.getMethod().equals("POST")) {
         	ArrayList<String> errors = new ArrayList<String>();
             request.setAttribute("errors", errors);
             try {
-            	TransitionDayForm form = null; // TODO
+            	TransitionDayForm form = new TransitionDayForm(request);
                 List<String> validationErrors = form.getValidationErrors();
                 if (validationErrors.size() > 0) {
                 	errors.addAll(validationErrors);
                 	return "transition-day.jsp";
                 }
-                String executeDate = (String) request.getAttribute("date");
-                HashMap<Integer, Double> prices = (HashMap<Integer, Double>) request.getAttribute("prices");
+                String executeDate = form.getClosingDate();
+                System.out.println("Closing: " + executeDate);
+                Map<Integer, Double> prices = form.getPriceForFundMap();
+                prices.forEach((fundId, closingPrice) -> {
+                    System.out.println("\tFund " + fundId + ": " + closingPrice);
+                });
                 transactionDAO.processTransaction(prices, executeDate, customerDAO, customerPositionDAO);
                 fundPriceHistoryDAO.updatePrice(prices, executeDate);
             } catch (Exception e) {

@@ -4,57 +4,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="header.jsp" %>
-<%!
-  public class CusFund {
-    private int fundId;
-    private String fundName;
-    private String ticker;
-    private double numOfShares;
-    private double price;
-    private double value;
-    
-    public CusFund(int fundId, String fundName, String ticker, double numOfShares, double price) {
-        this.fundId = fundId;
-        this.fundName = fundName;
-        this.ticker = ticker;
-        this.numOfShares = numOfShares;
-        this.price = price;
-        this.value = numOfShares * price;
-    }
-    
-    public int getFundId() {
-        return fundId;
-    }
-    
-    public String getFundName() {
-        return fundName;
-    }
-    
-    public String getTicker() {
-        return ticker;
-    }
-    
-    public double getNumOfShares() {
-        return numOfShares;
-    }
-    public double getPrice() {
-      return price;
-    }
-    public double getValue() {
-      return value;
-    }
-  }
-%>
-<%
-    CusFund[] cusFunds = {
-            new CusFund(1, "Long-Term Treasury", "LTT", 1000.000, 11.88),
-            new CusFund(2, "Index Admiral Shares", "IAS", 1000.000, 209.79),
-            new CusFund(3, "Strategic Equity", "SE", 5000.000, 32.88),
-    };
-    request.setAttribute("cusFunds", cusFunds);
-%>
   <main>
     <h2>Sell Funds</h2>
+    <c:if test="${(!empty error)}">
+      <div class="alert alert-danger">
+        ${fn:escapeXml(error)}
+      </div>
+    </c:if>
     <form action="sell-fund.do" method="POST">
       <div class="form-group">
         <label for="fundId">Please select fund to sell</label>
@@ -83,7 +39,8 @@
       </div>
       <div class="form-group">
         <label for="shares">Shares to sell</label>
-        <input type="number" class="form-control" id="shares" name="shares" placeholder="12.345" step="0.001" min="0.001" required>
+        <input type="number" class="form-control" id="shares" name="shares" placeholder="12.345" step="0.001" min="1.000" max="1000000.000" required>
+        <%-- TODO(yuchen): Write some JS to update the max attr above so it can also be validated on client-side. --%>
       </div>
       <div class="alert alert-info" role="alert">
         The transaction will be processed on the end of the trading day. The cash amount depends on the closing price of the fund at that time.

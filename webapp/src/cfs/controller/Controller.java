@@ -10,20 +10,20 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.genericdao.RollbackException;
-import org.genericdao.Transaction;
 
 import cfs.databean.Customer;
-import cfs.model.CustomerDAO;
-import cfs.model.EmployeeDAO;
+import cfs.databean.Employee;
 import cfs.model.Model;
 
 
 public class Controller extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    
+    private Model model;
 
     public void init() throws ServletException {
-        Model model = new Model(getServletConfig());
+        model = new Model(getServletConfig());
         model.seed();
 
         Action.add(new LoginAction(model));
@@ -118,21 +118,31 @@ public class Controller extends HttpServlet {
 
         HttpSession session = request.getSession(true);
         
-        Integer employeeId = (Integer) session.getAttribute("employeeId");
-        if (employeeId != null) {
-            // TODO: Get employee using DAO.
-            request.setAttribute("employee", new Object());
-            request.setAttribute("greeting", "Alice Admin");
+        if (session.getAttribute("employeeId") != null) {
+            int employeeId = (int) session.getAttribute("employeeId");
+        	Employee employee;
+			try {
+				employee = model.getEmployeeDAO().read(employeeId);
+				request.setAttribute("employee", employee);
+	            request.setAttribute("greeting", employee.getFirstname() + " " + employee.getLastname());
+			} catch (RollbackException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        } else if (session.getAttribute("customerId") != null) {
+            int customerId = (int) session.getAttribute("customerId");
+            Customer customer;
+            try {
+                customer = model.getCustomerDAO().read(customerId);
+                request.setAttribute("customer", customer);
+                request.setAttribute("greeting", customer.getFirstname() + " " + customer.getLastname());
+            } catch (RollbackException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else {
+            return Action.perform("login.do", request);
         }
-        
-        Integer customerId = (Integer) session.getAttribute("customerId");
-        if (customerId != null) {
-            // TODO: Get customer using DAO.
-            Customer customer = new Customer(23, "carl", "Carl", "Customer");
-            request.setAttribute("customer", customer);
-            request.setAttribute("greeting", customer.getFirstname() + " " + customer.getLastname());
-        }
-
         return Action.perform(action, request);
     }
 
