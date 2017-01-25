@@ -40,18 +40,18 @@ public class TransactionHistoryAction extends Action {
             customerId = (int) request.getAttribute("customerId");
         }
         try {
-			Transactions[] transactions= transactionDAO.showHistory(customerId);
-			Customer customer = customerDAO.read(customerId);
-			String firstName = customer.getFirstname();
-			String lastName = customer.getFirstname();
-			request.setAttribute("transactions", transactions);
-			request.setAttribute("firstName", firstName);
-			request.setAttribute("lastName", lastName);
-		} catch (RollbackException e) {
-			request.setAttribute("error", e.getMessage());
+            Transactions[] transactions= transactionDAO.showHistory(customerId);
+            Customer customer = customerDAO.read(customerId);
+            String firstName = customer.getFirstname();
+            String lastName = customer.getFirstname();
+            request.setAttribute("transactions", transactions);
+            request.setAttribute("firstName", firstName);
+            request.setAttribute("lastName", lastName);
             return "transaction-history.jsp";
-		}
-        return "transaction-history.jsp";
+        } catch (RollbackException e) {
+            request.setAttribute("error", e.getMessage());
+            return "transaction-history.jsp";
+        }
     }
 
     @Override

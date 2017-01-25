@@ -50,9 +50,9 @@ public class AccountAction extends Action {
             	request.setAttribute("lastName", lastName);
             	request.setAttribute("address", address);
             	request.setAttribute("cash", cash);
-            	
             	Position[] positions = customerPositionDAO.findPositions(customerId);
             	request.setAttribute("positions", positions);
+            	return "account.jsp";
             } catch (Exception e) {
                 request.setAttribute("error", e.getMessage());
                 return "account.jsp";
@@ -60,7 +60,6 @@ public class AccountAction extends Action {
         } else {
             return null;
         }
-        return "account.jsp";
     }
 
     @Override

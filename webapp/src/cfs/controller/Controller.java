@@ -118,8 +118,8 @@ public class Controller extends HttpServlet {
 
         HttpSession session = request.getSession(true);
         
-        Integer employeeId = (Integer) session.getAttribute("employeeId");
-        if (employeeId != null) {
+        if (session.getAttribute("employeeId") != null) {
+            int employeeId = (int) session.getAttribute("employeeId");
         	Employee employee;
 			try {
 				employee = model.getEmployeeDAO().read(employeeId);
@@ -129,21 +129,20 @@ public class Controller extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        }
-        
-        Integer customerId = (Integer) session.getAttribute("customerId");
-        if (customerId != null) {
+        } else if (session.getAttribute("customerId") != null) {
+            int customerId = (int) session.getAttribute("customerId");
             Customer customer;
-			try {
-				customer = model.getCustomerDAO().read(customerId);
-				request.setAttribute("customer", customer);
-	            request.setAttribute("greeting", customer.getFirstname() + " " + customer.getLastname());
-			} catch (RollbackException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+            try {
+                customer = model.getCustomerDAO().read(customerId);
+                request.setAttribute("customer", customer);
+                request.setAttribute("greeting", customer.getFirstname() + " " + customer.getLastname());
+            } catch (RollbackException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else {
+            return Action.perform("login.do", request);
         }
-
         return Action.perform(action, request);
     }
 

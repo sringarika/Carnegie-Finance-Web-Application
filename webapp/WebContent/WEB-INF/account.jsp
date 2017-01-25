@@ -4,11 +4,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="header.jsp" %>
   <main>
+    <p>${error}</p>
     <h2>Account</h2>
-
     <table class="table table-striped table-bordered">
     <tr>
-      <th>Name</th>
+      <td>Name</td>
       <td>${firstName} ${lastName}</td>
     </tr>
     <tr>
@@ -17,7 +17,7 @@
     </tr>
     <tr>
       <td>Last Trading Day</td>
-      <td></td>
+      <td>${address}</td>
     </tr>
     <tr>
       <td>Cash Balance</td>
@@ -90,11 +90,11 @@
     </thead>
     <c:forEach var="position" items="${positions}">
     <tr>
-       <td>${position.}</td>
-       <td>${position.}</td>
+       <td></td>
+       <td></td>
        <td>${position.shares}</td>
-       <td>${position.}</td>
-       <td>${position.}</td>
+       <td></td>
+       <td></td>
     </tr>
     </c:forEach>
   </table>
