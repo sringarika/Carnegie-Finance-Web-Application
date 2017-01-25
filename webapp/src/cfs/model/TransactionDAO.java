@@ -96,25 +96,23 @@ public class TransactionDAO extends GenericDAO<Transactions> {
 		//include this in above cases sell fund so that this happens simultaneously
     	//will be the same for any type of transaction
 			try {
-				Position[] posc = customerPositionDAO.findPositionscid(custId);
-				Position[] posf = customerPositionDAO.findPositionsfid(fundId);
-				if(posc == null) {//position does not exist
+				Position[] pos = customerPositionDAO.findPositions(custId, fundId);
+				if(fundtrans.equals("sell") && shares == 0) {//so deletefund 
+					Transaction.begin();
+					customerPositionDAO.delete(pos[0]);
+					Transaction.commit();
+				} else {
+				if(pos == null) {//position does not exist
 				    Position posn = new Position();
 				    posn.setShares(shares);
 				    customerPositionDAO.updatepos(posn);
 				} else {
-				    for(Position p : posc) {
+				    for(Position p : pos) {
 				    	p.setShares(shares);
 				    	customerPositionDAO.updatepos(p);
 				    }
 				}
-					
-                if(posf != null) { //if null then already generated with customer id
-				    for(Position p : posc) {
-				    	p.setShares(shares);
-				    	customerPositionDAO.updatepos(p);
-				    }
-                }
+				}
 				
 			} catch (RollbackException e) {
 				e.printStackTrace();
