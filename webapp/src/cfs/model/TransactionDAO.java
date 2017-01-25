@@ -8,7 +8,7 @@ import org.genericdao.GenericDAO;
 import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 import org.genericdao.Transaction;
-
+import cfs.databean.Position;
 import cfs.databean.Customer;
 import cfs.databean.Transactions;
 
@@ -30,12 +30,12 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     		return;
     	}
     	for (Transactions transaction : pendings) {
-    		if (transaction.getType() == "Deposit Check" || transaction.getType() == "Request Check" ) {
+    		if (transaction.getType().equals("Deposit Check") || transaction.getType().equals("Request Check")) {
     			transaction.setExecuteDate(transitionDate);
-    			transaction.setStatus("Processed");
-    		} else if (transaction.getType() == "Sell") {
+    			transaction.setStatus("Processed"); //where is the amount being added/removed?
+    		} else if (transaction.getType().equals("Sell")) {
     			if (closingPrice.get(transaction.getFundId()) == null) {
-        			throw new RollbackException("Error!!!");
+        			throw new RollbackException("Error!!!"); //Fund does not exist?(should specify)
         		}
     			transaction.setExecuteDate(transitionDate);
     			transaction.setStatus("Processed");
@@ -52,7 +52,7 @@ public class TransactionDAO extends GenericDAO<Transactions> {
                 }
     		} else {
     			if (closingPrice.get(transaction.getFundId()) == null) {
-        			throw new RollbackException("Error!!!");
+        			throw new RollbackException("Error!!!"); //???
         		}
         		transaction.setPrice(closingPrice.get(transaction.getFundId()));
         		transaction.setExecuteDate(transitionDate);
@@ -87,6 +87,37 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     		// update customer's position according to the type of the transaction
     		// if position for this customer and this fund exists, update it
     		// otherwise, create a position for the customer and fund
+    		
     	}
+    }
+    
+    //could call this method from prev code
+    public void updatePos(int custId, int fundId, double shares, String fundtrans,CustomerPositionDAO customerPositionDAO ) { //fund trans can be buy or sell
+		//include this in above cases sell fund so that this happens simultaneously
+    	//will be the same for any type of transaction
+			try {
+				Position[] pos = customerPositionDAO.findPositionsBoth(custId, fundId);
+				if(fundtrans.equals("sell") && shares == 0) {//so deletefund 
+					Transaction.begin();
+					customerPositionDAO.delete(pos[0]);
+					Transaction.commit();
+				} else {
+				if(pos == null) {//position does not exist
+				    Position posn = new Position(custId, fundId, shares);
+				    Transaction.begin();
+				    customerPositionDAO.create(posn);
+				    Transaction.commit();
+				} else {
+				    for(Position p : pos) {
+				    	p.setShares(shares);
+				    	customerPositionDAO.updatePos(p);
+				    }
+				}
+				}
+				
+			} catch (RollbackException e) {
+				e.printStackTrace();
+			}
+
     }
 }
