@@ -66,7 +66,7 @@ public class ChangePasswordAction extends Action {
                 }
             } catch (Exception e) {
                 request.setAttribute("error", e.getMessage());
-                return "change-password.jsp";
+                return "error.jsp";
             }
         } else {
             return null;

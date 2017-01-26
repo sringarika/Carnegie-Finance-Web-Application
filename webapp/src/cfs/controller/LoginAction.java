@@ -85,7 +85,7 @@ public class LoginAction extends Action {
             } catch (Exception e) {
                 e.printStackTrace();
                 request.setAttribute("error", e.getMessage());
-                return "login.jsp";
+                return "error.jsp";
             }
         } else {
             return null;

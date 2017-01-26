@@ -52,7 +52,7 @@ public class TransactionHistoryAction extends Action {
             return "transaction-history.jsp";
         } catch (RollbackException e) {
             request.setAttribute("error", e.getMessage());
-            return "transaction-history.jsp";
+            return "error.jsp";
         }
     }
 
