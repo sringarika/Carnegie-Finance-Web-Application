@@ -34,13 +34,18 @@ public class LoginAction extends Action {
 
     @Override
     public String perform(HttpServletRequest request) {
+        // if GET request, return the login page
         if (request.getMethod().equals("GET")) {
             return "login.jsp";
+          
+        // if POST request, return the account
         } else if (request.getMethod().equals("POST")) {
         	HttpSession session = request.getSession();
-        	// if someone already logged in, switch to the account page
+        	// if a customer already logged in, switch to the account page
             if (session.getAttribute("customerId") != null) {
         		return "account.do";
+        	
+            // if employee already logged in, switch to the employee page
         	} else if (session.getAttribute("employeeId") != null) {
         		return "employee.do";
         	}

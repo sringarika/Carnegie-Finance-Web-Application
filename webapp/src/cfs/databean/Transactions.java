@@ -2,6 +2,9 @@ package cfs.databean;
 
 import org.genericdao.PrimaryKey;
 
+// TODO
+// declaration of status and type classes
+
 @PrimaryKey("transactionId")
 public class Transactions {
     private int transactionId;
