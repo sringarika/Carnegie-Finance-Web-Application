@@ -1,26 +1,30 @@
 package cfs.formbean;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class TransitionDayForm {
+    private String closingDateISO;
     private String closingDate;
     private String[] closingPrices;
     private String[] fundIds;
     private Map<Integer, Double> priceForFund;
 
     public TransitionDayForm(HttpServletRequest request) {
-        closingDate = request.getParameter("closingDate");
+        closingDateISO = request.getParameter("closingDateISO");
         fundIds = request.getParameterValues("fundIds");
         closingPrices = request.getParameterValues("closingPrices");
     }
 
     public List<String> getValidationErrors() {
-        if (closingDate == null || closingDate.isEmpty()) {
+        if (closingDateISO == null || closingDateISO.isEmpty()) {
             return Collections.singletonList("Closing date is required!");
         }
         if (fundIds == null || fundIds.length == 0) {
@@ -28,6 +32,13 @@ public class TransitionDayForm {
         }
         if (closingPrices == null || closingPrices.length != fundIds.length) {
             return Collections.singletonList("Closing price is required for every fund!");
+        }
+
+        try {
+            LocalDate date = LocalDate.parse(closingDateISO, DateTimeFormatter.ISO_DATE);
+            closingDate = date.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", new Locale("en", "US")));
+        } catch (Exception e) {
+            return Collections.singletonList("Invalid closing date!");
         }
 
         Map<Integer, Double> priceForFund = new HashMap<Integer, Double>();
