@@ -2,12 +2,15 @@ package cfs.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import cfs.model.CustomerDAO;
 import cfs.model.Model;
 
 public class CreateCustomerAction extends Action {
+    private CustomerDAO customerdao;
 
     public CreateCustomerAction(Model model) {
         // TODO Auto-generated constructor stub
+        customerdao= model.getCustomerDAO();
     }
 
     @Override
