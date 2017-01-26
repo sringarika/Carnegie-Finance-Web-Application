@@ -12,7 +12,7 @@ public class FundDAO extends GenericDAO<Fund> {
     public FundDAO(ConnectionPool cp, String tableName) throws DAOException {
         super(Fund.class, tableName, cp);
     }
-    
+
     /**
      * Fund name
      * @param fundName input param
@@ -26,10 +26,10 @@ public class FundDAO extends GenericDAO<Fund> {
     	}
     	return fundn;
     }
-    
+
     /**
      * Fund price
-     * @param fundSymbol input param
+     * @param fundTicker input param
      * @return fund price
      * @throws RollbackException
      */

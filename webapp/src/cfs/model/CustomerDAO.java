@@ -1,6 +1,7 @@
 package cfs.model;
 
 import org.genericdao.ConnectionPool;
+
 import org.genericdao.DAOException;
 import org.genericdao.GenericDAO;
 import org.genericdao.MatchArg;
@@ -22,6 +23,34 @@ public class CustomerDAO extends GenericDAO<Customer> {
 		} else {
 			return customer[0];
 		}
+    }
+    
+    public void increaseCash(double cash, int customerId) throws RollbackException {
+        try {
+            Transaction.begin();
+            Customer customer = read(customerId);
+            if (customer == null) throw new RollbackException ("User doesn't exist!");
+            double availableCash = customer.getCash() + cash;
+            customer.setCash(availableCash);
+            update(customer);
+            Transaction.commit();
+        } finally {
+            if (Transaction.isActive()) Transaction.rollback();
+        } 
+    }
+    
+    public void deductCash(double cash, int customerId) throws RollbackException {
+        try {
+            Transaction.begin();
+            Customer customer = read(customerId);
+            if (customer == null) throw new RollbackException ("User doesn't exist!");
+            double availableCash = customer.getCash() + cash;
+            customer.setCash(availableCash);
+            update(customer);
+            Transaction.commit();
+        } finally {
+            if (Transaction.isActive()) Transaction.rollback();
+        } 
     }
     
     public Customer changePassword(String username, String password) throws RollbackException {

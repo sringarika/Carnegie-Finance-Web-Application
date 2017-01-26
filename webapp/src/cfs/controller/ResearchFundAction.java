@@ -4,16 +4,20 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.genericdao.RollbackException;
 
+import cfs.databean.Fund;
 import cfs.databean.FundPriceHistory;
+import cfs.model.FundDAO;
+
 import cfs.model.FundPriceHistoryDAO;
 import cfs.model.Model;
+import cfs.viewbean.ResearchFundView;
 
 public class ResearchFundAction extends Action {
-
-	private FundPriceHistoryDAO fundPriceHistoryDAO;
-	
+    private FundDAO fundDAO;
+    private FundPriceHistoryDAO fundPriceHistoryDAO;
     public ResearchFundAction(Model model) {
-    	fundPriceHistoryDAO = model.getFundPriceHistoryDAO();
+        fundDAO = model.getFundDAO();
+        fundPriceHistoryDAO = model.getFundPriceHistoryDAO();
     }
 
     @Override
@@ -23,23 +27,37 @@ public class ResearchFundAction extends Action {
 
     @Override
     public String perform(HttpServletRequest request) {
-    	if (request.getMethod().equals("GET")) {
-    		// can we have a Date Databean/table to store all the transition day.
-    		String lastTransitionDate = (String) request.getAttribute("date");
-    		try {
-    			FundPriceHistory[] prices = fundPriceHistoryDAO.researchFund(lastTransitionDate);
-    			request.setAttribute("prices", prices);
-			} catch (RollbackException e) {
-				request.setAttribute("error", e.getMessage());
+        try {
+            Fund[] funds = fundDAO.match();
+            if (funds.length == 0) {
+                request.setAttribute("message", "Currently we have no fund.");
                 return "research-fund.jsp";
-			}
+            }
+            FundPriceHistory[] history = fundPriceHistoryDAO.match();
+            ResearchFundView[] fundList = merge(funds, history);
+            request.setAttribute("fundList", fundList);
             return "research-fund.jsp";
-        } else if (request.getMethod().equals("POST")) {
-        	// add "displayTrend.do"
-        	return "displayTrend.do";
-        } else {
-            return null;
+        } catch (RollbackException e) {
+            e.printStackTrace();
+            request.setAttribute("error",e.toString());
         }
+        return "research-fund.jsp";
+    }
+    private ResearchFundView[] merge(Fund[] funds, FundPriceHistory[] history) {
+        ResearchFundView[] fundList = new ResearchFundView[funds.length];
+
+        for (int i = 0; i < fundList.length; i++) {
+            fundList[i].setFundId(funds[i].getFundId());
+            fundList[i].setFundName(funds[i].getName());
+            fundList[i].setTicker(funds[i].getTicker());
+        }
+        for (int j = 0; j< fundList.length; j++) {
+            if (history[j].getFundId() == fundList[j].getFundId()) {
+                fundList[j].setLastClosingDate(history[j].getExecuteDate());
+                fundList[j].setPrice(history[j].getPrice());
+            }
+        }
+        return fundList;
     }
 
     @Override
