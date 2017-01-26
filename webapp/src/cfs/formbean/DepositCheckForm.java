@@ -7,69 +7,74 @@ import java.util.List;
 
 import org.mybeans.form.FormBean;
 
-public class DepositCheckForm extends FormBean{
-	private String amount; 
-	private String button;
-	private String requestAmount;
+public class DepositCheckForm extends FormBean {
+    private String amount;
+    private String customerId;
 
-	
-	
-	public void setAmount(String amount) {
-		this.amount = amount;
-	}
-	
-	public void setButton(String button) {
-		this.button = button;
-	}
-	
-	public String getAmount() {
-		return amount;
-	}
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
 
-	public String getButton() {
-		return button;
-	}
+    public String getAmount() {
+        return amount;
+    }
 
-	public boolean isPresent() {		
-		if(button == null) return false;
-		return true;
-	}
+    public double getRequestAmount() {
+        try {
+            return Double.parseDouble(amount);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
 
-	public double getRequestAmount() {
-		try {
-			return Double.parseDouble(requestAmount);
-		} catch (NumberFormatException e) {
-			return -1;
-		}
-	}
-	public void setRequestAmount(String str) {
-		this.requestAmount = str;
-	}
-	
-	public List<String> getValidationErrors() {
-		List<String> errors = new ArrayList<String>();
+    public int getCustomerIdVal() {
+        try {
+            return Integer.parseInt(customerId);
+        } catch (NumberFormatException num) {
+            return -1;
+        }
 
-		if (amount == null || amount.trim().length() == 0)
-			errors.add("Amount is required");
-        
-		double a = 0;
-    	try {
-    		a = Double.parseDouble(amount);
-    		if(a <= 0) {
-    			errors.add("Amount must be greater than zero!");
-    		}
-    		
-    		if(a > 1000000) {
-    			errors.add("Amount cannot be greater than $1,000,000.00!");
-    		}
-    	} catch(NumberFormatException num){
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    @Override
+    public List<String> getValidationErrors() {
+        List<String> errors = new ArrayList<String>();
+
+        if (amount == null || amount.trim().length() == 0)
+            errors.add("Amount is required");
+
+        if (customerId == null || customerId.trim().length() == 0)
+            errors.add("customerId is required");
+
+        double a = 0;
+        try {
+            a = Double.parseDouble(amount);
+            if (a <= 0) {
+                errors.add("Amount must be greater than zero!");
+            }
+
+            if (a > 1000000) {
+                errors.add("Amount cannot be greater than $1,000,000.00!");
+            }
+        } catch (NumberFormatException num) {
             errors.add("Amount must be a valid number!");
-    	}
-    	
+        }
 
-		if (errors.size() > 0)
-			return errors;
+        int b = 0;
+        try {
+            b = Integer.parseInt(customerId);
+        } catch (NumberFormatException num) {
+            errors.add("Amount must be a valid number!");
+        }
 
-		return errors;
-	}
+        if (errors.size() > 0)
+            return errors;
+
+        return errors;
+    }
+
 }

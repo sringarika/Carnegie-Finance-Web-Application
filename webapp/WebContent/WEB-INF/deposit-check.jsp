@@ -5,7 +5,13 @@
 <%@ include file="header.jsp" %>
  <main>
     <h2>Deposit Check</h2>
+    <c:if test="${(!empty error)}">
+      <div class="alert alert-danger">
+        ${fn:escapeXml(error)}
+      </div>
+    </c:if>
     <form action="deposit-check.do" method="POST">
+    <input type="hidden" name="customerId" value="${customerId}">
     <div>
         <label for="cash">Available Cash: <fmt:formatNumber value="${availableCash}" type="currency"/></label>
     </div>

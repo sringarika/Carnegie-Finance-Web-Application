@@ -7,11 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.genericdao.Transaction;
 import org.mybeans.form.FormBeanFactory;
 
-import cfs.databean.Customer;
 import cfs.databean.Transactions;
 import cfs.formbean.DepositCheckForm;
-import cfs.model.Model;
 import cfs.model.CustomerDAO;
+import cfs.model.Model;
 import cfs.model.TransactionDAO;
 
 public class DepositCheckAction extends Action {
@@ -30,7 +29,6 @@ public class DepositCheckAction extends Action {
 
     @Override
     public String perform(HttpServletRequest request) {
-    	Customer customer = (Customer) request.getAttribute("customer");
         int customerId;
         String customerIdStr = request.getParameter("customerId");
         try {
@@ -41,8 +39,6 @@ public class DepositCheckAction extends Action {
         }
         request.setAttribute("customerId", customerId);
         if (request.getMethod().equals("GET")) {
-        	double availableCash = customer.getCash();
-        	request.setAttribute("availableCash", availableCash);
             return "deposit-check.jsp";
         } else if (request.getMethod().equals("POST")) {
         //	System.out.println(request.getParameter("amount"));
@@ -53,12 +49,11 @@ public class DepositCheckAction extends Action {
                     throw new Exception(validationErrors.get(0));
                 }
                 double amount = form.getRequestAmount();
-				customerDAO.increaseCash(amount, customer.getCustomerId());
-				
+
 				//Add to pending list
 				Transaction.begin();
 				Transactions transaction = new Transactions();
-	            transaction.setCustomerId(customer.getCustomerId());
+	            transaction.setCustomerId(form.getCustomerIdVal());
 	            transaction.setType("Deposit Check");
 	            transaction.setAmount(amount);
 	            transaction.setStatus("Pending");
@@ -67,6 +62,7 @@ public class DepositCheckAction extends Action {
             request.setAttribute("message", "Check deposited successfully! The transaction will be processed by the end of the business day.");
             return "success.jsp";
         } catch (Exception e) {
+            e.printStackTrace();
             request.setAttribute("error", e.getMessage());
             return "deposit-check.jsp";
         }
