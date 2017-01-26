@@ -9,10 +9,15 @@
       There are <a href="transaction-list.jsp">42 transactions</a> pending.
       <a href="transaction-list.jsp">Show details...</a>
     </p>
+    <c:if test="${(!empty error)}">
+      <div class="alert alert-danger">
+        ${fn:escapeXml(error)}
+      </div>
+    </c:if>
     <form action="transition-day.do" method="POST">
       <div>
-        <p>Last Closing Date: 01/19/2017</p>
-        <p>Current Closing Date: <input type="date" class="form-control" name="closingDate" value="" required></p>
+        <p>Last Closing Date: ${fn:escapeXml(lastClosingDateDisp)}</p>
+        <p>Current Closing Date: <input type="date" class="form-control" name="closingDateISO" value="${minClosingDateISO}" min="${minClosingDateISO}" required></p>
       </div>
       <table class="table table-striped table-bordered">
       <tr>

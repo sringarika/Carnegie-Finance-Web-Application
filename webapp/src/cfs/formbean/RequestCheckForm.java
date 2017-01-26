@@ -22,6 +22,7 @@ public class RequestCheckForm extends FormBean{
 		List<String> errors = new ArrayList<String>();
 		if(requestAmount == null || requestAmount.length() == 0) {
 			errors.add("Please enter the amount you want to withdraw.");
+			return errors;
 		}
 		try {
 			double amount = Double.parseDouble(requestAmount);
@@ -35,6 +36,8 @@ public class RequestCheckForm extends FormBean{
 		} catch (NumberFormatException e) {
 			errors.add("The amount should be numbers.");
 		}
+	    if (errors.size() > 0)
+	       return errors;
 		return errors;
 	}
 }

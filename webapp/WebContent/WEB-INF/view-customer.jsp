@@ -9,30 +9,30 @@
       <h2>My Account</h2>
     </c:if>
     <c:if test="${not isMyAccount}">
-      <h2>View Customer Account: ${showCustomer.username}</h2>
+      <h2>View Customer Account: ${fn:escapeXml(showCustomer.username)}</h2>
     </c:if>
     <table class="table table-striped table-bordered">
     <tr>
       <td>Name</td>
-      <td>${showCustomer.firstname} ${showCustomer.lastname}</td>
+      <td>${fn:escapeXml(showCustomer.firstname)} ${fn:escapeXml(showCustomer.lastname)}</td>
     </tr>
     <tr>
       <td>Address</td>
       <td>
-        ${showCustomer.addrLine1}
+        ${fn:escapeXml(showCustomer.addrLine1)}
         <br>
-        ${showCustomer.addrLine2}
+        ${fn:escapeXml(showCustomer.addrLine2)}
         <br>
-        ${showCustomer.city}, ${showCustomer.state} ${showCustomer.zip}
+        ${fn:escapeXml(showCustomer.city)}, ${fn:escapeXml(showCustomer.state)} ${fn:escapeXml(showCustomer.zip)}
       </td>
     </tr>
     <tr>
-      <td>Last Trading Day</td>
-      <td>${lastTradingDay}</td>
+      <td>Last Trading Date</td>
+      <td>${fn:escapeXml(lastTradingDateDisp)}</td>
     </tr>
     <tr>
       <td>Cash Balance</td>
-      <td>${showCustomer.cash}</td>
+      <td><fmt:formatNumber value="${showCustomer.cash}" type="currency"/></td>
     </tr>
     </table>
     
