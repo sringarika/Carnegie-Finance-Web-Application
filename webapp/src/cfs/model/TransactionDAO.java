@@ -132,9 +132,7 @@ public class TransactionDAO extends GenericDAO<Transactions> {
                             Transaction.commit();
                         } else { // // update position for selling 
                             existingPosition[0].setShares(existingShares - shares);
-                            Transaction.begin();
                             customerPositionDAO.update(existingPosition[0]);
-                            Transaction.commit();
                         }
                     }
 				// buy
@@ -147,9 +145,7 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     				} else { // update position for buying
     				    double exsitingShares = existingPosition[0].getShares();
     				    existingPosition[0].setShares(exsitingShares + shares);
-    				    Transaction.begin();
     				    customerPositionDAO.update(existingPosition[0]);
-    				    Transaction.commit();
     				}
 				}
 			} catch (RollbackException e) {
