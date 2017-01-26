@@ -10,17 +10,15 @@ public class Transactions {
     private int transactionId;
     private int customerId;
     private int fundId;
-    private String fundName;
     private double shares;
     private double amount;
-    private double price;
     private String executeDate;
     private String status;
     private String type;
-    
+
     public Transactions() {
     }
-    
+
     // when a transaction is created, required input should include all three ids and the amount
     // the shares and price will be available after transition day
     // status should be pending when a transaction is created
@@ -49,12 +47,6 @@ public class Transactions {
     public void setFundId(int fundId) {
         this.fundId = fundId;
     }
-    public String getFundName() {
-        return fundName;
-    }
-    public void setFundName(String fundName) {
-        this.fundName = fundName;
-    }
     public String getExecuteDate() {
         return executeDate;
     }
@@ -78,12 +70,6 @@ public class Transactions {
     }
     public void setShares(double shares) {
         this.shares = shares;
-    }
-    public double getPrice() {
-        return price;
-    }
-    public void setPrice(double price) {
-        this.price = price;
     }
     public double getAmount() {
         return amount;

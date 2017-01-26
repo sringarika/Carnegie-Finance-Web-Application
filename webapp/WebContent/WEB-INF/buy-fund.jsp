@@ -15,8 +15,9 @@
       <div class="form-group">
         <label for="fundId">Fund</label>
         <select class="form-control" id="fundId" name="fundId" required>
-          <option value="1">EBIZC - ebConsultants Fund</option>
-          <option value="2">CMUMC - CMU Math Club Fund</option>
+          <c:forEach var="fund" items="${funds}">
+            <option value="${fn:escapeXml(fund.fundId)}">${fn:escapeXml(fund.name)}</option>
+          </c:forEach>
         </select>
       </div>
       <div class="form-group">

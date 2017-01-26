@@ -83,7 +83,6 @@ public class Model {
                 transaction1.setStatus("Processed");
                 transaction1.setExecuteDate("01/25/2016");
                 transaction1.setFundId(fundId);
-                transaction1.setPrice(1.88);
                 transaction1.setShares(1000.000);
             }
             if (employeeDAO.findByUsername("admin") == null) {

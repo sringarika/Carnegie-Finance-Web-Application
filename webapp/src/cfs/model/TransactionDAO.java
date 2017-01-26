@@ -8,15 +8,16 @@ import org.genericdao.GenericDAO;
 import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 import org.genericdao.Transaction;
-import cfs.databean.Position;
+
 import cfs.databean.Customer;
+import cfs.databean.Position;
 import cfs.databean.Transactions;
 
 public class TransactionDAO extends GenericDAO<Transactions> {
     public TransactionDAO(ConnectionPool cp, String tableName) throws DAOException {
         super(Transactions.class, tableName, cp);
     }
-    
+
     // show the transaction history for a given customer ID
     public Transactions[] showHistory(int CustomerId) throws RollbackException {
     	Transactions[] history = match(MatchArg.equals("customerId", CustomerId));
@@ -30,7 +31,7 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     		CustomerDAO customerDAO, CustomerPositionDAO customerPositionDAO) throws RollbackException {
         // TODO
         // sort it by transaction id
-        
+
         // sell
         // TODO
         // check if it is still pending
@@ -44,7 +45,7 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     		    transaction.setExecuteDate(transitionDate);
                 transaction.setStatus("Processed");
                 // the available cash is updated here
-                customer.setCash(customer.getCash() + transaction.getAmount()); 
+                customer.setCash(customer.getCash() + transaction.getAmount());
     		} else if (transaction.getType().equals("Request Check")) {
     			transaction.setExecuteDate(transitionDate);
     			transaction.setStatus("Processed"); // the available cash is updated already
@@ -76,9 +77,8 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     			if (closingPrice.get(transaction.getFundId()) == null) {
         			throw new RollbackException("Fund does not exist!!!");
         		}
-        		transaction.setPrice(closingPrice.get(transaction.getFundId()));
         		transaction.setExecuteDate(transitionDate);
-        		double shares = transaction.getAmount() / transaction.getPrice();
+        		double shares = transaction.getAmount() / closingPrice.get(transaction.getFundId());
         		// ask Jeff about rounding here
         		String s = String.format("#.###", shares);
         		shares = Double.valueOf(s);
@@ -112,14 +112,14 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     		} finally {
                 if (Transaction.isActive()) Transaction.rollback();
             }
-    		// TODO 
+    		// TODO
     		// update customer's position according to the type of the transaction
     		// if position for this customer and this fund exists, update it
     		// otherwise, create a position for the customer and fund
-    		
+
     	}
     }
-    
+
     //could call this method from prev code
     public void updatePos(int custId, int fundId, double shares, String fundType,
             CustomerPositionDAO customerPositionDAO) throws Exception { //fund trans can be buy or sell
@@ -137,7 +137,7 @@ public class TransactionDAO extends GenericDAO<Transactions> {
                         Transaction.begin();
                         customerPositionDAO.delete(existingPosition[0]);
                         Transaction.commit();
-                    } else { // // update position for selling 
+                    } else { // // update position for selling
                         existingPosition[0].setShares(existingShares - shares);
                         customerPositionDAO.updatePosition(existingPosition[0]);
                     }
@@ -159,7 +159,7 @@ public class TransactionDAO extends GenericDAO<Transactions> {
 			e.printStackTrace();
 		}
     }
-    
+
     // calculate the pending amount for updating available cash
     public double pendingAmount(int customerId) throws RollbackException {
         double result = 0.00;
