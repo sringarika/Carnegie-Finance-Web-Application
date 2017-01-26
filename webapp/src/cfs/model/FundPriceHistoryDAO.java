@@ -16,13 +16,14 @@ public class FundPriceHistoryDAO extends GenericDAO <FundPriceHistory> {
         super(FundPriceHistory.class, tableName, cp);
     }
     
-    // return the latest price of each fund for the given last transition date -- research fund
-    public FundPriceHistory[] researchFund(String lastTransitionDate) throws RollbackException {
-    	FundPriceHistory[] fundPrice = match(MatchArg.equals("executeDate", lastTransitionDate));
+    // return the latest price of each fund for processing pending transactions
+    public Double latestFundPRice(int fundId, String executeDate) throws RollbackException {
+    	FundPriceHistory[] fundPrice = match(MatchArg.and(MatchArg.equals("executeDate", executeDate),
+    	        MatchArg.equals("fundId", fundId)));
     	if (fundPrice == null) {
     		return null;
     	}
-    	return fundPrice;
+    	return fundPrice[0].getPrice();
     }
     
     // return the  price history of input fund -- display trend
@@ -38,18 +39,27 @@ public class FundPriceHistoryDAO extends GenericDAO <FundPriceHistory> {
     	FundPriceHistory[] fundPrices = match();
     	for (FundPriceHistory fundPrice : fundPrices) {
     		if (closingPrice.get(fundPrice.getFundId()) == null) {
-    			throw new RollbackException("Error!!!");
+    			throw new RollbackException("Fund no longer exists!");
     		} else {
     			fundPrice.setExecuteDate(transitionDate);
     			fundPrice.setPrice(closingPrice.get(fundPrice.getFundId()));
     			try {
     	    		Transaction.begin();
-    	    		super.update(fundPrice);
+    	    		update(fundPrice);
     	    		Transaction.commit();
         		} finally {
                     if (Transaction.isActive()) Transaction.rollback();
                 }
     		}
     	}
+    }
+    
+    // return the last closing date
+    public String getLastClosingDate() throws RollbackException {
+        FundPriceHistory[] history = match(MatchArg.max("executeDate"));
+        if (history == null) {
+            return "No transition day before!";
+        }
+        return history[0].getExecuteDate();
     }
 }

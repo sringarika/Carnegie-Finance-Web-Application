@@ -7,19 +7,23 @@ import java.util.Locale;
 public class TransactionHistoryView {
     private int transactionId;
     private String transactionType;
-    private String date;
-    private double numOfShares;
+    private String transactionStatus;
+    private int customerId;
+    private String customerName;
+    private int fundId;
     private String fundName;
     private String ticker;
+    private String date;
+    private double shares;
+    private double price;
     private double amount;
-    private String transactionStatus;
     
 //    public TransactionHistoryView() {
 //        return transactionId;
 //    }
     
     public void setTransactionId(int transactionId) {
-        this.transactionId= transactionId;
+        this.transactionId = transactionId;
     }
     public int getTransactionId() {
         return transactionId;
@@ -28,7 +32,13 @@ public class TransactionHistoryView {
         return transactionType;
     }
     public void setTransactionType(String transactionType) {
-        this.transactionType= transactionType;
+        this.transactionType = transactionType;
+    }
+    public String getTransactionStatus() {
+        return transactionStatus;
+    }
+    public void setTransactionStatus(String transactionStatus) {
+        this.transactionStatus = transactionStatus;
     }
     public String getDate() {
         return date;
@@ -38,13 +48,31 @@ public class TransactionHistoryView {
         return (date1.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", new Locale("en", "US"))));
     }
     public void setDate(String date) {
-        this.date= date;
+        this.date = date;
     }
-    public double getNumOfShares() {
-        return numOfShares;
+    public int getCustomerId() {
+        return customerId;
     }
-    public void setNumOfShares(double numOfShares) {
-        this.numOfShares= numOfShares;
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
+    public String getCustomerName() {
+        return customerName;
+    }
+    public void setCustomerName(String customerName) {
+        this.customerName= customerName;
+    }
+    public int getFundId() {
+        return fundId;
+    }
+    public void setFundId(int fundId) {
+        this.fundId = fundId;
+    }
+    public double getShares() {
+        return shares;
+    }
+    public void setShares(double shares) {
+        this.shares= shares;
     }
     public String getFundName() {
         return fundName;
@@ -64,11 +92,10 @@ public class TransactionHistoryView {
     public void setAmount(double amount) {
         this.amount= amount;
     }
-    public String getTransactionStatus() {
-        return transactionStatus;
+    public double getPrice() {
+        return price;
     }
-    public void setTransactionStatus(String transactionStatus) {
-        this.transactionStatus= transactionStatus;
+    public void setPrice(double price) {
+        this.price= price;
     }
-    
-    }
+}

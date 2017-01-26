@@ -21,67 +21,94 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     // show the transaction history for a given customer ID
     public Transactions[] showHistory(int CustomerId) throws RollbackException {
         Transactions[] history = match(MatchArg.equals("customerId", CustomerId));
-        // TODO
+        // TODO joint
         // sort the transaction history based on transaction id
         return history;
     }
-    // a while loop for looking for all the pending transactions smaller than max transactionId
-    // for that closing date
-    public void processTransaction(Map<Integer, Double> closingPrice, String transitionDate,
+    
+    // update pending transactions
+    public void processTransaction(FundPriceHistoryDAO fundPriceHistoryDAO,
             CustomerDAO customerDAO, CustomerPositionDAO customerPositionDAO) throws RollbackException {
         Transactions[] maxTransaction = match(MatchArg.max("transactionId"));
         if (maxTransaction == null) {
             return;
         }
         int maxId = maxTransaction[0].getTransactionId();
+        String closingDate = fundPriceHistoryDAO.getLastClosingDate();
         while (match(MatchArg.and(MatchArg.min("transactionId"), MatchArg.equals("status", "Pending"))) != null) {
             Transactions[] minTransaction = match(MatchArg.and(MatchArg.min("transactionId"), MatchArg.equals("status", "Pending")));
-            if (minTransaction[0].getFundId() <= maxId) {
-                if (minTransaction[0].getStatus().equals("Pending")) {
-                    Transactions transaction = minTransaction[0];
-                    Customer customer = customerDAO.findByUsername(String.valueOf(transaction.getCustomerId()));
-                    if (transaction.getType().equals("Deposit Check")) {
-                        transaction.setExecuteDate(transitionDate);
+            if (minTransaction[0].getFundId() <= maxId && minTransaction[0].getStatus().equals("Pending")) {
+                Transactions transaction = minTransaction[0];
+                Customer customer = customerDAO.read(transaction.getCustomerId());
+                if (transaction.getType().equals("Deposit Check")) {
+                    transaction.setExecuteDate(closingDate);
+                    transaction.setStatus("Processed");
+                    // add the transaction amount to account balance here
+                    customer.setCash(customer.getCash() + transaction.getAmount());
+                    try {
+                        Transaction.begin();
+                        customerDAO.update(customer);
+                        update(transaction);
+                        Transaction.commit();
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                } else if (transaction.getType().equals("Request Check")) {
+                    transaction.setExecuteDate(closingDate);
+                    transaction.setStatus("Processed");
+                    // delete the transaction amount from the account balance here
+                    customer.setCash(customer.getCash() + transaction.getAmount());
+                    try {
+                        Transaction.begin();
+                        customerDAO.update(customer);
+                        update(transaction);
+                        Transaction.commit();
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                } else if (transaction.getType().equals("Sell")) {
+                    if (fundPriceHistoryDAO.latestFundPRice(transaction.getFundId(), closingDate) == null) {
+                        throw new RollbackException("Fund no longer exsits!!!");
+                    } else {
+                        double price = fundPriceHistoryDAO.latestFundPRice(transaction.getFundId(), closingDate);
+                        transaction.setExecuteDate(closingDate);
                         transaction.setStatus("Processed");
-                        // add the transaction amount to account balance here
-                        customer.setCash(customer.getCash() + transaction.getAmount());
-                        try {
-                            Transaction.begin();
-                            customerDAO.update(customer);
-                            super.update(transaction);
-                            Transaction.commit();
-                        } catch (Exception e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
-                    } else if (transaction.getType().equals("Request Check")) {
-                        transaction.setExecuteDate(transitionDate);
-                        transaction.setStatus("Processed");
-                        // delete the transaction amount from the account balance here
-                        customer.setCash(customer.getCash() + transaction.getAmount());
-                        try {
-                            Transaction.begin();
-                            customerDAO.update(customer);
-                            super.update(transaction);
-                            Transaction.commit();
-                        } catch (Exception e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
-                    } else if (transaction.getType().equals("Sell")) {
-                        if (closingPrice.get(transaction.getFundId()) == null) {
-                            throw new RollbackException("Fund does not exist!!!");
-                        }
-                        transaction.setExecuteDate(transitionDate);
-                        transaction.setStatus("Processed");
-                        double amount = closingPrice.get(transaction.getFundId()) * transaction.getShares();
+                        double amount = price * transaction.getShares();
                         transaction.setAmount(amount);
                         // add the transaction amount to account balance here
                         customer.setCash(customer.getCash() + amount);
+                    }
+                    try {
+                        Transaction.begin();
+                        customerDAO.update(customer);
+                        update(transaction);
+                        updatePos(customer.getCustomerId(), transaction.getFundId(), transaction.getShares(),
+                                "Sell", customerPositionDAO);
+                        Transaction.commit();
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                } else { // buy
+                    if (fundPriceHistoryDAO.latestFundPRice(transaction.getFundId(), closingDate) == null) {
+                        throw new RollbackException("Fund no longer exsits!!!");
+                    }
+                    transaction.setExecuteDate(closingDate);
+                    double price = fundPriceHistoryDAO.latestFundPRice(transaction.getFundId(), closingDate);
+                    double shares = transaction.getAmount() / price;
+                    // ask Jeff about rounding here
+                    String s = String.format("#.###", shares);
+                    shares = Double.valueOf(s);
+                    if (shares > 0) {
+                        transaction.setShares(shares);
+                        transaction.setStatus("Processed");
+                        customer.setCash(customer.getCash() + transaction.getAmount());
                         try {
                             Transaction.begin();
                             customerDAO.update(customer);
-                            super.update(transaction);
+                            update(transaction);
                             updatePos(customer.getCustomerId(), transaction.getFundId(), transaction.getShares(),
                                     "Sell", customerPositionDAO);
                             Transaction.commit();
@@ -89,45 +116,20 @@ public class TransactionDAO extends GenericDAO<Transactions> {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
-                    } else { // buy
-                        if (closingPrice.get(transaction.getFundId()) == null) {
-                            throw new RollbackException("Fund does not exist!!!");
-                        }
-                        transaction.setExecuteDate(transitionDate);
-                        double shares = transaction.getAmount() / closingPrice.get(transaction.getFundId());
-                        // ask Jeff about rounding here
-                        String s = String.format("#.###", shares);
-                        shares = Double.valueOf(s);
-                        if (shares > 0) {
-                            transaction.setShares(shares);
-                            transaction.setStatus("Processed");
-                            customer.setCash(customer.getCash() + transaction.getAmount());
-                            try {
-                                Transaction.begin();
-                                customerDAO.update(customer);
-                                super.update(transaction);
-                                updatePos(customer.getCustomerId(), transaction.getFundId(), transaction.getShares(),
-                                        "Sell", customerPositionDAO);
-                                Transaction.commit();
-                            } catch (Exception e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
-                        } else {
-                            transaction.setShares(0.000);
-                            customer.setCash(customer.getCash() + transaction.getAmount());
-                            transaction.setStatus("Rejected");
-                            try {
-                                Transaction.begin();
-                                customerDAO.update(customer);
-                                super.update(transaction);
-                                updatePos(customer.getCustomerId(), transaction.getFundId(), transaction.getShares(),
-                                        "Sell", customerPositionDAO);
-                                Transaction.commit();
-                            } catch (Exception e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
+                    } else {
+                        transaction.setShares(0.000);
+                        customer.setCash(customer.getCash() + transaction.getAmount());
+                        transaction.setStatus("Rejected");
+                        try {
+                            Transaction.begin();
+                            customerDAO.update(customer);
+                            update(transaction);
+                            updatePos(customer.getCustomerId(), transaction.getFundId(), transaction.getShares(),
+                                    "Sell", customerPositionDAO);
+                            Transaction.commit();
+                        } catch (Exception e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
                         }
                     }
                 }
