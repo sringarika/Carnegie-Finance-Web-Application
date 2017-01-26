@@ -7,7 +7,6 @@ import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 import org.genericdao.Transaction;
 
-import cfs.databean.Customer;
 import cfs.databean.Position;
 
 public class CustomerPositionDAO extends GenericDAO<Position> {
@@ -25,11 +24,11 @@ public class CustomerPositionDAO extends GenericDAO<Position> {
         return positions;
     }
     
-    public void updatePos(Position p) throws RollbackException{
+    public void updatePosition(Position p) throws RollbackException{
 		try{
-		Transaction.begin();
-		super.update(p);
-		Transaction.commit();
+    		Transaction.begin();
+    		super.update(p);
+    		Transaction.commit();
 		} finally {
 			if (Transaction.isActive())
 				Transaction.rollback();
