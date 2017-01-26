@@ -7,12 +7,19 @@ import javax.servlet.http.HttpServletRequest;
 import org.mybeans.form.FormBeanFactory;
 
 import cfs.formbean.ChangePasswordForm;
+import cfs.model.CustomerDAO;
+import cfs.model.EmployeeDAO;
 import cfs.model.Model;
 
 public class ChangePasswordAction extends Action {
 
+    private CustomerDAO customerDAO;
+
+    private EmployeeDAO employeeDAO;
+
     public ChangePasswordAction(Model model) {
-        // TODO Auto-generated constructor stub
+        customerDAO = model.getCustomerDAO();
+        employeeDAO = model.getEmployeeDAO();
     }
 
     @Override
@@ -29,14 +36,34 @@ public class ChangePasswordAction extends Action {
                 ChangePasswordForm form = FormBeanFactory.getInstance(ChangePasswordForm.class).create(request);
                 List<String> validationErrors = form.getValidationErrors();
                 if (validationErrors.size() > 0) {
-                    throw new Exception(validationErrors.get(0));
+                    request.setAttribute("error", validationErrors.get(0));
+                    return "change-password.jsp";
                 }
-                System.out.println("Old Password:" + form.getOldPassword());
-                System.out.println("New Password:" + form.getNewPassword());
-                System.out.println("Confirm Password:" + form.getConfirmPassword());
-                // TODO
-                request.setAttribute("message", "Password changed successfully!");
-                return "success.jsp";
+                String oldPsw = form.getOldPassword();
+                String newPsw = form.getNewPassword();
+                if (request.getSession().getAttribute("customerId") != null) {
+                    int customerId = (int) request.getSession().getAttribute("customerId");
+                    if (!customerDAO.read(customerId).getPassword().equals(oldPsw)) {
+                        request.setAttribute("error", "The current password you entered is wrong!");
+                        return "change-password.jsp";
+                    } else {
+                        customerDAO.changePassword(customerId, newPsw);
+                        request.setAttribute("message", "Password changed successfully!");
+                        return "success.jsp";
+                    }
+                } else if (request.getSession().getAttribute("employeeId") != null) {
+                    int employeeId = (int) request.getSession().getAttribute("employeeId");
+                    if (!employeeDAO.read(employeeId).getPassword().equals(oldPsw)) {
+                        request.setAttribute("error", "The current password you entered is wrong!");
+                        return "change-password.jsp";
+                    } else {
+                        employeeDAO.changePassword(employeeId, newPsw);
+                        request.setAttribute("message", "Password changed successfully!");
+                        return "success.jsp";
+                    }
+                } else {
+                    return "login.do";
+                }
             } catch (Exception e) {
                 request.setAttribute("error", e.getMessage());
                 return "change-password.jsp";
