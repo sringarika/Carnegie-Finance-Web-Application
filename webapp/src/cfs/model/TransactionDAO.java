@@ -163,14 +163,13 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     // calculate the pending amount for updating available cash
     public double pendingAmount(int customerId) throws RollbackException {
         double result = 0.00;
-        Transactions[] pendingAmounts = match(MatchArg.equals("customerId", customerId));
+        Transactions[] pendingAmounts = match(MatchArg.and(MatchArg.equals("customerId", customerId),
+                MatchArg.equals("status", "Pending")));
         if (pendingAmounts == null) {
             return result;
         } else {
             for (Transactions transaction : pendingAmounts) {
-                if (transaction.getStatus().equals("Pending")) {
-                    result += transaction.getAmount();
-                }
+                result += transaction.getAmount();
             }
             return result;
         }
