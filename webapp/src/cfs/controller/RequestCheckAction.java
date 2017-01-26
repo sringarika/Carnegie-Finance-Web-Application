@@ -32,9 +32,10 @@ public class RequestCheckAction extends Action {
 
     @Override
     public String perform(HttpServletRequest request) {
-        Customer customer = (Customer) request.getSession().getAttribute("customer");
+        Customer customer = (Customer) request.getAttribute("customer");
         if (request.getMethod().equals("GET")) {
-            request.setAttribute("availableCash", customer.getCash());
+            double availableCash = customer.getCash();
+            request.setAttribute("availableCash", availableCash);
             return "request-check.jsp";
         } else if (request.getMethod().equals("POST")) {
         	try {

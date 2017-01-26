@@ -2,12 +2,14 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="header.jsp" %>
  <main>
     <h2>Request Check</h2>
     <form action="request-check.do" method="POST">
     <div>
-        <label for="cash">Available Cash: <fmt:formatNumber value="${availableCash}" type="currency"/></label>
+        <label for="cash">Available Cash:</label>
+        <p><fmt:formatNumber value="${availableCash}" type="currency"/></p>
     </div>
 
     <div class="form-group">
