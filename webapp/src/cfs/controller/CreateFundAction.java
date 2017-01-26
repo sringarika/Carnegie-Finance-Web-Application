@@ -1,5 +1,5 @@
 package cfs.controller;
-
+//TODO Error check for create form
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,12 +7,17 @@ import javax.servlet.http.HttpServletRequest;
 import org.mybeans.form.FormBeanFactory;
 
 import cfs.formbean.CreateFundForm;
+import cfs.model.CustomerDAO;
 import cfs.model.Model;
+import cfs.model.TransactionDAO;
 
 public class CreateFundAction extends Action {
-
+	private CustomerDAO customerDAO;
+	private TransactionDAO transactionDAO;
+	
     public CreateFundAction(Model model) {
-        // TODO Auto-generated constructor stub
+        customerDAO = model.getCustomerDAO();
+        transactionDAO = model.getTransactionDAO();
     }
 
     @Override

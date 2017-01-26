@@ -20,7 +20,7 @@ public class CustomerPositionDAO extends GenericDAO<Position> {
     }
 
     public Position[] findPositionsBoth(int customerId, int fundId) throws RollbackException {
-        Position[] positions = match(MatchArg.and(MatchArg.equals("customerId", customerId),MatchArg.equals("fudnId", fundId)));
+        Position[] positions = match(MatchArg.and(MatchArg.equals("customerId", customerId),MatchArg.equals("fundId", fundId)));
         return positions;
     }
 
@@ -28,7 +28,20 @@ public class CustomerPositionDAO extends GenericDAO<Position> {
         Position[] positions = match(MatchArg.equals("customerId", customerId));
         return positions;
     }
-    
+
+    public double existingShare(int customerId, int fundId) throws RollbackException{
+        Position[] positions = match(MatchArg.and(MatchArg.equals("customerId", customerId),MatchArg.equals("fundId", fundId)));
+        double exshare =  0.00;
+        if (positions == null) {
+            return exshare;
+        } else {
+            for (Position pos : positions) {
+            	exshare += pos.getShares();
+            }
+            return exshare;
+        }
+    }
+
     public void updatePosition(Position p) throws RollbackException{
 		try{
     		Transaction.begin();
@@ -51,5 +64,5 @@ public class CustomerPositionDAO extends GenericDAO<Position> {
                      "   AND fundprice.executeDate = (SELECT MAX(executeDate) FROM fundprice)" +
                      " WHERE position.fundId = fund.fundId AND position.customerId = ?";
         return viewDAO.executeQuery(sql, customerId);
-    }	
+    }
 }

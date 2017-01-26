@@ -10,12 +10,9 @@ import org.mybeans.form.FormBean;
 public class DepositCheckForm extends FormBean{
 	private String amount; 
 	private String button;
+	private String requestAmount;
+
 	
-	/*public LoginForm(HttpServletRequest request) {
-		username = request.getParameter("username");
-		password = request.getParameter("password");
-		button = request.getParameter("loginbutton");
-	}*/
 	
 	public void setAmount(String amount) {
 		this.amount = amount;
@@ -38,6 +35,17 @@ public class DepositCheckForm extends FormBean{
 		return true;
 	}
 
+	public double getRequestAmount() {
+		try {
+			return Double.parseDouble(requestAmount);
+		} catch (NumberFormatException e) {
+			return -1;
+		}
+	}
+	public void setRequestAmount(String str) {
+		this.requestAmount = str;
+	}
+	
 	public List<String> getValidationErrors() {
 		List<String> errors = new ArrayList<String>();
 
