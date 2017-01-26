@@ -21,7 +21,7 @@ import cfs.model.Model;
 public class Controller extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-
+    
     private Model model;
 
     @Override
