@@ -9,6 +9,7 @@ public class TransactionListView {
 	    private double amount;
 	    private String transactionstatus;
 	    
+	    //if you want to set all at once use this, else I have provided for individual setters as well
 	    public TransactionListView(int fundId, int customerId, String date, double numOfShares,
 	    		String transactiontype, double amount,String transactionstatus) {
 	        this.fundId = fundId;
@@ -20,6 +21,7 @@ public class TransactionListView {
 	        this.transactionstatus = transactionstatus;
 	    }
 	    
+	    //getters
 	    public int getFundId() {
 	        return fundId;
 	    }
@@ -46,5 +48,34 @@ public class TransactionListView {
 	    
 	    public String getTransactionstatus() {
 		    return transactionstatus;
+		}
+	    
+	    
+	    //setters
+	    public void setFundId(int fundId) {
+	    	this.fundId = fundId;
+	    }
+	    
+	    public void setCustomerId(int customerId) {
+	    	this.customerId = customerId;
+		}
+	    
+	    public void setDate(String date) {
+	    	this.date = date;	    }
+	    
+	    public void setNumOfShares(int numOfShares) {
+	        this.numOfShares = numOfShares;
+	    }
+
+	    public void setTransactiontype(String transactiontype) {
+	        this.transactiontype = transactiontype;
+	    }
+	    
+	    public void setAmount(int amount) {
+		    this.amount = amount;
+	    }
+	    
+	    public void setTransactionstatus(String transactionstatus) {
+		    this.transactionstatus = transactionstatus;
 		}
 }
