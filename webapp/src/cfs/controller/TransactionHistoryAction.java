@@ -45,7 +45,7 @@ public class TransactionHistoryAction extends Action {
             Transactions[] transactions= transactionDAO.showHistory(customerId);
             Customer customer = customerDAO.read(customerId);
             String firstName = customer.getFirstname();
-            String lastName = customer.getFirstname();
+            String lastName = customer.getLastname();
             request.setAttribute("transactions", transactions);
             request.setAttribute("firstName", firstName);
             request.setAttribute("lastName", lastName);
