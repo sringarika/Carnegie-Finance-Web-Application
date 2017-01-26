@@ -6,10 +6,10 @@
   <main>
   <h2>Reset Password for</h2>
   <tr>
-      <td>Name</td>
-      <td>${firstName} ${lastName}</td>
+      
+      <h3>${firstName} ${lastName}</h3>
     </tr>
-    <h2>Reset Password</h2>
+    <br>
 	<form action="reset-password.do" method="POST">
       <input type="hidden" name="customerId" value="${fn:escapeXml(customerId)}">
       <div class="form-group">
