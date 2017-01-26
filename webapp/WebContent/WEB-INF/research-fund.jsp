@@ -5,7 +5,7 @@
 <%@ include file="header.jsp" %>
   <main>
     <h2>Research Funds</h2>
-<%!
+<%-- <%!
   public class Fund {
     private int fundId;
     private String fundName;
@@ -47,7 +47,7 @@
          new Fund(6, "High Yield Corporate", "HYC", 5.89),
     };
     request.setAttribute("funds", funds);
-%>
+%> --%>
 <div>
 </div>
     <table class="table table-bordered table-striped">
@@ -56,14 +56,16 @@
          <th>ID</th>
          <th>Fund Name</th>
          <th>Ticker</th>
+         <th>Last Closing Date</th>
          <th>Price</th>
          </tr>
       </thread>
-      <c:forEach var="fund" items="${funds}">
+      <c:forEach var="fund" items="${fundList}">
       <tr>
       	  <td>${fn:escapeXml(fund.fundId)}</td>
           <td>${fn:escapeXml(fund.fundName)}</td>
           <td>${fn:escapeXml(fund.ticker)}</td>
+          <td>${fn:escapeXml(fund.lastClosingDate)}</td>
           <td>${fn:escapeXml(fund.price)}</td>
       </tr>
       </c:forEach>
