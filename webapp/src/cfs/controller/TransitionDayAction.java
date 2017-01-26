@@ -45,10 +45,11 @@ public class TransitionDayAction extends Action {
         try {
             Fund[] funds = fundDAO.match();
             request.setAttribute("funds", funds);
-            String lastClosingDate = "01/15/2017"; // TODO
-            request.setAttribute("lastClosingDate", lastClosingDate);
-            LocalDate date = LocalDate.parse(lastClosingDate, DateTimeFormatter.ofPattern("MM/dd/yyyy", new Locale("en", "US")));
+            String lastClosingDate = "2017-01-17"; // TODO
+            LocalDate date = LocalDate.parse(lastClosingDate, DateTimeFormatter.ISO_DATE);
             LocalDate minDate = date.plusDays(1);
+            request.setAttribute("lastClosingDateDisp",
+                    date.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", new Locale("en", "US"))));
             request.setAttribute("minClosingDateISO", minDate.format(DateTimeFormatter.ISO_DATE));
         } catch (RollbackException e) {
             request.setAttribute("error", e.getMessage());

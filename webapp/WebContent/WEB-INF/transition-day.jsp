@@ -16,7 +16,7 @@
     </c:if>
     <form action="transition-day.do" method="POST">
       <div>
-        <p>Last Closing Date: ${fn:escapeXml(lastClosingDate)}</p>
+        <p>Last Closing Date: ${fn:escapeXml(lastClosingDateDisp)}</p>
         <p>Current Closing Date: <input type="date" class="form-control" name="closingDateISO" value="${minClosingDateISO}" min="${minClosingDateISO}" required></p>
       </div>
       <table class="table table-striped table-bordered">

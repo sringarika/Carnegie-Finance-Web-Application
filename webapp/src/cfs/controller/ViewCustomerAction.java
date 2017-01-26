@@ -1,5 +1,9 @@
 package cfs.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.genericdao.RollbackException;
@@ -39,7 +43,10 @@ public class ViewCustomerAction extends Action {
 
     protected String showCustomer(int customerId, HttpServletRequest request) {
         try {
-            request.setAttribute("lastTradingDay", "01/15/2017"); // TODO
+            String lastTradingDate = "2017-01-15"; // TODO
+            LocalDate date = LocalDate.parse(lastTradingDate, DateTimeFormatter.ISO_DATE);
+            request.setAttribute("lastTradingDateDisp",
+                    date.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", new Locale("en", "US"))));
             request.setAttribute("showCustomer", customerDAO.read(customerId));
             PositionView[] positions = customerPositionDAO.getPositionViews(customerId);
             request.setAttribute("positions", positions);

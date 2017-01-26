@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +35,7 @@ public class TransitionDayForm {
 
         try {
             LocalDate date = LocalDate.parse(closingDateISO, DateTimeFormatter.ISO_DATE);
-            closingDate = date.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", new Locale("en", "US")));
+            closingDate = date.format(DateTimeFormatter.ISO_DATE);
         } catch (Exception e) {
             return Collections.singletonList("Invalid closing date!");
         }

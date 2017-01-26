@@ -27,8 +27,8 @@
       </td>
     </tr>
     <tr>
-      <td>Last Trading Day</td>
-      <td>${fn:escapeXml(lastTradingDay)}</td>
+      <td>Last Trading Date</td>
+      <td>${fn:escapeXml(lastTradingDateDisp)}</td>
     </tr>
     <tr>
       <td>Cash Balance</td>
