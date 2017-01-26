@@ -24,7 +24,14 @@ public class RequestCheckForm extends FormBean{
 			errors.add("Please enter the amount you want to withdraw.");
 		}
 		try {
-			Double.parseDouble(requestAmount);
+			double amount = Double.parseDouble(requestAmount);
+			if(amount <= 0) {
+    			errors.add("Amount must be greater than zero!");
+    		}
+    		
+    		if(amount > Integer.MAX_VALUE) {
+    			errors.add("Amount cannot be greater than $2147483647!");
+    		}
 		} catch (NumberFormatException e) {
 			errors.add("The amount should be numbers.");
 		}

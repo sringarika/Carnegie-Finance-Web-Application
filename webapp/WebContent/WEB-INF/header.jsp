@@ -7,7 +7,6 @@
 <head>
   <meta charset="utf-8">
   <title>CFS Mutual Funds</title>
-  <link rel="stylesheet" href="site.css" media="all">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
@@ -28,33 +27,27 @@
           <a class="navbar-brand" href="#">CFS Mutual Funds</a>
         </div>
         <div class="collapse navbar-collapse" id="main-nav-bar">
-          <c:if test="${empty customer and empty employee}">
+          <c:if test='${!empty links}'>
             <ul class="nav navbar-nav">
-              <li class="active"><a href="login.do">Login <span class="sr-only">(current)</span></a></li>
-            </ul>
-          </c:if>
-          <c:if test='${!empty customer}'>
-            <ul class="nav navbar-nav">
-              <li class="active"><a href="account.do">Account <span class="sr-only">(current)</span></a></li>
-              <li><a href="buy-fund.do">Buy</a></li>
-              <li><a href="sell-fund.do">Sell</a></li>
-              <li><a href="request-check.do">Request Check</a></li>
-              <li><a href="transaction-history.do">Transaction History</a></li>
-              <li><a href="research-fund.do">Research Funds</a></li>
-            </ul>
-          </c:if>
-          <c:if test='${!empty employee}'>
-            <ul class="nav navbar-nav">
-              <li><a href="customer-list.do">Manage Customers</a></li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Create Account <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  <li><a href="create-customer.do">Create Customer Account</a></li>
-                  <li><a href="create-employee.do">Create Employee Account</a></li>
-                </ul>
-              </li>
-              <li><a href="create-fund.do">Create Fund</a></li>
-              <li><a href="transition-day.do">Transition Day</a></li>
+              <c:forEach var="link" items="${links}">
+                <c:choose>
+                  <c:when test="${link.key == '(dropdown)'}">
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">${fn:escapeXml(link.value)} <span class="caret"></span></a>
+                      <ul class="dropdown-menu">
+                        <li><a href="create-customer.do">Create Customer Account</a></li>
+                        <li><a href="create-employee.do">Create Employee Account</a></li>
+                      </ul>
+                    </li>
+                  </c:when>
+                  <c:when test="${link.key == activeLink}">
+                    <li class="active"><a href="${fn:escapeXml(link.key)}">${fn:escapeXml(link.value)} <span class="sr-only">(current)</span></a></li>
+                  </c:when>
+                  <c:otherwise>
+                    <li><a href="${fn:escapeXml(link.key)}">${fn:escapeXml(link.value)}</a></li>
+                  </c:otherwise>
+                </c:choose>
+              </c:forEach>
             </ul>
           </c:if>
           <c:if test="${!empty customer or !empty employee}">

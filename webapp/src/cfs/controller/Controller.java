@@ -1,6 +1,8 @@
 package cfs.controller;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,9 +21,10 @@ import cfs.model.Model;
 public class Controller extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    
+
     private Model model;
 
+    @Override
     public void init() throws ServletException {
         model = new Model(getServletConfig());
         model.seed();
@@ -45,59 +48,15 @@ public class Controller extends HttpServlet {
         Action.add(new RequestCheckAction(model));
         Action.add(new TransactionHistoryAction(model));
         Action.add(new ResearchFundAction(model));
-        //add default (formbean)
-        //add one user with information
- //       CreateinitUser(model);
     }
 
-  /*  public void CreateinitUser(Model model) {
-    	CustomerDAO userDAO = model.getCustomerDAO();
-       
-        Customer[]arr = null;
-		try {
-			arr = userDAO.match();
-		} catch (RollbackException e) {
-			e.printStackTrace();
-		}
-		int len= 0;
-		if(arr != null) len = arr.length;
-		String uname = "uname";
-		String fname = "fname";
-		String lname = "lname";
-		String pwd = "pwd";
-		String addrLine1 = "abcd";
-		String addrLine2 = "efgh";
-		String city = "pittsburgh";
-		String state = "Pennsylvania";
-		String zip = "15213";
-		
-			Customer user;
-			try {
-			Transaction.begin();
-			user = new Customer();
-			user.setUsername(uname);
-			user.setFirstname(fname);
-			user.setLastname(lname);
-			user.setPassword(pwd);
-			user.setAddrLine1(addrLine1);
-			user.setAddrLine2(addrLine2);
-			user.setCity(city);
-			user.setState(state);
-			user.setZip(zip);
-			Transaction.commit();
-			CustomerDAO.create(user);
-			
-			} catch (RollbackException e) {
-				e.printStackTrace();
-			}	
-	}*/
-    
-    
+    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         doGet(request, response);
     }
 
+    @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String nextPage = performTheAction(request);
@@ -107,17 +66,18 @@ public class Controller extends HttpServlet {
     /*
      * Extracts the requested action and (depending on whether the user is
      * logged in) perform it (or make the user login).
-     * 
+     *
      * @param request
-     * 
+     *
      * @return the next page (the view)
      */
     private String performTheAction(HttpServletRequest request) throws ServletException {
         String servletPath = request.getServletPath();
         String action = getActionName(servletPath);
+        request.setAttribute("activeLink", action);
 
         HttpSession session = request.getSession(true);
-        
+
         if (session.getAttribute("employeeId") != null) {
             int employeeId = (int) session.getAttribute("employeeId");
         	Employee employee;
@@ -165,6 +125,7 @@ public class Controller extends HttpServlet {
         }
 
         if (nextPage.endsWith(".jsp")) {
+            prepareLinks(request);
             RequestDispatcher d = request.getRequestDispatcher("WEB-INF/"
                     + nextPage);
             d.forward(request, response);
@@ -183,5 +144,25 @@ public class Controller extends HttpServlet {
         // We're guaranteed that the path will start with a slash
         int slash = path.lastIndexOf('/');
         return path.substring(slash + 1);
+    }
+
+    private void prepareLinks(HttpServletRequest request) {
+        Map<String, String> links = new LinkedHashMap<String, String>();
+        if (request.getAttribute("employee") != null) {
+            links.put("customer-list.do", "Manage Customers");
+            links.put("(dropdown)", "Create Account");
+            links.put("create-fund.do", "Create Fund");
+            links.put("transition-day.do", "Transition Day");
+        } else if (request.getAttribute("customer") != null) {
+            links.put("account.do", "Account");
+            links.put("buy-fund.do", "Buy");
+            links.put("sell-fund.do", "Sell");
+            links.put("request-check.do", "Request Check");
+            links.put("transaction-history.do", "Transaction History");
+            links.put("research-fund.do", "Research Fund");
+        } else {
+            links.put("login.do", "Login");
+        }
+        request.setAttribute("links", links);
     }
 }

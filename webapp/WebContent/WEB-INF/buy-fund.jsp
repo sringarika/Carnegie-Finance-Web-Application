@@ -6,19 +6,26 @@
 <%@ include file="header.jsp" %>
   <main>
     <h2>Buy Funds</h2>
+    <c:if test="${(!empty error)}">
+      <div class="alert alert-danger">
+        ${fn:escapeXml(error)}
+      </div>
+    </c:if>
     <form action="buy-fund.do" method="POST">
       <div class="form-group">
         <label for="fundId">Fund</label>
         <select class="form-control" id="fundId" name="fundId" required>
-          <option value="1">EBIZC - ebConsultants Fund</option>
-          <option value="2">CMUMC - CMU Math Club Fund</option>
+          <c:forEach var="fund" items="${funds}">
+            <option value="${fn:escapeXml(fund.fundId)}">${fn:escapeXml(fund.name)}</option>
+          </c:forEach>
         </select>
       </div>
       <div class="form-group">
         <label for="amount">Amount (in dollars)</label>
         <div class="input-group">
           <div class="input-group-addon">$</div>
-          <input type="number" class="form-control" id="amount" name="amount" placeholder="12.34" step="0.01" min="0.01" required>
+          <fmt:formatNumber var="maxAmountStr" value="${availableCash>1000000.00 ? 1000000.00 : availableCash}" groupingUsed="false" minFractionDigits="2" maxFractionDigits="2"/>
+          <input type="number" class="form-control" id="amount" name="amount" placeholder="${maxAmountStr}" step="0.01" min="1.00" max="${maxAmountStr}" required>
         </div>
       </div>
       <div>

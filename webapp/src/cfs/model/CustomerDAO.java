@@ -1,6 +1,7 @@
 package cfs.model;
 
 import org.genericdao.ConnectionPool;
+
 import org.genericdao.DAOException;
 import org.genericdao.GenericDAO;
 import org.genericdao.MatchArg;
@@ -24,12 +25,40 @@ public class CustomerDAO extends GenericDAO<Customer> {
 		}
     }
     
-    public Customer changePassword(String username, String password) throws RollbackException {
+    public void increaseCash(double cash, int customerId) throws RollbackException {
         try {
             Transaction.begin();
-            Customer user = read(username);
+            Customer customer = read(customerId);
+            if (customer == null) throw new RollbackException ("User doesn't exist!");
+            double availableCash = customer.getCash() + cash;
+            customer.setCash(availableCash);
+            update(customer);
+            Transaction.commit();
+        } finally {
+            if (Transaction.isActive()) Transaction.rollback();
+        } 
+    }
+    
+    public void deductCash(double cash, int customerId) throws RollbackException {
+        try {
+            Transaction.begin();
+            Customer customer = read(customerId);
+            if (customer == null) throw new RollbackException ("User doesn't exist!");
+            double availableCash = customer.getCash() + cash;
+            customer.setCash(availableCash);
+            update(customer);
+            Transaction.commit();
+        } finally {
+            if (Transaction.isActive()) Transaction.rollback();
+        } 
+    }
+    
+    public Customer changePassword(int customerId, String password) throws RollbackException {
+        try {
+            Transaction.begin();
+            Customer user = read(customerId);
             if (user == null) {
-                throw new RollbackException("Account for" + username + " no longer exists");
+                throw new RollbackException("Account for this user no longer exists");
             }
             user.setPassword(password);
             super.update(user);

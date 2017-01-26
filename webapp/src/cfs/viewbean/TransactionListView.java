@@ -1,8 +1,13 @@
 package cfs.viewbean;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 public class TransactionListView {
 	    private int fundId;
 	    private int customerId;
+	    private String customername;
 	    private String date;
 	    private double numOfShares;
 	    private String transactiontype;
@@ -10,15 +15,7 @@ public class TransactionListView {
 	    private String transactionstatus;
 	    
 	    //if you want to set all at once use this, else I have provided for individual setters as well
-	    public TransactionListView(int fundId, int customerId, String date, double numOfShares,
-	    		String transactiontype, double amount,String transactionstatus) {
-	        this.fundId = fundId;
-	        this.customerId = customerId;
-	        this.date = date;
-	        this.numOfShares = numOfShares;
-	        this.transactiontype = transactiontype;
-	        this.amount = amount;
-	        this.transactionstatus = transactionstatus;
+	    public TransactionListView() {
 	    }
 	    
 	    //getters
@@ -30,8 +27,13 @@ public class TransactionListView {
 		    return customerId;
 		}
 	    
-	    public String getDate() {
-	        return date;
+	    public String getExecuteDate() {
+	    	return date;
+	    }
+	    public String getExecuteDatedisp() {
+	    	String var = date;
+            LocalDate date = LocalDate.parse(var, DateTimeFormatter.ISO_DATE);
+            return date.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", new Locale("en", "US")));
 	    }
 	    
 	    public double getNumOfShares() {
@@ -49,6 +51,9 @@ public class TransactionListView {
 	    public String getTransactionstatus() {
 		    return transactionstatus;
 		}
+	    public String getCustomername(String customername) {
+	    	return customername;
+	    }
 	    
 	    
 	    //setters
@@ -61,7 +66,8 @@ public class TransactionListView {
 		}
 	    
 	    public void setDate(String date) {
-	    	this.date = date;	    }
+	    	this.date = date;	    
+	    	}
 	    
 	    public void setNumOfShares(int numOfShares) {
 	        this.numOfShares = numOfShares;
@@ -78,4 +84,7 @@ public class TransactionListView {
 	    public void setTransactionstatus(String transactionstatus) {
 		    this.transactionstatus = transactionstatus;
 		}
+	    public void setCustomername(String customername) {
+	    	this.customername = customername;
+	    }
 }
