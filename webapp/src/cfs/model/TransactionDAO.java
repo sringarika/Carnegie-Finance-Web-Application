@@ -23,9 +23,17 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     	//should we sort the history based on the date?
     	return history;
     }
-    
+    // TODO
+    // rewrite it using a while loop (id and pending) instead of using an array to get all the pendings
+    // check if the date is smaller than the current date
     public void processTransaction(Map<Integer, Double> closingPrice, String transitionDate,
     		CustomerDAO customerDAO, CustomerPositionDAO customerPositionDAO) throws RollbackException {
+        // TODO
+        // sort it by transaction id
+        
+        // sell
+        // TODO
+        // check if it is still pending
     	Transactions[] pendings = match(MatchArg.equals("status", "Pending"));
     	if (pendings == null) {
     		return;
@@ -117,40 +125,54 @@ public class TransactionDAO extends GenericDAO<Transactions> {
             CustomerPositionDAO customerPositionDAO) throws Exception { //fund trans can be buy or sell
 		//include this in above cases sell fund so that this happens simultaneously
     	//will be the same for any type of transaction
-			try {
-				Position[] existingPosition = customerPositionDAO.findPositionsBoth(custId, fundId);
-				// sell
-				if (fundType.equals("Sell")) {
-				    if (existingPosition == null) { // position does not exist, you can't sell
-				        throw new Exception("Fund does not exist!!!");
-                    } else { // position exists
-                        double existingShares = existingPosition[0].getShares();
-                        double newShares = existingShares - shares;
-                        if (newShares <= 0) { // sold all shares had, delete position
-                            Transaction.begin();
-                            customerPositionDAO.delete(existingPosition[0]);
-                            Transaction.commit();
-                        } else { // // update position for selling 
-                            existingPosition[0].setShares(existingShares - shares);
-                            customerPositionDAO.updatePosition(existingPosition[0]);
-                        }
+		try {
+			Position[] existingPosition = customerPositionDAO.findPositionsBoth(custId, fundId);
+			if (fundType.equals("Sell")) {
+			    if (existingPosition == null) { // position does not exist, you can't sell
+			        throw new Exception("Fund does not exist!!!");
+                } else { // position exists
+                    double existingShares = existingPosition[0].getShares();
+                    double newShares = existingShares - shares;
+                    if (newShares <= 0) { // sold all shares had, delete position
+                        Transaction.begin();
+                        customerPositionDAO.delete(existingPosition[0]);
+                        Transaction.commit();
+                    } else { // // update position for selling 
+                        existingPosition[0].setShares(existingShares - shares);
+                        customerPositionDAO.updatePosition(existingPosition[0]);
                     }
-				// buy
-				} else {
-    				if (existingPosition == null) { // position does not exist
-    				    Position position = new Position(custId, fundId, shares);
-    				    Transaction.begin();
-    				    customerPositionDAO.create(position);
-    				    Transaction.commit();
-    				} else { // update position for buying
-    				    double exsitingShares = existingPosition[0].getShares();
-    				    existingPosition[0].setShares(exsitingShares + shares);
-    				    customerPositionDAO.updatePosition(existingPosition[0]);
-    				}
+                }
+			// buy
+			} else {
+				if (existingPosition == null) { // position does not exist
+				    Position position = new Position(custId, fundId, shares);
+				    Transaction.begin();
+				    customerPositionDAO.create(position);
+				    Transaction.commit();
+				} else { // update position for buying
+				    double exsitingShares = existingPosition[0].getShares();
+				    existingPosition[0].setShares(exsitingShares + shares);
+				    customerPositionDAO.updatePosition(existingPosition[0]);
 				}
-			} catch (RollbackException e) {
-				e.printStackTrace();
 			}
-
+		} catch (RollbackException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    // calculate the pending amount for updating available cash
+    public double pendingAmount(int customerId) throws RollbackException {
+        double result = 0.00;
+        Transactions[] pendingAmounts = match(MatchArg.equals("customerId", customerId));
+        if (pendingAmounts == null) {
+            return result;
+        } else {
+            for (Transactions transaction : pendingAmounts) {
+                if (transaction.getStatus().equals("Pending")) {
+                    result += transaction.getAmount();
+                }
+            }
+            return result;
+        }
     }
 }

@@ -33,8 +33,8 @@ public class FundDAO extends GenericDAO<Fund> {
      * @return fund price
      * @throws RollbackException
      */
-    public Fund[] fundSym(String fundSymbol) throws RollbackException {
-    	Fund[] funds = match(MatchArg.equals("symbol", fundSymbol));
+    public Fund[] fundSym(String fundTicker) throws RollbackException {
+    	Fund[] funds = match(MatchArg.equals("ticker", fundTicker));
     	if (funds == null) {
     		return null;
     	}
