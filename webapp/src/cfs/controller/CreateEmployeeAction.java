@@ -1,13 +1,19 @@
 package cfs.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.mybeans.form.FormBeanFactory;
+import cfs.formbean.CreateEmployeeForm;
+import cfs.model.EmployeeDAO;
 import cfs.model.Model;
 
 public class CreateEmployeeAction extends Action {
-
+    private EmployeeDAO employeedao;
     public CreateEmployeeAction(Model model) {
         // TODO Auto-generated constructor stub
+        employeedao= model.getEmployeeDAO();
     }
 
     @Override
@@ -21,8 +27,23 @@ public class CreateEmployeeAction extends Action {
             return "create-employee.jsp";
         } else if (request.getMethod().equals("POST")) {
             // TODO
+            try {
+                CreateEmployeeForm form = FormBeanFactory.getInstance(CreateEmployeeForm.class).create(request);
+                List<String> validationErrors = form.getValidationErrors();
+                if (validationErrors.size() > 0) {
+                    throw new Exception(validationErrors.get(0));
+                }
+            System.out.println("First Name:" + form.getFirstName());
+            System.out.println("Last Name:" + form.getLastName());
+            System.out.println("Username:" + form.getUsername());
+            System.out.println("New Password:" + form.getNewPassword());
+            System.out.println("Confirm Password:" + form.getConfirmPassword());
             request.setAttribute("message", "Employee created successfully!");
             return "success.jsp";
+            } catch (Exception e) {
+                request.setAttribute("error", e.getMessage());
+                return "create-employee.jsp";
+            }
         } else {
             return null;
         }

@@ -38,7 +38,7 @@ public class CreateCustomerForm extends FormBean {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-    public String getLastname() {
+    public String getLastName() {
         return lastName;
     }
     public void setLastName(String lastName) {
