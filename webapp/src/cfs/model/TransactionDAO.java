@@ -29,8 +29,6 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     // check if the date is smaller than the current date
     public void processTransaction(Map<Integer, Double> closingPrice, String transitionDate,
     		CustomerDAO customerDAO, CustomerPositionDAO customerPositionDAO) throws RollbackException {
-        // TODO
-        // sort it by transaction id
 
         // sell
         // TODO
@@ -44,11 +42,31 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     		if (transaction.getType().equals("Deposit Check")) {
     		    transaction.setExecuteDate(transitionDate);
                 transaction.setStatus("Processed");
-                // the available cash is updated here
+                // add the transaction amount to account balance here
                 customer.setCash(customer.getCash() + transaction.getAmount());
+                try {
+                    Transaction.begin();
+                    customerDAO.update(customer);
+                    super.update(transaction);
+                    Transaction.commit();
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
     		} else if (transaction.getType().equals("Request Check")) {
     			transaction.setExecuteDate(transitionDate);
-    			transaction.setStatus("Processed"); // the available cash is updated already
+    			transaction.setStatus("Processed");
+    			// delete the transaction amount from the account balance here
+                customer.setCash(customer.getCash() + transaction.getAmount());
+                try {
+                    Transaction.begin();
+                    customerDAO.update(customer);
+                    super.update(transaction);
+                    Transaction.commit();
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
     		} else if (transaction.getType().equals("Sell")) {
     			if (closingPrice.get(transaction.getFundId()) == null) {
         			throw new RollbackException("Fund does not exist!!!");
@@ -57,18 +75,15 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     			transaction.setStatus("Processed");
     			double amount = closingPrice.get(transaction.getFundId()) * transaction.getShares();
     			transaction.setAmount(amount);
-    			// the available cash is updated here
+    			// add the transaction amount to account balance here
     			customer.setCash(customer.getCash() + amount);
     			try {
-    	    		Transaction.begin();
-    	    		customerDAO.update(customer);
-    	    		Transaction.commit();
-        		} finally {
-                    if (Transaction.isActive()) Transaction.rollback();
-                }
-    			try {
+                    Transaction.begin();
+                    customerDAO.update(customer);
+                    super.update(transaction);
                     updatePos(customer.getCustomerId(), transaction.getFundId(), transaction.getShares(),
                             "Sell", customerPositionDAO);
+                    Transaction.commit();
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -85,9 +100,14 @@ public class TransactionDAO extends GenericDAO<Transactions> {
         		if (shares > 0) {
         			transaction.setShares(shares);
         			transaction.setStatus("Processed");
+        			customer.setCash(customer.getCash() + transaction.getAmount());
         			try {
-                        updatePos(customer.getCustomerId(), transaction.getFundId(), shares,
-                                "Buy", customerPositionDAO);
+                        Transaction.begin();
+                        customerDAO.update(customer);
+                        super.update(transaction);
+                        updatePos(customer.getCustomerId(), transaction.getFundId(), transaction.getShares(),
+                                "Sell", customerPositionDAO);
+                        Transaction.commit();
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -97,25 +117,18 @@ public class TransactionDAO extends GenericDAO<Transactions> {
         			customer.setCash(customer.getCash() + transaction.getAmount());
         			transaction.setStatus("Rejected");
         			try {
-        	    		Transaction.begin();
-        	    		customerDAO.update(customer);
-        	    		Transaction.commit();
-            		} finally {
-                        if (Transaction.isActive()) Transaction.rollback();
+                        Transaction.begin();
+                        customerDAO.update(customer);
+                        super.update(transaction);
+                        updatePos(customer.getCustomerId(), transaction.getFundId(), transaction.getShares(),
+                                "Sell", customerPositionDAO);
+                        Transaction.commit();
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
                     }
         		}
     		}
-    		try {
-	    		Transaction.begin();
-	    		super.update(transaction);
-	    		Transaction.commit();
-    		} finally {
-                if (Transaction.isActive()) Transaction.rollback();
-            }
-    		// TODO
-    		// update customer's position according to the type of the transaction
-    		// if position for this customer and this fund exists, update it
-    		// otherwise, create a position for the customer and fund
 
     	}
     }
@@ -135,9 +148,7 @@ public class TransactionDAO extends GenericDAO<Transactions> {
                     double existingShares = existingPosition[0].getShares();
                     double newShares = existingShares - shares;
                     if (newShares <= 0) { // sold all shares had, delete position
-                        Transaction.begin();
                         customerPositionDAO.delete(existingPosition[0]);
-                        Transaction.commit();
                     } else { // update position for selling
                         existingPosition[0].setShares(existingShares - shares);
                         customerPositionDAO.updatePosition(existingPosition[0]);
@@ -147,9 +158,7 @@ public class TransactionDAO extends GenericDAO<Transactions> {
 			} else {
 				if (existingPosition == null) { // position does not exist
 				    Position position = new Position(custId, fundId, shares);
-				    Transaction.begin();
 				    customerPositionDAO.create(position);
-				    Transaction.commit();
 				} else { // update position for buying
 				    double exsitingShares = existingPosition[0].getShares();
 				    existingPosition[0].setShares(exsitingShares + shares);
