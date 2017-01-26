@@ -21,7 +21,7 @@ public class TransactionHistoryView {
     public void setTransactionId(int transactionId) {
         this.transactionId= transactionId;
     }
-    public int getTransactionId(int transactionId) {
+    public int getTransactionId() {
         return transactionId;
     }
     public String getTransactionType() {

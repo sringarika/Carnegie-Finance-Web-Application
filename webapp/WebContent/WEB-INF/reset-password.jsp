@@ -4,12 +4,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="header.jsp" %>
   <main>
-  <h2>Reset Password for</h2>
-  <tr>
-      <td>Name</td>
-      <td>${firstName} ${lastName}</td>
-    </tr>
-    <h2>Reset Password</h2>
+  	<h2>Reset Password for</h2>
+  	<h3>${fn:escapeXml(firstName)} ${fn:escapeXml(lastName)}</h3>
+    <br>
 	<form action="reset-password.do" method="POST">
       <input type="hidden" name="customerId" value="${fn:escapeXml(customerId)}">
       <div class="form-group">
