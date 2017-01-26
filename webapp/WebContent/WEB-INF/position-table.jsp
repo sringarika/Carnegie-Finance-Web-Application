@@ -21,8 +21,8 @@
           <c:if test="${not empty param.radioInput}">
             <td><input type="radio" name="${param.radioInput}" value="${fn:escapeXml(position.fundId)}" required></td>
           </c:if>
-          <td>${position.fundName}</td>
-          <td>${position.ticker}</td>
+          <td>${fn:escapeXml(position.fundName)}</td>
+          <td>${fn:escapeXml(position.ticker)}</td>
           <td class="text-right"><fmt:formatNumber type="number" minFractionDigits="3" maxFractionDigits="3" value="${position.shares}" /></td>
           <c:if test="${position.priceAvailable}">
             <td class="text-right"><fmt:formatNumber value="${position.price}" type="currency"/></td>
