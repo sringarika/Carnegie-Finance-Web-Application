@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.genericdao.RollbackException;
+import org.genericdao.Transaction;
 import org.mybeans.form.FormBeanException;
 import org.mybeans.form.FormBeanFactory;
 
@@ -33,9 +34,17 @@ public class RequestCheckAction extends Action {
     @Override
     public String perform(HttpServletRequest request) {
         Customer customer = (Customer) request.getAttribute("customer");
+        double pendingAmount;
+        try {
+            pendingAmount = transactionDAO.pendingAmount(customer.getCustomerId());
+        } catch (RollbackException e1) {
+            e1.printStackTrace();
+            request.setAttribute("error", e1.getMessage());
+            return "error.jsp";
+        }
+        double availableCash = pendingAmount + customer.getCash();
+        request.setAttribute("availableCash", availableCash);
         if (request.getMethod().equals("GET")) {
-            double availableCash = customer.getCash();
-            request.setAttribute("availableCash", availableCash);
             return "request-check.jsp";
         } else if (request.getMethod().equals("POST")) {
         	try {
@@ -44,31 +53,41 @@ public class RequestCheckAction extends Action {
 	                if (validationErrors.size() > 0) {
 	                    request.setAttribute("error", validationErrors.get(0));
 	                    return "request-check.jsp";
-	                }
+	            }
 				double amount = form.getRequestAmount();
-				if (amount >= customer.getCash()) {
-				    request.setAttribute("error", "Not enough cash to withdraw!");
-				    return "request-check.jsp";
-				}
-				customerDAO.deductCash(amount, customer.getCustomerId());
+				queueTransaction(customer.getCustomerId(), amount);
 	            request.setAttribute("message", "Check requested. It will be processed by the end of the business day.");
-	            //record a transaction
-	            Transactions transaction = new Transactions();
-	            transaction.setCustomerId(customer.getCustomerId());
-	            transaction.setType("Request Check");
-	            transaction.setAmount(amount);
-	            transaction.setStatus("Pending");
-	            transactionDAO.create(transaction);
 	            return "success.jsp";
-			} catch (FormBeanException e) {
-			    request.setAttribute("error", e.getMessage());
-                return "request-check.jsp";
-			} catch (RollbackException e) {
-			    request.setAttribute("error", e.getMessage());
+			} catch (Exception e) {
+			    e.printStackTrace();
+                request.setAttribute("error", e.getMessage());
                 return "request-check.jsp";
             }
         } else {
             return null;
+        }
+    }
+    private void queueTransaction(int customerId, double amount) throws Exception {
+        try {
+            Transaction.begin();
+            Customer customer = customerDAO.read(customerId);
+            double pendingAmount = transactionDAO.pendingAmount(customer.getCustomerId());
+            double availableCash = pendingAmount + customer.getCash();
+            if (amount > availableCash) {
+                throw new Exception("Not enough available cash!");
+            } else if  (amount <= 0) {
+                throw new Exception("Amount should be larger than 0!");
+            }
+            //record a transaction
+            Transactions transaction = new Transactions();
+            transaction.setCustomerId(customer.getCustomerId());
+            transaction.setType("Request Check");
+            transaction.setAmount(0 - amount);
+            transaction.setStatus("Pending");
+            transactionDAO.create(transaction);
+            Transaction.commit();
+        } finally {
+            if (Transaction.isActive()) Transaction.rollback();
         }
     }
 
