@@ -47,7 +47,6 @@
             var availShares = option.getAttribute('data-avail-shares');
             availSharesForFund[fundId] = availShares;
           });
-          console.log(availSharesForFund);
         }
         var checkedInput = document.querySelector('input[name="fundId"]:checked');
         if (!checkedInput) {
