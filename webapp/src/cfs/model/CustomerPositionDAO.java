@@ -8,6 +8,7 @@ import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 import org.genericdao.Transaction;
 
+import cfs.databean.Position;
 import cfs.viewbean.PositionView;
 
 public class CustomerPositionDAO extends GenericDAO<Position> {
@@ -51,5 +52,4 @@ public class CustomerPositionDAO extends GenericDAO<Position> {
                      " WHERE position.fundId = fund.fundId AND position.customerId = ?";
         return viewDAO.executeQuery(sql, customerId);
     }	
-	}
 }
