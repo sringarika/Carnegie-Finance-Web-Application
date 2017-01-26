@@ -2,12 +2,21 @@ package cfs.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.genericdao.RollbackException;
+
+import cfs.model.CustomerDAO;
+import cfs.model.CustomerPositionDAO;
 import cfs.model.Model;
+import cfs.viewbean.PositionView;
 
 public class ViewCustomerAction extends Action {
 
+    private CustomerPositionDAO customerPositionDAO;
+    private CustomerDAO customerDAO;
+
     public ViewCustomerAction(Model model) {
-        // TODO Auto-generated constructor stub
+        customerPositionDAO = model.getCustomerPositionDAO();
+        customerDAO = model.getCustomerDAO();
     }
 
     @Override
@@ -17,7 +26,28 @@ public class ViewCustomerAction extends Action {
 
     @Override
     public String perform(HttpServletRequest request) {
-        return "view-customer.jsp";
+        int customerId;
+        String customerIdStr = request.getParameter("customerId");
+        try {
+            customerId = Integer.parseInt(customerIdStr);
+        } catch (Exception e) {
+            request.setAttribute("error", "Invalid customerId!");
+            return "error.jsp";
+        }
+        return showCustomer(customerId, request);
+    }
+
+    protected String showCustomer(int customerId, HttpServletRequest request) {
+        try {
+            request.setAttribute("lastTradingDay", "01/15/2017"); // TODO
+            request.setAttribute("showCustomer", customerDAO.read(customerId));
+            PositionView[] positions = customerPositionDAO.getPositionViews(customerId);
+            request.setAttribute("positions", positions);
+            return "view-customer.jsp";
+        } catch (RollbackException e) {
+            request.setAttribute("error", e.getMessage());
+            return "error.jsp";
+        }
     }
 
     @Override

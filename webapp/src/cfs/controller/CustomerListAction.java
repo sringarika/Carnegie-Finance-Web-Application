@@ -2,13 +2,18 @@ package cfs.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.genericdao.RollbackException;
+
 import cfs.databean.Customer;
+import cfs.model.CustomerDAO;
 import cfs.model.Model;
 
 public class CustomerListAction extends Action {
 
+    private CustomerDAO customerDAO;
+
     public CustomerListAction(Model model) {
-        // TODO Auto-generated constructor stub
+        customerDAO = model.getCustomerDAO();
     }
 
     @Override
@@ -18,12 +23,13 @@ public class CustomerListAction extends Action {
 
     @Override
     public String perform(HttpServletRequest request) {
-        // TODO: Use DAO to get customers.
-        Customer[] customers = {
-                new Customer("bobama", "Barack", "Obama", "1"),
-                new Customer("hclinton", "Hillary", "Clinton", "1"),
-                new Customer("makeamericagreatagain", "Donald", "Trump", "1"),
-                };
+        Customer[] customers;
+        try {
+            customers = customerDAO.match();
+        } catch (RollbackException e) {
+            request.setAttribute("error", e.getMessage());
+            return "error.jsp";
+        }
         request.setAttribute("customers", customers);
         return "customer-list.jsp";
     }

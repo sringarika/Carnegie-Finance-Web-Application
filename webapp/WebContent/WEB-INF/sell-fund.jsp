@@ -14,33 +14,21 @@
     <form action="sell-fund.do" method="POST">
       <div class="form-group">
         <label for="fundId">Please select fund to sell</label>
-      <table class="table table-hoverable">
-          <thead>
-            <tr class="table-light-grey">
-              <th></th>
-              <th>Fund Name</th>
-              <th>Ticker</th>
-              <th class="text-right">Number of shares</th>
-              <th class="text-right">Last Closing Price</th>
-              <th class="text-right">Total Value</th>
-            </tr>
-          </thead>
-          <c:forEach var="cusFund" items="${cusFunds}">
-          <tr>
-                <td><input type="radio" name="fundId" value="${fn:escapeXml(cusFund.fundId)}" required></td>
-                <td>${fn:escapeXml(cusFund.fundName)}</td>
-                <td>${fn:escapeXml(cusFund.ticker)}</td>
-                <td class="text-right"><fmt:formatNumber type="number" minFractionDigits="3" maxFractionDigits="3" value="${cusFund.numOfShares}" /></td>
-                <td class="text-right"><fmt:formatNumber value="${cusFund.price}" type="currency"/></td>
-                <td class="text-right"><fmt:formatNumber value="${cusFund.value}" type="currency"/></td>
-          </tr>
-          </c:forEach>
-        </table>
+        <jsp:include page="position-table.jsp">
+          <jsp:param name="radioInput" value="fundId"/>
+        </jsp:include>
       </div>
       <div class="form-group">
         <label for="shares">Shares to sell</label>
-        <input type="number" class="form-control" id="shares" name="shares" placeholder="12.345" step="0.001" min="1.000" max="1000000.000" required>
-        <%-- TODO(yuchen): Write some JS to update the max attr above so it can also be validated on client-side. --%>
+        <input type="number" class="form-control" id="shares" name="shares" placeholder="1.000" step="0.001" min="1.000" max="1000000.000" required>
+        
+        <%-- The following datalist is for JavaScript validation. --%>
+        <datalist id="fund-ids" style="display: none;">
+          <c:forEach var="entry" items="${availableSharesForFund}">
+            <fmt:formatNumber var="availSharesStr" value="${entry.value}" groupingUsed="false" minFractionDigits="3" maxFractionDigits="3"/>
+            <option value="${fn:escapeXml(entry.key)}" data-avail-shares="${fn:escapeXml(availSharesStr)}"></option>
+          </c:forEach>
+        </datalist>
       </div>
       <div class="alert alert-info" role="alert">
         The transaction will be processed on the end of the trading day. The cash amount depends on the closing price of the fund at that time.
@@ -48,4 +36,41 @@
       <button type="submit" class="btn btn-primary">Sell</button>
     </form>
   </main>
+  <script>
+    (function() {
+      var availSharesForFund;
+      var updateMaxShares = function() {
+        if (!availSharesForFund) {
+          availSharesForFund = {};
+          document.querySelectorAll('#fund-ids option').forEach(function(option) {
+            var fundId = option.getAttribute('value');
+            var availShares = option.getAttribute('data-avail-shares');
+            availSharesForFund[fundId] = availShares;
+          });
+          console.log(availSharesForFund);
+        }
+        var checkedInput = document.querySelector('input[name="fundId"]:checked');
+        if (!checkedInput) {
+          checkedInput = document.querySelector('input[name="fundId"]');
+          if (!checkedInput) return;
+          checkedInput.checked = true;
+        }
+        var fundId = checkedInput.value;
+        var availShares = availSharesForFund[fundId];
+        if (typeof availShares === 'undefined') return;
+        var sharesInput = document.getElementById('shares');
+        if (!sharesInput) return;
+        sharesInput.max = availShares;
+        sharesInput.placeholder = availShares;
+      };
+      document.addEventListener('change', function(e) {
+        var element = e.target;
+        if (element.getAttribute('name') === 'fundId') {
+          updateMaxShares();
+        }
+      });
+      document.addEventListener('DOMContentLoaded', updateMaxShares);
+    })();
+
+  </script>
 <%@ include file="footer.jsp" %>

@@ -23,6 +23,7 @@ public class BuyFundAction extends Action {
     @Override
     public String perform(HttpServletRequest request) {
         if (request.getMethod().equals("GET")) {
+            // TODO: Get available cash from DAO.
             request.setAttribute("availableCash", 23.45);
             return "buy-fund.jsp";
         } else if (request.getMethod().equals("POST")) {
