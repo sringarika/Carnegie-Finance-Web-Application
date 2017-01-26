@@ -10,6 +10,7 @@ public class Transactions {
     private int transactionId;
     private int customerId;
     private int fundId;
+    private String fundName;
     private double shares;
     private double amount;
     private String executeDate;
@@ -46,6 +47,12 @@ public class Transactions {
     }
     public void setFundId(int fundId) {
         this.fundId = fundId;
+    }
+    public String getFundName() {
+        return fundName;
+    }
+    public void setFundName(String fundName) {
+        this.fundName = fundName;
     }
     public String getExecuteDate() {
         return executeDate;
