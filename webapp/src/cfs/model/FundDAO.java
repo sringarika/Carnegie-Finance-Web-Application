@@ -20,11 +20,11 @@ public class FundDAO extends GenericDAO<Fund> {
      * @throws RollbackException
      */
     public Fund[] fundName(String fundName) throws RollbackException {
-    	Fund[] fundn = match(MatchArg.equals("name", fundName));
-    	if (fundn == null) {
-    		return null;
-    	}
-    	return fundn;
+        Fund[] fundn = match(MatchArg.equals("name", fundName));
+        if (fundn == null) {
+            return null;
+        }
+        return fundn;
     }
 
     /**
@@ -34,19 +34,19 @@ public class FundDAO extends GenericDAO<Fund> {
      * @throws RollbackException
      */
     public Fund[] fundTicker(String fundTicker) throws RollbackException {
-    	Fund[] funds = match(MatchArg.equals("ticker", fundTicker));
-    	if (funds == null) {
-    		return null;
-    	}
-    	return funds;
+        Fund[] funds = match(MatchArg.equals("ticker", fundTicker));
+        if (funds == null) {
+            return null;
+        }
+        return funds;
     }
 
-	public Integer findIdByName(String fundName) throws RollbackException {
-		Fund[] fund = match(MatchArg.equals("name", fundName));
-		if (fund.length == 0) {
-			return null;
-		} else {
-			return fund[0].getFundId();
-		}
-	}
+    public Integer findIdByName(String fundName) throws RollbackException {
+        Fund[] fund = match(MatchArg.equals("name", fundName));
+        if (fund.length == 0) {
+            return null;
+        } else {
+            return fund[0].getFundId();
+        }
+    }
 }

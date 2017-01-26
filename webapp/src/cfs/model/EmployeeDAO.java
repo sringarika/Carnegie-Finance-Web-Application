@@ -34,12 +34,12 @@ public class EmployeeDAO extends GenericDAO<Employee> {
      * @return the user
      * @throws RollbackException
      */
-    public Employee changePassword(String username, String password) throws RollbackException {
+    public Employee changePassword(int employeeId, String password) throws RollbackException {
         try {
             Transaction.begin();
-            Employee user = read(username);
+            Employee user = read(employeeId);
             if (user == null) {
-                throw new RollbackException("Account for" + username + " does not exist");
+                throw new RollbackException("Account for this user does not exist");
             }
             user.setPassword(password);
             super.update(user);

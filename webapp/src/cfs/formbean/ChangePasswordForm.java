@@ -14,34 +14,34 @@ public class ChangePasswordForm extends FormBean {
         return oldPassword;
     }
     public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
+        this.oldPassword = oldPassword.trim();
     }
     public String getNewPassword() {
         return newPassword;
     }
     public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
+        this.newPassword = newPassword.trim();
     }
     public String getConfirmPassword() {
         return confirmPassword;
     }
     public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
+        this.confirmPassword = confirmPassword.trim();
     }
 
     @Override
     public List<String> getValidationErrors() {
         if (oldPassword == null || oldPassword.isEmpty()) {
-            return Collections.singletonList("Current password is required!");
+            return Collections.singletonList("Please enter your current password!");
         }
         if (newPassword == null || newPassword.isEmpty()) {
-            return Collections.singletonList("New password is required!");
+            return Collections.singletonList("Please enter your new password!");
         }
         if (confirmPassword == null || confirmPassword.isEmpty()) {
-            return Collections.singletonList("Confirm password is required!");
+            return Collections.singletonList("Please confirm your new password!!");
         }
         if (!newPassword.equals(confirmPassword)) {
-            return Collections.singletonList("Confirm password does not match new password!");
+            return Collections.singletonList("Confirm password does not match the new password you entered!");
         }
         return Collections.emptyList();
     }

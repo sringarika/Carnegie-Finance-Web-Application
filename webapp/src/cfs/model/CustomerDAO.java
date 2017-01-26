@@ -53,12 +53,12 @@ public class CustomerDAO extends GenericDAO<Customer> {
         } 
     }
     
-    public Customer changePassword(String username, String password) throws RollbackException {
+    public Customer changePassword(int customerId, String password) throws RollbackException {
         try {
             Transaction.begin();
-            Customer user = read(username);
+            Customer user = read(customerId);
             if (user == null) {
-                throw new RollbackException("Account for" + username + " no longer exists");
+                throw new RollbackException("Account for this user no longer exists");
             }
             user.setPassword(password);
             super.update(user);

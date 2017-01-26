@@ -120,9 +120,10 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     	}
     }
 
-    //could call this method from prev code
+    // could call this method from prev code
     public void updatePos(int custId, int fundId, double shares, String fundType,
-            CustomerPositionDAO customerPositionDAO) throws Exception { //fund trans can be buy or sell
+            CustomerPositionDAO customerPositionDAO) throws Exception { 
+        //fund trans can be buy or sell
 		//include this in above cases sell fund so that this happens simultaneously
     	//will be the same for any type of transaction
 		try {
@@ -137,7 +138,7 @@ public class TransactionDAO extends GenericDAO<Transactions> {
                         Transaction.begin();
                         customerPositionDAO.delete(existingPosition[0]);
                         Transaction.commit();
-                    } else { // // update position for selling
+                    } else { // update position for selling
                         existingPosition[0].setShares(existingShares - shares);
                         customerPositionDAO.updatePosition(existingPosition[0]);
                     }
@@ -163,14 +164,28 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     // calculate the pending amount for updating available cash
     public double pendingAmount(int customerId) throws RollbackException {
         double result = 0.00;
-        Transactions[] pendingAmounts = match(MatchArg.equals("customerId", customerId));
+        Transactions[] pendingAmounts = match(MatchArg.and(MatchArg.equals("customerId", customerId),
+                MatchArg.equals("status", "Pending")));
         if (pendingAmounts == null) {
             return result;
         } else {
             for (Transactions transaction : pendingAmounts) {
-                if (transaction.getStatus().equals("Pending")) {
-                    result += transaction.getAmount();
-                }
+                result += transaction.getAmount();
+            }
+            return result;
+        }
+    }
+    
+    // calculate the pending shares for updating available shares for each fund of each customer
+    public double pendingShares(int customerId, int fundId) throws RollbackException {
+        double result = 0.000;
+        Transactions[] pendingShares = match(MatchArg.and(MatchArg.equals("customerId", customerId),
+                MatchArg.equals("status", "Pending"), MatchArg.equals("fundId", fundId)));
+        if (pendingShares == null) {
+            return result;
+        } else {
+            for (Transactions transaction : pendingShares) {
+                result += transaction.getShares();
             }
             return result;
         }
