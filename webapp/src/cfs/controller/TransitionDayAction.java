@@ -45,7 +45,9 @@ public class TransitionDayAction extends Action {
         try {
             Fund[] funds = fundDAO.match();
             request.setAttribute("funds", funds);
-            String lastClosingDate = "2017-01-17"; // TODO
+            // TODO get the real closing date
+            // String lastClosingDate = "2017-01-17";
+            String lastClosingDate = fundPriceHistoryDAO.getLastClosingDate();
             LocalDate date = LocalDate.parse(lastClosingDate, DateTimeFormatter.ISO_DATE);
             LocalDate minDate = date.plusDays(1);
             request.setAttribute("lastClosingDateDisp",
@@ -55,7 +57,6 @@ public class TransitionDayAction extends Action {
             request.setAttribute("error", e.getMessage());
             return "error.jsp";
         }
-
         if (request.getMethod().equals("GET")) {
             return "transition-day.jsp";
         } else if (request.getMethod().equals("POST")) {
@@ -64,6 +65,7 @@ public class TransitionDayAction extends Action {
                 List<String> validationErrors = form.getValidationErrors();
                 if (validationErrors.size() > 0) {
                     request.setAttribute("error", validationErrors.get(0));
+                    System.out.println("here 1");
                 	return "transition-day.jsp";
                 }
                 String executeDate = form.getClosingDate();
@@ -76,9 +78,12 @@ public class TransitionDayAction extends Action {
 
                 fundPriceHistoryDAO.updatePrice(prices, executeDate);
                 // TODO: Do not pass prices and executeDate into processTransaction.
-                transactionDAO.processTransaction(prices, executeDate, customerDAO, customerPositionDAO);
+                // fundPriceHistoryDAO passed for getting the latest prices and date
+                transactionDAO.processTransaction(fundPriceHistoryDAO, customerDAO, customerPositionDAO);
             } catch (Exception e) {
+                e.printStackTrace();
                 request.setAttribute("error", e.getMessage());
+                System.out.println("here 2");
                 return "transition-day.jsp";
             }
             request.setAttribute("message", "Business day has ended. Transactions executed successfully.");

@@ -6,7 +6,7 @@ import java.util.List;
 import org.mybeans.form.FormBean;
 
 public class ResetPasswordForm extends FormBean {
-    private String oldPassword;
+    //private String oldPassword;
     private String newPassword;
     private String confirmPassword;
 

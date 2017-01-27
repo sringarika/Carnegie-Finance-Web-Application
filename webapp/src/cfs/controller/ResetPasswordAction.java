@@ -8,6 +8,7 @@ import org.mybeans.form.FormBeanFactory;
 
 import cfs.databean.Customer;
 import cfs.formbean.ChangePasswordForm;
+import cfs.formbean.ResetPasswordForm;
 import cfs.model.CustomerDAO;
 import cfs.model.Model;
 public class ResetPasswordAction extends Action {
@@ -54,7 +55,7 @@ public class ResetPasswordAction extends Action {
             // TODO: Validate password & confirmPassword.
             // TODO: Use DAO to reset password for customerId.
             try {
-                ChangePasswordForm form = FormBeanFactory.getInstance(ChangePasswordForm.class).create(request);
+                ResetPasswordForm form = FormBeanFactory.getInstance(ResetPasswordForm.class).create(request);
                 List<String> validationErrors = form.getValidationErrors();
                 if (validationErrors.size() > 0) {
                     throw new Exception(validationErrors.get(0));

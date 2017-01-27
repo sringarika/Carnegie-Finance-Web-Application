@@ -16,13 +16,14 @@ public class FundPriceHistoryDAO extends GenericDAO <FundPriceHistory> {
         super(FundPriceHistory.class, tableName, cp);
     }
     
-    // return the latest price of each fund for the given last transition date -- research fund
-    public FundPriceHistory[] researchFund(String lastTransitionDate) throws RollbackException {
-    	FundPriceHistory[] fundPrice = match(MatchArg.equals("executeDate", lastTransitionDate));
-    	if (fundPrice == null) {
+    // return the latest price of each fund for processing pending transactions
+    public Double latestFundPRice(int fundId, String executeDate) throws RollbackException {
+    	FundPriceHistory[] fundPrice = match(MatchArg.and(MatchArg.equals("executeDate", executeDate),
+    	        MatchArg.equals("fundId", fundId)));
+    	if (fundPrice.length == 0) {
     		return null;
     	}
-    	return fundPrice;
+    	return fundPrice[0].getPrice();
     }
     
     // return the  price history of input fund -- display trend
@@ -34,22 +35,26 @@ public class FundPriceHistoryDAO extends GenericDAO <FundPriceHistory> {
     	return prices;
     }
     
-    public void updatePrice (Map<Integer, Double> closingPrice, String transitionDate) throws RollbackException {
-    	FundPriceHistory[] fundPrices = match();
-    	for (FundPriceHistory fundPrice : fundPrices) {
-    		if (closingPrice.get(fundPrice.getFundId()) == null) {
-    			throw new RollbackException("Error!!!");
-    		} else {
-    			fundPrice.setExecuteDate(transitionDate);
-    			fundPrice.setPrice(closingPrice.get(fundPrice.getFundId()));
-    			try {
-    	    		Transaction.begin();
-    	    		super.update(fundPrice);
-    	    		Transaction.commit();
-        		} finally {
-                    if (Transaction.isActive()) Transaction.rollback();
-                }
-    		}
+    public void updatePrice(Map<Integer, Double> closingPrice, String transitionDate) throws RollbackException {
+    	for (int fundId : closingPrice.keySet()) {
+	        FundPriceHistory fundPrice = new FundPriceHistory(transitionDate, fundId, closingPrice.get(fundId));
+	        try {
+                Transaction.begin();
+                create(fundPrice);
+                Transaction.commit();
+            } finally {
+                if (Transaction.isActive()) Transaction.rollback();
+            }
     	}
+    }
+    
+    // return the last closing date
+    public String getLastClosingDate() throws RollbackException {
+        FundPriceHistory[] history = match(MatchArg.max("executeDate"));
+        if (history.length == 0) {
+            return "1999-01-01";
+        } else {
+            return history[0].getExecuteDate();
+        }
     }
 }
