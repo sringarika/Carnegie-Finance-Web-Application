@@ -27,14 +27,25 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="address">Current Address</label>
+        <label for="address">Address Line 1</label>
         <input type="text" class="form-control" id="address1" name="address1" placeholder="">
       </div>
       <div class="form-group">
         <label for="address2">Address Line 2</label>
         <input type="text" class="form-control" id="address2" name="address2" placeholder="">
       </div>
-      
+      <div class="form-group">
+        <label for="address2">City</label>
+        <input type="text" class="form-control" id="address2" name="address2" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="address2">State</label>
+        <input type="text" class="form-control" id="address2" name="address2" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="address2">Zip Code</label>
+        <input type="text" class="form-control" id="address2" name="address2" placeholder="">
+      </div>
       <div class="form-group">
         <label for="password">Password </label>
         <input type="password" class="form-control" id="password" name="password" placeholder="">

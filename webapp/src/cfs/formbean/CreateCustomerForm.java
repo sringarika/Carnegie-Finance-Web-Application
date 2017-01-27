@@ -11,6 +11,9 @@ public class CreateCustomerForm extends FormBean {
     private String username;
     private String address1;
     private String address2;
+    private String city;
+    private String state;
+    private String zipcode;
     private String amount;
     //private String button;
     
@@ -56,6 +59,24 @@ public class CreateCustomerForm extends FormBean {
     public void setAddress2(String address2) {
         this.address2 = address2;
     }
+    public String getState() {
+        return state;
+    }
+    public void setState(String state) {
+        this.state = state;
+    }
+    public String getCity() {
+        return city;
+    }
+    public void setCity(String city) {
+        this.city = city;
+    }
+    public String getZipcode() {
+        return zipcode;
+    }
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
+    }
     public void setAmount(String amount) {
         this.amount = amount;
     }
@@ -85,6 +106,15 @@ public class CreateCustomerForm extends FormBean {
         }
         if (address1 == null || address1.isEmpty()) {
             return Collections.singletonList("Current address is required!");
+        }
+        if (state == null || state.isEmpty()) {
+            return Collections.singletonList("State is required!");
+        }
+        if (city == null || city.isEmpty()) {
+            return Collections.singletonList("City is required!");
+        }
+        if (zipcode == null || zipcode.isEmpty()) {
+            return Collections.singletonList("Zipcode is required!");
         }
         //testing special characters
         if(username.contains("$")) {

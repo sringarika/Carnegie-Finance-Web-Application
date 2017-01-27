@@ -49,6 +49,9 @@ public class CreateCustomerAction extends Action {
                 newCustomer.setAddrLine1(form.getAddress1());
                 newCustomer.setAddrLine2(form.getAddress2());
                 newCustomer.setCash(Double.parseDouble(form.getAmount()));
+                newCustomer.setCity(form.getCity());
+                newCustomer.setState(form.getState());
+                newCustomer.setZip(form.getZipcode());
                 //try {
                     customerdao.create(newCustomer);
 
@@ -59,7 +62,7 @@ public class CreateCustomerAction extends Action {
 //                    request.setAttribute("error", "A user with this username already exists!");
 //                    return "create-customer.jsp";
 //                }
-               // System.out.println("First Name:" + form.getFirstName());
+               System.out.println("First Name:" + form.getFirstName());
 //                System.out.println("Last Name:" + form.getLastName());
 //                System.out.println("Username:" + form.getUsername());
 //                System.out.println("Address Line 1:" + form.getAddress1());
