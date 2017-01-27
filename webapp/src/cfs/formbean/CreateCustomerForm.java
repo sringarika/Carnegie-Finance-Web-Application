@@ -66,7 +66,7 @@ public class CreateCustomerForm extends FormBean {
     public List<String> getValidationErrors() {
         //List<String> errors = new ArrayList<String>();
         if (password == null || password.isEmpty()) {
-            return Collections.singletonList("New password is required!");
+            return Collections.singletonList("Password is required!");
         }
         if (confPassword == null || confPassword.isEmpty()) {
             return Collections.singletonList("Confirm password is required!");
@@ -110,8 +110,8 @@ public class CreateCustomerForm extends FormBean {
         double a;
         try {
             a = Double.parseDouble(amount);
-            if(a < 1.00) {
-                return Collections.singletonList("Amount must atleast be $1.00!");
+            if(a < 0.00) {
+                return Collections.singletonList("Amount must atleast be $0.00!");
             }
             System.out.println(a);
             if(a > 1000000.00) {
