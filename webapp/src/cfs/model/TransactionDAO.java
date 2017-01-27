@@ -192,8 +192,8 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     // calculate the pending amount for updating available cash
     public double pendingAmount(int customerId) throws RollbackException {
         double result = 0.00;
-        Transactions[] pendingAmounts = match(MatchArg.and(MatchArg.equals("customerId", customerId),
-                MatchArg.equals("status", "Pending")));
+        Transactions[] pendingAmounts = match(MatchArg.and(MatchArg.equals("customerId", customerId), 
+                MatchArg.equals("status", "Pending"), MatchArg.equals("type", "Buy")));
         if (pendingAmounts == null) {
             return result;
         } else {
@@ -208,7 +208,7 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     public double pendingShares(int customerId, int fundId) throws RollbackException {
         double result = 0.000;
         Transactions[] pendingShares = match(MatchArg.and(MatchArg.equals("customerId", customerId),
-                MatchArg.equals("status", "Pending"), MatchArg.equals("fundId", fundId)));
+                MatchArg.equals("status", "Pending"), MatchArg.equals("fundId", fundId), MatchArg.equals("type", "Buy")));
         if (pendingShares == null) {
             return result;
         } else {
