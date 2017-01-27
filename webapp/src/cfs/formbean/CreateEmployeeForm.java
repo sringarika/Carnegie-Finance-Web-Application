@@ -4,22 +4,22 @@ import java.util.Collections;
 import java.util.List;
 import org.mybeans.form.FormBean;
 public class CreateEmployeeForm extends FormBean{
-    private String newPassword;
-    private String confPassword;
-    private String firstName;
-    private String lastName;
+    private String password;
+    private String confpassword;
+    private String firstname;
+    private String lastname;
     private String username;
-    public String getNewPassword() {
-        return newPassword;
+    public String getPassword() {
+        return password;
     }
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
+    public void setPassword(String newPassword) {
+        this.password = newPassword;
     }
-    public String getConfirmPassword() {
-        return confPassword;
+    public String getConfirmpassword() {
+        return confpassword;
     }
-    public void setConfirmPassword(String confirmPassword) {
-        this.confPassword = confirmPassword;
+    public void setConfirmpassword(String confirmPassword) {
+        this.confpassword = confirmPassword;
     }
     public String getUsername() {
         return username;
@@ -27,36 +27,37 @@ public class CreateEmployeeForm extends FormBean{
     public void setUsername(String username) {
         this.username = username;
     }
-    public String getFirstName() {
-        return firstName;
+    public String getFirstname() {
+        return firstname;
     }
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstname(String firstName) {
+        this.firstname = firstName;
     }
-    public String getLastName() {
-        return lastName;
+    public String getLastname() {
+        return lastname;
     }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastname(String lastName) {
+        this.lastname = lastName;
     }
     public List<String> getValidationErrors() {
         //List<String> errors = new ArrayList<String>();
-        if (newPassword == null || newPassword.isEmpty()) {
+        System.out.println(password);
+        if (password == null || password.isEmpty()) {
             return Collections.singletonList("New password is required!");
         }
-        if (confPassword == null || confPassword.isEmpty()) {
+        if (confpassword == null || confpassword.isEmpty()) {
             return Collections.singletonList("Confirm password is required!");
         }
-        if (!newPassword.equals(confPassword)) {
+        if (!password.equals(confpassword)) {
             return Collections.singletonList("Confirm password does not match new password!");
         }
         if (username == null || username.isEmpty()) {
             return Collections.singletonList("Username is required!");
         }
-        if (firstName == null || firstName.isEmpty()) {
+        if (firstname == null || firstname.isEmpty()) {
             return Collections.singletonList("First Name is required!");
         }
-        if (lastName == null || lastName.isEmpty()) {
+        if (lastname == null || lastname.isEmpty()) {
             return Collections.singletonList("Last Name is required!");
         }
         //testing special characters
@@ -64,11 +65,11 @@ public class CreateEmployeeForm extends FormBean{
             return Collections.singletonList("Username cannot contain special characters.");
             
         }
-        if(firstName.contains("$")) {
+        if(firstname.contains("$")) {
             return Collections.singletonList("First Name cannot contain special characters.");
             
         }
-        if(lastName.contains("$")) {
+        if(lastname.contains("$")) {
             return Collections.singletonList("Last Name cannot contain special characters.");
             
         }
