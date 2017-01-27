@@ -50,9 +50,15 @@ public class DepositCheckForm extends FormBean {
         if (customerId == null || customerId.trim().length() == 0)
             errors.add("customerId is required");
 
-        double a = 0;
+         double a = 0;
         try {
-            a = Double.parseDouble(amount);
+         a = Double.parseDouble(amount);
+        } catch (NumberFormatException num) {
+            errors.add("Amount must be a valid number!");
+        }
+        try {
+            //insert check for 2 decimal digits heres
+
             if (a <= 0) {
                 errors.add("Amount must be greater than zero!");
             }
