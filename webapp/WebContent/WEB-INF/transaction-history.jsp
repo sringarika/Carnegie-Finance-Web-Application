@@ -9,7 +9,6 @@
     <table class="table table-bordered table-striped">
       <thead>
         <tr>
-          <th>ID</th>
           <th>Transaction Date</th>
           <th>Transaction Type</th>
           <th>Fund</th>
@@ -23,7 +22,6 @@
         <tr>
           <c:forEach var="transaction" items="${transactions}">
             <tr>
-              <td>${fn:escapeXml(transaction.transactionId)}</td>
               <td>${fn:escapeXml(transaction.dateDisp)}</td>
               <td>${fn:escapeXml(transaction.transactionType)}</td>
               <td>${fn:escapeXml(transaction.fundName)}</td>

@@ -10,9 +10,8 @@
     <table class="table table-bordered table-striped">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Customer Username</th>
           <th>Transaction Date</th>
+          <th>Customer Username</th>
           <th>Transaction Type</th>
           <th>Fund</th>
           <th class="text-right">Shares</th>
@@ -25,9 +24,8 @@
         <tr>
           <c:forEach var="transaction" items="${transactions}">
             <tr>
-              <td>${fn:escapeXml(transaction.transactionId)}</td>
-              <td>${fn:escapeXml(transaction.customerName)}</td>
               <td>${fn:escapeXml(transaction.dateDisp)}</td>
+              <td>${fn:escapeXml(transaction.customerName)}</td>
               <td>${fn:escapeXml(transaction.transactionType)}</td>
               <td>${fn:escapeXml(transaction.fundName)}</td>
               <td class="text-right"><fmt:formatNumber type="number" minFractionDigits="3" maxFractionDigits="3" value="${transaction.sharesVal}" /></td>
