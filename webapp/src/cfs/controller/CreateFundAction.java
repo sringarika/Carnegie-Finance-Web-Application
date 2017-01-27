@@ -9,14 +9,13 @@ import org.genericdao.Transaction;
 import org.mybeans.form.FormBeanFactory;
 
 import cfs.databean.Fund;
-import cfs.databean.Transactions;
 import cfs.formbean.CreateFundForm;
 import cfs.model.FundDAO;
 import cfs.model.Model;
 
 public class CreateFundAction extends Action {
 	private FundDAO FundDAO;
-	
+
     public CreateFundAction(Model model) {
         FundDAO = model.getFundDAO();
     }
@@ -37,7 +36,7 @@ public class CreateFundAction extends Action {
 				if(fn == null) {
 					request.setAttribute("message", "Currently we have no funds");
 					return "create-fund.jsp";
-				} 
+				}
 				request.setAttribute("fundList", fn);
 				return "create-fund.jsp";
 			} catch (RollbackException e) {
@@ -46,13 +45,13 @@ public class CreateFundAction extends Action {
             return "create-fund.jsp";
 
         } else if (request.getMethod().equals("POST")) {
-            // TODO        	
+            // TODO
         	System.out.println("POST");
         	try {
         		Transaction.begin(); //not yet sure of the most appropriate position to start
                 CreateFundForm form = FormBeanFactory.getInstance(CreateFundForm.class).create(request);
                 List<String> validationErrors = form.getValidationErrors();
-                
+
                 fn = FundDAO.match();
                 request.setAttribute("fundList", fn);
                 if (validationErrors.size() > 0) {
@@ -70,7 +69,7 @@ public class CreateFundAction extends Action {
             	 System.out.println("funds exists");
                request.setAttribute("error", "Fund exists!");
 			   return "create-fund.jsp";
-             } 
+             }
              //not sure if ticker should be exclusive too
             System.out.println("checkpoint2");
              boolean tflag = FundDAO.fundTicker(ticker);
@@ -91,6 +90,8 @@ public class CreateFundAction extends Action {
         } catch (Exception e) {
             request.setAttribute("error", e.getMessage());
             return "create-fund.jsp";
+        } finally {
+            if (Transaction.isActive()) Transaction.rollback();
         }
         } else {
             return null;

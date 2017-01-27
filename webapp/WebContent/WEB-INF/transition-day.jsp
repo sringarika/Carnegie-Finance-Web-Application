@@ -5,7 +5,6 @@
 <%@ include file="header.jsp" %>
   <main>
     <h2>Transition Day</h2>
-<<<<<<< HEAD
     <c:if test="${pendingTransactionCount > 0}">
       <p class="alert alert-info">
         There are ${fn:escapeXml(pendingTransactionCount)} transaction(s) pending.

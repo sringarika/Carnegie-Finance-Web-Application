@@ -35,18 +35,6 @@
         <input type="text" class="form-control" id="address2" name="address2" placeholder="">
       </div>
       <div class="form-group">
-        <label for="address2">City</label>
-        <input type="text" class="form-control" id="address2" name="address2" placeholder="">
-      </div>
-      <div class="form-group">
-        <label for="address2">State</label>
-        <input type="text" class="form-control" id="address2" name="address2" placeholder="">
-      </div>
-      <div class="form-group">
-        <label for="address2">Zipcode</label>
-        <input type="text" class="form-control" id="address2" name="address2" placeholder="">
-      </div>
-      <div class="form-group">
         <label for="state">State</label>
         <input type="text" class="form-control" id="state" name="state" placeholder="">
       </div>
@@ -58,7 +46,6 @@
         <label for="city">City</label>
         <input type="text" class="form-control" id="city" name="city" placeholder="">
       </div>
-
       
       <div class="form-group">
         <label for="password">Password </label>
