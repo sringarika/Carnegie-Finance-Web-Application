@@ -35,7 +35,8 @@ public class CreateEmployeeAction extends Action {
                 CreateEmployeeForm form = FormBeanFactory.getInstance(CreateEmployeeForm.class).create(request);
                 List<String> validationErrors = form.getValidationErrors();
                 if (validationErrors.size() > 0) {
-                    throw new Exception(validationErrors.get(0));
+                    request.setAttribute("error", validationErrors.get(0));
+                    return "create-employee.jsp";
                 }
                 Employee newEmployee = new Employee();
                 newEmployee.setUsername(form.getUsername());

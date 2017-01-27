@@ -12,15 +12,15 @@
       </div>
       <div class="form-group">
         <label for="firstname">First Name</label>
-        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="">
+        <input type="text" class="form-control" id="firstName" name="firstname" placeholder="">
       </div>
       <div class="form-group">
         <label for="lastname">Last Name</label>
-        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="">
+        <input type="text" class="form-control" id="lastName" name="lastname" placeholder="">
       </div>
       <div class="form-group">
         <label for="password">Password </label>
-        <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="">
+        <input type="password" class="form-control" id="newPassword" name="password" placeholder="">
       </div>
       <div class="form-group">
         <label for="password">Confirm Password </label>
