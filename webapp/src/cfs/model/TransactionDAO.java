@@ -52,7 +52,7 @@ public class TransactionDAO extends GenericDAO<Transactions> {
                      "  WHERE C.customerId = T.customerId" +
                      "    AND T.customerId = ?";
         TransactionHistoryView[] history = viewDAO.executeQuery(sql, customerId);
-        Arrays.sort(history, (a, b) -> a.getTransactionId() - b.getTransactionId());
+        Arrays.sort(history, (a, b) -> b.getTransactionId() - a.getTransactionId());
         return history;
     }
 
@@ -74,7 +74,7 @@ public class TransactionDAO extends GenericDAO<Transactions> {
                 "    LEFT JOIN fundprice P ON T.fundId = P.fundId AND T.executeDate = P.executeDate" +
                 "  WHERE C.customerId = T.customerId";
         TransactionHistoryView[] history = viewDAO.executeQuery(sql);
-        Arrays.sort(history, (a, b) -> a.getTransactionId() - b.getTransactionId());
+        Arrays.sort(history, (a, b) -> b.getTransactionId() - a.getTransactionId());
         return history;
     }
 
