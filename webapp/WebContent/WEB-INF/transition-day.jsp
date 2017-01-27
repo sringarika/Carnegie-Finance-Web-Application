@@ -9,11 +9,6 @@
       There are <a href="transaction-list.jsp">42 transactions</a> pending.
       <a href="transaction-list.jsp">Show details...</a>
     </p>
-    <c:if test="${(!empty error)}">
-      <div class="alert alert-danger">
-        ${fn:escapeXml(error)}
-      </div>
-    </c:if>
     <form action="transition-day.do" method="POST">
       <div>
         <p>Last Closing Date: ${fn:escapeXml(lastClosingDateDisp)}</p>

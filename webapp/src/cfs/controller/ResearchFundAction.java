@@ -30,7 +30,6 @@ public class ResearchFundAction extends Action {
         try {
             Fund[] funds = fundDAO.match();
             if (funds.length == 0 || funds == null) {
-                System.out.println("here");
                 request.setAttribute("message", "Currently we have no fund.");
                 return "research-fund.jsp";
             }
