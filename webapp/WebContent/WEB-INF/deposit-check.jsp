@@ -12,9 +12,6 @@
     </c:if>
     <form action="deposit-check.do" method="POST">
     <input type="hidden" name="customerId" value="${customerId}">
-    <div>
-        <label for="cash">Available Cash: <fmt:formatNumber value="${availableCash}" type="currency"/></label>
-    </div>
 
     <div class="form-group">
         <label for="amount">Amount to be deposited(in dollars)</label>

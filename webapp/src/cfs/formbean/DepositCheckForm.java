@@ -1,5 +1,6 @@
 package cfs.formbean;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +54,14 @@ public class DepositCheckForm extends FormBean {
         double a = 0;
         try {
             a = Double.parseDouble(amount);
+            String text = Double.toString(Math.abs(a));
+            int integerPlaces = text.indexOf('.');
+            int decimalPlaces = text.length() - integerPlaces - 1;
+            if(decimalPlaces > 2) {
+            	errors.add("Amount must be upto decimal places only");
+            }
+            
+
             if (a <= 0) {
                 errors.add("Amount must be greater than zero!");
             }
