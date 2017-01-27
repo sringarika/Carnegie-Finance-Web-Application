@@ -55,6 +55,27 @@ public class TransactionDAO extends GenericDAO<Transactions> {
         return history;
     }
 
+    public TransactionHistoryView[] showAll() throws RollbackException {
+        String sql = "SELECT T.transactionId AS transactionId," +
+                "       T.type          AS transactionType," +
+                "       T.status        AS transactionStatus," +
+                "       T.customerId    AS customerId," +
+                "       C.username      AS customerName," +
+                "       CAST(F.fundId AS CHAR(50))        AS fundId," +
+                "       F.name          AS fundName," +
+                "       F.ticker        AS ticker," +
+                "       T.executeDate   AS date," +
+                "       CAST(T.shares AS CHAR(50))        AS shares," +
+                "       CAST(P.price AS CHAR(50))         AS price," +
+                "       CAST(T.amount AS CHAR(50))        AS amount" +
+                "  FROM customer C, transactions T" +
+                "    LEFT JOIN fund F      ON T.fundId = F.fundId" +
+                "    LEFT JOIN fundprice P ON T.fundId = P.fundId AND T.executeDate = P.executeDate" +
+                "  WHERE C.customerId = T.customerId";
+        TransactionHistoryView[] history = viewDAO.executeQuery(sql);
+        return history;
+    }
+
     // calculate the pending amount for updating available cash
     public double pendingAmount(int customerId) throws RollbackException {
         double result = 0.00;

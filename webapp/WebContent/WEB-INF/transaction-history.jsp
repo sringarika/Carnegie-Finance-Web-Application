@@ -6,7 +6,6 @@
 <%@ include file="header.jsp" %>
   <main>
     <h2>Transaction History for ${fn:escapeXml(firstName)} ${fn:escapeXml(lastName)}</h2>
-    <p style="font-size: 12pt; font-weight: bold; color: red"> ${error} </p>
     <table class="table table-bordered table-striped">
       <thead>
         <tr>
