@@ -5,10 +5,18 @@
 <%@ include file="header.jsp" %>
   <main>
     <h2>Transition Day</h2>
-    <p class="alert alert-info">
-      There are <a href="transaction-list.jsp">42 transactions</a> pending.
-      <a href="transaction-list.jsp">Show details...</a>
-    </p>
+    <c:if test="${pendingTransactionCount > 0}">
+      <p class="alert alert-info">
+        There are ${fn:escapeXml(pendingTransactionCount)} transaction(s) pending.
+        <a class="alert-link" href="transaction-list.do">Show details...</a>
+      </p>
+    </c:if>
+    <c:if test="${pendingTransactionCount == 0}">
+      <p class="alert alert-info">
+        There are no pending transactions.
+        <a class="alert-link" href="transaction-list.do">Show transaction list...</a>
+      </p>
+    </c:if>
     <c:if test="${(!empty error)}">
       <div class="alert alert-danger">
         ${fn:escapeXml(error)}
@@ -19,6 +27,7 @@
         <label class="col-sm-3 control-label">Last Closing Date:</label>
         <div class="col-sm-9">
           <p class="form-control-static">${fn:escapeXml(lastClosingDateDisp)}</p>
+          <input type="hidden" name="lastClosingDateISO" value="${fn:escapeXml(lastClosingDateISO)}">
         </div>
       </div>
       <div class="form-group">
