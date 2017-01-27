@@ -19,6 +19,7 @@ public class Model {
     private FundPriceHistoryDAO fundPriceHistoryDAO;
     private FundDAO fundDAO;
     private EmployeeDAO employeeDAO;
+    private TransactionProcessor transactionProcessor;
 
     public Model(ServletConfig config) throws ServletException {
         try {
@@ -26,6 +27,7 @@ public class Model {
             String jdbcURL    = config.getInitParameter("jdbcURL");
 
             ConnectionPool pool = new ConnectionPool(jdbcDriver,jdbcURL);
+            pool.setDebugOutput(System.out);
 
             customerDAO = new CustomerDAO(pool, "customer");
             transactionDAO = new TransactionDAO(pool, "transactions");
@@ -33,6 +35,7 @@ public class Model {
             fundPriceHistoryDAO = new FundPriceHistoryDAO(pool, "fundprice");
             fundDAO = new FundDAO(pool, "fund");
             employeeDAO = new EmployeeDAO(pool, "employee");
+            transactionProcessor = new TransactionProcessor(this, pool);
         } catch (DAOException e) {
             throw new ServletException(e);
         }
@@ -62,6 +65,10 @@ public class Model {
         return employeeDAO;
     }
 
+    public TransactionProcessor getTransactionProcessor() {
+        return transactionProcessor;
+    }
+
     public void seed() {
         try {
             if (customerDAO.findByUsername("bob") == null) {
@@ -89,4 +96,5 @@ public class Model {
             System.out.println("something is wrong");
         }
     }
+
 }

@@ -8,31 +8,29 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 
 import cfs.databean.Fund;
+import cfs.databean.Transactions;
 import cfs.formbean.TransitionDayForm;
-import cfs.model.CustomerDAO;
-import cfs.model.CustomerPositionDAO;
 import cfs.model.FundDAO;
 import cfs.model.FundPriceHistoryDAO;
 import cfs.model.Model;
 import cfs.model.TransactionDAO;
+import cfs.model.TransactionProcessor;
 
 public class TransitionDayAction extends Action {
-
-	// private FormBeanFactory<TransitionDayForm> formBeanFactory = FormBeanFactory.getInstance(TransitionDayForm.class);
-	private TransactionDAO transactionDAO;
-	private CustomerDAO customerDAO;
 	private FundPriceHistoryDAO fundPriceHistoryDAO;
-	private CustomerPositionDAO customerPositionDAO;
     private FundDAO fundDAO;
+    private TransactionProcessor transactionProcessor;
+    private TransactionDAO transactionDAO;
 
     public TransitionDayAction(Model model) {
-    	transactionDAO = model.getTransactionDAO();
-    	customerDAO = model.getCustomerDAO();
     	fundPriceHistoryDAO = model.getFundPriceHistoryDAO();
     	fundDAO = model.getFundDAO();
+    	transactionProcessor = model.getTransactionProcessor();
+        transactionDAO = model.getTransactionDAO();
     }
 
     @Override
@@ -43,6 +41,12 @@ public class TransitionDayAction extends Action {
     @Override
     public String perform(HttpServletRequest request) {
         try {
+            Transactions[] transactions = transactionDAO.match(MatchArg.equals("status", Transactions.PENDING));
+            if (transactions == null) {
+                request.setAttribute("pendingTransactionCount", 0);
+            } else {
+                request.setAttribute("pendingTransactionCount", transactions.length);
+            }
             Fund[] funds = fundDAO.match();
             request.setAttribute("funds", funds);
             String lastClosingDate = fundPriceHistoryDAO.getLastClosingDate();
@@ -83,11 +87,11 @@ public class TransitionDayAction extends Action {
                 });
 
                 fundPriceHistoryDAO.updatePrice(prices, transitionDate, lastTransitionDate);
-                transactionDAO.processTransaction(fundPriceHistoryDAO, customerDAO, customerPositionDAO);
+                transactionProcessor.transitionDay(transitionDate);
+                transactionProcessor.processPendingTransactions();
             } catch (Exception e) {
                 e.printStackTrace();
                 request.setAttribute("error", e.getMessage());
-                System.out.println("here 2");
                 return "transition-day.jsp";
             }
             request.setAttribute("message", "Business day has ended. Transactions executed successfully.");
