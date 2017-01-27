@@ -1,5 +1,6 @@
 package cfs.formbean;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +53,9 @@ public class DepositCheckForm extends FormBean {
 
         double a = 0;
         try {
-            a = Double.parseDouble(amount);
+            //insert check for 2 decimal digits heres
+            
+
             if (a <= 0) {
                 errors.add("Amount must be greater than zero!");
             }

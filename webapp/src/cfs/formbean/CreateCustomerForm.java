@@ -1,11 +1,10 @@
 package cfs.formbean;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.mybeans.form.FormBean;
 public class CreateCustomerForm extends FormBean {
     private String password;
-    private String confPassword;
+    private String confpassword;
     private String firstName;
     private String lastName;
     private String username;
@@ -20,14 +19,14 @@ public class CreateCustomerForm extends FormBean {
     public String getPassword() {
         return password;
     }
-    public void setNewPassword(String newPassword) {
+    public void setPassword(String newPassword) {
         this.password = newPassword;
     }
-    public String getConfirmPassword() {
-        return confPassword;
+    public String getConfpassword() {
+        return confpassword;
     }
-    public void setConfirmPassword(String confirmPassword) {
-        this.confPassword = confirmPassword;
+    public void setConfpassword(String confirmPassword) {
+        this.confpassword = confirmPassword;
     }
     public String getUsername() {
         return username;
@@ -89,10 +88,11 @@ public class CreateCustomerForm extends FormBean {
         if (password == null || password.isEmpty()) {
             return Collections.singletonList("Password is required!");
         }
-        if (confPassword == null || confPassword.isEmpty()) {
+    	System.out.println("Password is "+password);
+        if (confpassword == null || confpassword.isEmpty()) {
             return Collections.singletonList("Confirm password is required!");
         }
-        if (!password.equals(confPassword)) {
+        if (!password.equals(confpassword)) {
             return Collections.singletonList("Confirm password does not match new password!");
         }
         if (username == null || username.isEmpty()) {
@@ -153,5 +153,3 @@ public class CreateCustomerForm extends FormBean {
         return Collections.emptyList();
     }
 }
-    
-

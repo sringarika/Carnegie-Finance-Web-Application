@@ -5,14 +5,14 @@ import org.genericdao.PrimaryKey;
 @PrimaryKey("fundId")
 public class Fund {
     private int fundId;
-    private String name;
+    private String fund;
     private String ticker;
     
     public Fund() {
     }
     
-    public Fund(String name, String ticker) {
-        this.name = name;
+    public Fund(String fund, String ticker) {
+        this.fund = fund;
         this.ticker = ticker;
     }
     
@@ -23,10 +23,10 @@ public class Fund {
         this.fundId = fundId;
     }
     public String getName() {
-        return name;
+        return fund;
     }
     public void setName(String name) {
-        this.name = name;
+        this.fund = name;
     }
     public String getTicker() {
         return ticker;
