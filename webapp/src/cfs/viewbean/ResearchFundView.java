@@ -1,8 +1,5 @@
 package cfs.viewbean;
 
-import java.util.List;
-
-
 public class ResearchFundView {
 	 private int fundId;
 	 private String fundName;

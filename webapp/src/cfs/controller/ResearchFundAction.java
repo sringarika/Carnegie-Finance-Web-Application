@@ -1,6 +1,11 @@
 package cfs.controller;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.genericdao.RollbackException;
@@ -30,13 +35,32 @@ public class ResearchFundAction extends Action {
         try {
             Fund[] funds = fundDAO.match();
             if (funds.length == 0 || funds == null) {
-                System.out.println("here");
                 request.setAttribute("message", "Currently we have no fund.");
                 return "research-fund.jsp";
             }
             FundPriceHistory[] history = fundPriceHistoryDAO.match();
             ResearchFundView[] fundList = merge(funds, history, request);
             request.setAttribute("fundList", fundList);
+            //TODO
+            // add a command that when mouse click on price, it shows a pop out graph.
+            Map<String, Double> priceHistoryMap = new HashMap<String, Double>();
+            List<Map<String, Double>> mapList = new ArrayList<Map<String, Double>>();
+            if (history.length == 0 || history == null) {
+                request.setAttribute("message", "The fund has no history");
+                return "research-fund.jsp";
+            }
+            for (int i = 1; i <= history.length; i++) {
+                int id = i;
+                for (int j = 0; j < history.length; j++) {
+                    if (history[j].getFundId() == id && history[j].getExecuteDate() != null) {
+                        priceHistoryMap.put(history[j].getExecuteDate(), history[j].getPrice());
+                    }
+                }
+                mapList.add(priceHistoryMap);
+            }
+            request.setAttribute("priceHistoryMap", priceHistoryMap);
+            request.setAttribute("mapList", mapList);
+            
             return "research-fund.jsp";
         } catch (RollbackException e) {
             e.printStackTrace();
@@ -44,6 +68,7 @@ public class ResearchFundAction extends Action {
         }
         return "research-fund.jsp";
     }
+    
     private ResearchFundView[] merge(Fund[] funds, FundPriceHistory[] history, HttpServletRequest request) {
         ResearchFundView[] fundList = new ResearchFundView[funds.length];
         if (fundList.length == 0 || fundList == null) {
@@ -69,7 +94,7 @@ public class ResearchFundAction extends Action {
 
         return fundList;
     }
-
+    
     @Override
     public AccessControlLevel getAccessControlLevel() {
         return AccessControlLevel.Customer;

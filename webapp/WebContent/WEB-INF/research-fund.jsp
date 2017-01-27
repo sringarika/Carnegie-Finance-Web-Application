@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="header.jsp" %>
-  <main>
+<main>
     <h2>Research Funds</h2>
 <div>
 </div>
@@ -27,5 +27,27 @@
       </tr>
       </c:forEach>
     </table>
-  </main>
+<table>
+<tr>
+    <th>Date</th>
+    <th>Price</th>
+</tr>
+<tr>
+ <c:forEach items="${mapList}" var="map">
+           <tr>
+   			 <th>Date</th>
+   			 <th>Price</th>
+		   </tr>
+           <c:forEach items="${priceHistoryMap}" var="entry">
+           <tr>
+                      <td>${entry.key}</td>
+                      <td>${entry.value}</td>
+           </tr>
+           </c:forEach>
+<br><br>
+ </c:forEach>
+</tr>
+</table>
+<h3>${fn:escapeXml(message)}</h3>
+</main>
 <%@ include file="footer.jsp" %>
