@@ -1,30 +1,32 @@
 package cfs.formbean;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.mybeans.form.FormBean;
 public class CreateCustomerForm extends FormBean {
     private String password;
-    private String confPassword;
+    private String confpassword;
     private String firstName;
     private String lastName;
     private String username;
     private String address1;
     private String address2;
+    private String city;
+    private String state;
+    private String zipcode;
     private String amount;
     //private String button;
     
     public String getPassword() {
         return password;
     }
-    public void setNewPassword(String newPassword) {
+    public void setPassword(String newPassword) {
         this.password = newPassword;
     }
-    public String getConfirmPassword() {
-        return confPassword;
+    public String getConfpassword() {
+        return confpassword;
     }
-    public void setConfirmPassword(String confirmPassword) {
-        this.confPassword = confirmPassword;
+    public void setConfpassword(String confirmPassword) {
+        this.confpassword = confirmPassword;
     }
     public String getUsername() {
         return username;
@@ -38,7 +40,7 @@ public class CreateCustomerForm extends FormBean {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-    public String getLastname() {
+    public String getLastName() {
         return lastName;
     }
     public void setLastName(String lastName) {
@@ -56,6 +58,24 @@ public class CreateCustomerForm extends FormBean {
     public void setAddress2(String address2) {
         this.address2 = address2;
     }
+    public String getState() {
+        return state;
+    }
+    public void setState(String state) {
+        this.state = state;
+    }
+    public String getCity() {
+        return city;
+    }
+    public void setCity(String city) {
+        this.city = city;
+    }
+    public String getZipcode() {
+        return zipcode;
+    }
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
+    }
     public void setAmount(String amount) {
         this.amount = amount;
     }
@@ -66,12 +86,13 @@ public class CreateCustomerForm extends FormBean {
     public List<String> getValidationErrors() {
         //List<String> errors = new ArrayList<String>();
         if (password == null || password.isEmpty()) {
-            return Collections.singletonList("New password is required!");
+            return Collections.singletonList("Password is required!");
         }
-        if (confPassword == null || confPassword.isEmpty()) {
+    	System.out.println("Password is "+password);
+        if (confpassword == null || confpassword.isEmpty()) {
             return Collections.singletonList("Confirm password is required!");
         }
-        if (!password.equals(confPassword)) {
+        if (!password.equals(confpassword)) {
             return Collections.singletonList("Confirm password does not match new password!");
         }
         if (username == null || username.isEmpty()) {
@@ -85,6 +106,15 @@ public class CreateCustomerForm extends FormBean {
         }
         if (address1 == null || address1.isEmpty()) {
             return Collections.singletonList("Current address is required!");
+        }
+        if (state == null || state.isEmpty()) {
+            return Collections.singletonList("State is required!");
+        }
+        if (city == null || city.isEmpty()) {
+            return Collections.singletonList("City is required!");
+        }
+        if (zipcode == null || zipcode.isEmpty()) {
+            return Collections.singletonList("Zipcode is required!");
         }
         //testing special characters
         if(username.contains("$")) {
@@ -110,8 +140,8 @@ public class CreateCustomerForm extends FormBean {
         double a;
         try {
             a = Double.parseDouble(amount);
-            if(a < 1.00) {
-                return Collections.singletonList("Amount must atleast be $1.00!");
+            if(a < 0.00) {
+                return Collections.singletonList("Amount must atleast be $0.00!");
             }
             System.out.println(a);
             if(a > 1000000.00) {
@@ -123,5 +153,3 @@ public class CreateCustomerForm extends FormBean {
         return Collections.emptyList();
     }
 }
-    
-

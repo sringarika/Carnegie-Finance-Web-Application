@@ -36,12 +36,26 @@
       </div>
       
       <div class="form-group">
+        <label for="state">State</label>
+        <input type="text" class="form-control" id="state" name="state" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="zipcode">Zip code</label>
+        <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="city">City</label>
+        <input type="text" class="form-control" id="city" name="city" placeholder="">
+      </div>
+
+      
+      <div class="form-group">
         <label for="password">Password </label>
         <input type="password" class="form-control" id="password" name="password" placeholder="">
       </div>
       <div class="form-group">
         <label for="password">Confirm Password </label>
-        <input type="password" class="form-control" id="confPassword" name="confPassword" placeholder="">
+        <input type="password" class="form-control" id="confpassword" name="confpassword" placeholder="">
       </div>
       <button type="submit" class="btn btn-primary">Create Customer Account</button>
     </form>
