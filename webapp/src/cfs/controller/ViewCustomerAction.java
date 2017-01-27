@@ -6,26 +6,24 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 
-import cfs.databean.Transactions;
 import cfs.model.CustomerDAO;
 import cfs.model.CustomerPositionDAO;
+import cfs.model.FundPriceHistoryDAO;
 import cfs.model.Model;
-import cfs.model.TransactionDAO;
 import cfs.viewbean.PositionView;
 
 public class ViewCustomerAction extends Action {
 
     private CustomerPositionDAO customerPositionDAO;
     private CustomerDAO customerDAO;
-    private TransactionDAO transactionDAO;
+    private FundPriceHistoryDAO fundPriceHistoryDAO;
 
     public ViewCustomerAction(Model model) {
         customerPositionDAO = model.getCustomerPositionDAO();
         customerDAO = model.getCustomerDAO();
-        transactionDAO = model.getTransactionDAO();
+        fundPriceHistoryDAO = model.getFundPriceHistoryDAO();
     }
 
     @Override
@@ -48,19 +46,7 @@ public class ViewCustomerAction extends Action {
 
     protected String showCustomer(int customerId, HttpServletRequest request) {
         try {
-            String lastTradingDate = null;
-            // TODO: Does transaction type need to be Buy/Sell?
-            Transactions[] transactions = transactionDAO.match(
-                    MatchArg.equals("customerId", customerId),
-                    MatchArg.notEquals("status", "Pending"));
-            if (transactions != null && transactions.length > 0) {
-                for (int i = 0; i < transactions.length; i++) {
-                    String executeDate = transactions[i].getExecuteDate();
-                    if (executeDate != null && (lastTradingDate == null || executeDate.compareTo(lastTradingDate) > 0)) {
-                        lastTradingDate = executeDate;
-                    }
-                }
-            }
+            String lastTradingDate = fundPriceHistoryDAO.getLastClosingDate();
             if (lastTradingDate != null) {
                 LocalDate date = LocalDate.parse(lastTradingDate, DateTimeFormatter.ISO_DATE);
                 request.setAttribute("lastTradingDateDisp",
