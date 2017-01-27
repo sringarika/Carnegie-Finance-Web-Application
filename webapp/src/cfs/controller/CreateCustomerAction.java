@@ -41,6 +41,7 @@ public class CreateCustomerAction extends Action {
                     request.setAttribute("error", validationErrors.get(0));
                     return "create-customer.jsp";
                 }
+                System.out.println("password is : "+form.getPassword());
                 Customer newCustomer = new Customer();
                 newCustomer.setUsername(form.getUsername());
                 newCustomer.setPassword(form.getPassword());

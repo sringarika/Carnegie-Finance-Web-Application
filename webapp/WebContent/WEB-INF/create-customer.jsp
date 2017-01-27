@@ -43,7 +43,7 @@
         <input type="text" class="form-control" id="address2" name="address2" placeholder="">
       </div>
       <div class="form-group">
-        <label for="address2">Zip Code</label>
+        <label for="address2">Zipcode</label>
         <input type="text" class="form-control" id="address2" name="address2" placeholder="">
       </div>
       <div class="form-group">
