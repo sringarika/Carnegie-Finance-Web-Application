@@ -58,10 +58,10 @@ public class CreateFundAction extends Action {
                 if (validationErrors.size() > 0) {
                     throw new Exception(validationErrors.get(0));
                 }
-				if(fn == null) {
+				/*if(fn == null) {
 					request.setAttribute("error", "Currently we have no funds");
 					return "create-fund.jsp";
-				}
+				}*/
 				System.out.println("checkpoint1");
 				System.out.println("looking for: "+fundname);
              boolean flag = FundDAO.fundName(fundname);

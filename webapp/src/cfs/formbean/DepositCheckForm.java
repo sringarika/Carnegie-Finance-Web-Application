@@ -53,13 +53,7 @@ public class DepositCheckForm extends FormBean {
 
         double a = 0;
         try {
-            a = Double.parseDouble(amount);
-            String text = Double.toString(Math.abs(a));
-            int integerPlaces = text.indexOf('.');
-            int decimalPlaces = text.length() - integerPlaces - 1;
-            if(decimalPlaces > 2) {
-            	errors.add("Amount must be upto decimal places only");
-            }
+            //insert check for 2 decimal digits heres
             
 
             if (a <= 0) {
