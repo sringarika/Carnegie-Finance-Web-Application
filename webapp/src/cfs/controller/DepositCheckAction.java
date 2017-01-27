@@ -45,14 +45,15 @@ public class DepositCheckAction extends Action {
         	try {
                 DepositCheckForm form = FormBeanFactory.getInstance(DepositCheckForm.class).create(request);
                 List<String> validationErrors = form.getValidationErrors();
+                System.out.println("checkpoint 1 with error size: "+validationErrors.size());
                 if (validationErrors.size() > 0) {
                     throw new Exception(validationErrors.get(0));
                 }
+                System.out.println("now here");
             queueTransaction(customerId,form);
             request.setAttribute("message", "Check deposited successfully! The transaction will be processed by the end of the business day.");
             return "success.jsp";
         } catch (Exception e) {
-            e.printStackTrace();
             request.setAttribute("error", e.getMessage());
             return "deposit-check.jsp";
         }
@@ -65,6 +66,7 @@ public class DepositCheckAction extends Action {
         try {
             double amount = form.getRequestAmount();
             //record a transaction
+            System.out.println("amount is "+amount);
             Transaction.begin();
 			Transactions transaction = new Transactions();
             transaction.setCustomerId(form.getCustomerIdVal());
