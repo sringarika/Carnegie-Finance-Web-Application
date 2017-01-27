@@ -6,13 +6,13 @@ import javax.servlet.http.HttpSession;
 import org.genericdao.RollbackException;
 
 import cfs.databean.Customer;
-import cfs.databean.Transactions;
 import cfs.model.CustomerDAO;
 import cfs.model.Model;
 import cfs.model.TransactionDAO;
+import cfs.viewbean.TransactionHistoryView;
 
 public class TransactionHistoryAction extends Action {
-	
+
 	private TransactionDAO transactionDAO;
 	private CustomerDAO customerDAO;
 
@@ -42,7 +42,7 @@ public class TransactionHistoryAction extends Action {
             customerId = (int) session.getAttribute("customerId");
         }
         try {
-            Transactions[] transactions= transactionDAO.showHistory(customerId);
+            TransactionHistoryView[] transactions = transactionDAO.showHistoryView(customerId);
             Customer customer = customerDAO.read(customerId);
             String firstName = customer.getFirstname();
             String lastName = customer.getLastname();
