@@ -24,9 +24,9 @@
         
         <%-- The following datalist is for JavaScript validation. --%>
         <datalist id="fund-ids" style="display: none;">
-          <c:forEach var="entry" items="${availableSharesForFund}">
-            <fmt:formatNumber var="availSharesStr" value="${entry.value}" groupingUsed="false" minFractionDigits="3" maxFractionDigits="3"/>
-            <option value="${fn:escapeXml(entry.key)}" data-avail-shares="${fn:escapeXml(availSharesStr)}"></option>
+          <c:forEach var="position" items="${positions}">
+            <fmt:formatNumber var="availSharesStr" value="${position.shares}" groupingUsed="false" minFractionDigits="3" maxFractionDigits="3"/>
+            <option value="${fn:escapeXml(position.fundId)}" data-avail-shares="${fn:escapeXml(availSharesStr)}"></option>
           </c:forEach>
         </datalist>
       </div>

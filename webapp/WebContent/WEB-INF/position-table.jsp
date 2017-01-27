@@ -11,7 +11,14 @@
           </c:if>
           <th>Fund Name</th>
           <th>Ticker</th>
-          <th class="text-right">Number of shares</th>
+          <th class="text-right">
+            <c:if test="${empty param.radioInput}">
+              Number of shares
+            </c:if>
+            <c:if test="${not empty param.radioInput}">
+              Available shares
+            </c:if>
+            </th>
           <th class="text-right">Last Closing Price</th>
           <th class="text-right">Total Value</th>
         </tr>

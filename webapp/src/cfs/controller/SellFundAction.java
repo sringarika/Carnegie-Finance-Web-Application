@@ -6,20 +6,29 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
+import org.genericdao.Transaction;
 import org.mybeans.form.FormBeanFactory;
 
+import cfs.databean.Transactions;
 import cfs.formbean.SellFundForm;
 import cfs.model.CustomerPositionDAO;
+import cfs.model.FundDAO;
 import cfs.model.Model;
+import cfs.model.TransactionDAO;
 import cfs.viewbean.PositionView;
 
 public class SellFundAction extends Action {
 
     private CustomerPositionDAO customerPositionDAO;
+    private TransactionDAO transactionDAO;
+    private FundDAO fundDAO;
 
     public SellFundAction(Model model) {
         customerPositionDAO = model.getCustomerPositionDAO();
+        transactionDAO = model.getTransactionDAO();
+        fundDAO = model.getFundDAO();
     }
 
     @Override
@@ -33,17 +42,28 @@ public class SellFundAction extends Action {
         try {
             PositionView[] positions = customerPositionDAO.getPositionViews(customerId);
             request.setAttribute("positions", positions);
-            // TODO: Get availableSharesForFund from DAO.
-            Map<Integer, Double> availableSharesForFund = new HashMap<Integer, Double>();
+
+            Map<Integer, PositionView> positionForFundId = new HashMap<Integer, PositionView>();
             for (int i = 0; i < positions.length; i++) {
-                availableSharesForFund.put(positions[i].getFundId(), positions[i].getShares());
+                positionForFundId.put(positions[i].getFundId(), positions[i]);
             }
-            request.setAttribute("availableSharesForFund", availableSharesForFund);
+
+            Transactions[] transactions = transactionDAO.match(MatchArg.and(
+                    MatchArg.equals("customerId", customerId),
+                    MatchArg.equals("status", "Pending"),
+                    MatchArg.equals("type", "Sell")));
+
+            for (int i = 0; i < transactions.length; i++) {
+                int fundId = transactions[i].getFundId();
+                if (positionForFundId.containsKey(fundId)) {
+                    PositionView position = positionForFundId.get(fundId);
+                    position.setShares(position.getShares() + transactions[i].getShares());
+                }
+            }
         } catch (RollbackException e) {
             request.setAttribute("error", e.getMessage());
             return "error.jsp";
         }
-        // TODO: Get the available shares for each fund.
 
         if (request.getMethod().equals("GET")) {
             return "sell-fund.jsp";
@@ -54,8 +74,7 @@ public class SellFundAction extends Action {
                 if (validationErrors.size() > 0) {
                     throw new Exception(validationErrors.get(0));
                 }
-                System.out.println("Sell fund ID:" + form.getFundIdVal());
-                System.out.println("Shares:" + form.getSharesVal());
+                queueTransaction(customerId, form.getFundIdVal(), form.getSharesVal());
             } catch (Exception e) {
                 request.setAttribute("error", e.getMessage());
                 return "sell-fund.jsp";
@@ -65,6 +84,31 @@ public class SellFundAction extends Action {
             return "success.jsp";
         } else {
             return null;
+        }
+    }
+
+    private void queueTransaction(int customerId, int fundId, double shares) throws Exception {
+        try {
+            Transaction.begin();
+            if (fundDAO.read(fundId) == null) {
+                throw new Exception("Fund does not exist!");
+            }
+            double existingShares = customerPositionDAO.existingShare(customerId, fundId);
+            double pendingShares = transactionDAO.pendingShares(customerId, fundId);
+            double availableShares = existingShares + pendingShares;
+            if (shares > availableShares) {
+                throw new Exception("Not enough available shares!");
+            }
+            Transactions sellFund = new Transactions();
+            sellFund.setStatus("Pending");
+            sellFund.setType("Sell");
+            sellFund.setCustomerId(customerId);
+            sellFund.setFundId(fundId);
+            sellFund.setShares(-shares);
+            transactionDAO.create(sellFund);
+            Transaction.commit();
+        } finally {
+            if (Transaction.isActive()) Transaction.rollback();
         }
     }
 

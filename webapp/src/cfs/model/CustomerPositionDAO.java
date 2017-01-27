@@ -20,7 +20,7 @@ public class CustomerPositionDAO extends GenericDAO<Position> {
     }
 
     public Position[] findPositionsBoth(int customerId, int fundId) throws RollbackException {
-        Position[] positions = match(MatchArg.and(MatchArg.equals("customerId", customerId),MatchArg.equals("fundId", fundId)));
+        Position[] positions = match(MatchArg.and(MatchArg.equals("customerId", customerId), MatchArg.equals("fundId", fundId)));
         return positions;
     }
 
