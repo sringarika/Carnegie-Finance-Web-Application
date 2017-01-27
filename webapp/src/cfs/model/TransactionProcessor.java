@@ -98,7 +98,7 @@ public class TransactionProcessor {
 
     private Integer getNextPendingTransactionId() throws RollbackException {
         LongValueBox[] result = boxViewDAO.executeQuery(
-                "SELECT CAST(IfNull(MIN(transactionId), 0) AS INT) AS value FROM transactions WHERE status = ? AND executeDate IS NOT NULL", Transactions.PENDING);
+                "SELECT CAST(IfNull(MIN(transactionId), 0) AS SIGNED) AS value FROM transactions WHERE status = ? AND executeDate IS NOT NULL", Transactions.PENDING);
         if (result == null || result.length == 0) {
             return null;
         } else {
