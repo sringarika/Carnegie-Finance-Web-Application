@@ -16,15 +16,6 @@ public class FundPriceHistoryDAO extends GenericDAO <FundPriceHistory> {
         super(FundPriceHistory.class, tableName, cp);
     }
 
-    public Double latestFundPRice(int fundId, String executeDate) throws RollbackException {
-    	FundPriceHistory[] fundPrice = match(MatchArg.and(MatchArg.equals("executeDate", executeDate),
-    	        MatchArg.equals("fundId", fundId)));
-    	if (fundPrice.length == 0) {
-    		return null;
-    	}
-    	return fundPrice[0].getPrice();
-    }
-
     // return the  price history of input fund -- display trend
     public FundPriceHistory[] priceTrend(int fundId) throws RollbackException {
     	FundPriceHistory[] prices= match(MatchArg.equals("fundId", fundId));
