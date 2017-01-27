@@ -51,7 +51,7 @@ public class TransactionListView {
 	    public String getTransactionstatus() {
 		    return transactionstatus;
 		}
-	    public String getCustomername(String customername) {
+	    public String getCustomername() {
 	    	return customername;
 	    }
 	    
