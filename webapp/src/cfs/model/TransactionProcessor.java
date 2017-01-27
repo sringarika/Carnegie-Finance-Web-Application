@@ -213,6 +213,7 @@ public class TransactionProcessor {
         }
 
         transaction.setStatus(Transactions.PROCESSED);
+        transaction.setAmount(actualAmount.doubleValue());
         transaction.setShares(shares.doubleValue());
         transactionDAO.update(transaction);
     }

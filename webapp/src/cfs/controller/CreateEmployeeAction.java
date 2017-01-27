@@ -40,20 +40,20 @@ public class CreateEmployeeAction extends Action {
                 }
                 Employee newEmployee = new Employee();
                 newEmployee.setUsername(form.getUsername());
-                newEmployee.setPassword(form.getNewPassword());
-                newEmployee.setFirstname(form.getFirstName());
-                newEmployee.setLastname(form.getLastName());
+                newEmployee.setPassword(form.getPassword());
+                newEmployee.setFirstname(form.getFirstname());
+                newEmployee.setLastname(form.getLastname());
                 //newEmployee.setEmployeeId(Integer.parseInt(form.getEmployeeID()));
-                try {
+                //try {
                     employeedao.create(newEmployee);
 
                     //ServletRequest request;
                     //request.setAttribute("Customer", newCustomer);
                     
-                } catch (DuplicateKeyException e) {
-                    request.setAttribute("error", "A user with this username already exists!");
-                    return "create-employee.jsp";
-                }
+//                } catch (DuplicateKeyException e) {
+//                    request.setAttribute("error", "A user with this username already exists!");
+//                    return "create-employee.jsp";
+//                }
 //            System.out.println("First Name:" + form.getFirstName());
 //            System.out.println("Last Name:" + form.getLastName());
 //            System.out.println("Username:" + form.getUsername());

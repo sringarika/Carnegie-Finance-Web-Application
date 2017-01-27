@@ -12,19 +12,19 @@
       </div>
       <div class="form-group">
         <label for="firstname">First Name</label>
-        <input type="text" class="form-control" id="firstName" name="firstname" placeholder="">
+        <input type="text" class="form-control" id="firstname" name="firstname" placeholder="">
       </div>
       <div class="form-group">
         <label for="lastname">Last Name</label>
-        <input type="text" class="form-control" id="lastName" name="lastname" placeholder="">
+        <input type="text" class="form-control" id="lastname" name="lastname" placeholder="">
       </div>
       <div class="form-group">
         <label for="password">Password </label>
-        <input type="password" class="form-control" id="newPassword" name="password" placeholder="">
+        <input type="password" class="form-control" id="password" name="password" placeholder="">
       </div>
       <div class="form-group">
         <label for="password">Confirm Password </label>
-        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="">
+        <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" placeholder="">
       </div>
       <button type="submit" class="btn btn-primary">Create Employee Account</button>
     </form>
