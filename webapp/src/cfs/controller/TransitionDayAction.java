@@ -8,24 +8,29 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 
 import cfs.databean.Fund;
+import cfs.databean.Transactions;
 import cfs.formbean.TransitionDayForm;
 import cfs.model.FundDAO;
 import cfs.model.FundPriceHistoryDAO;
 import cfs.model.Model;
+import cfs.model.TransactionDAO;
 import cfs.model.TransactionProcessor;
 
 public class TransitionDayAction extends Action {
 	private FundPriceHistoryDAO fundPriceHistoryDAO;
     private FundDAO fundDAO;
     private TransactionProcessor transactionProcessor;
+    private TransactionDAO transactionDAO;
 
     public TransitionDayAction(Model model) {
     	fundPriceHistoryDAO = model.getFundPriceHistoryDAO();
     	fundDAO = model.getFundDAO();
     	transactionProcessor = model.getTransactionProcessor();
+        transactionDAO = model.getTransactionDAO();
     }
 
     @Override
@@ -36,6 +41,12 @@ public class TransitionDayAction extends Action {
     @Override
     public String perform(HttpServletRequest request) {
         try {
+            Transactions[] transactions = transactionDAO.match(MatchArg.equals("status", Transactions.PENDING));
+            if (transactions == null) {
+                request.setAttribute("pendingTransactionCount", 0);
+            } else {
+                request.setAttribute("pendingTransactionCount", transactions.length);
+            }
             Fund[] funds = fundDAO.match();
             request.setAttribute("funds", funds);
             String lastClosingDate = fundPriceHistoryDAO.getLastClosingDate();
