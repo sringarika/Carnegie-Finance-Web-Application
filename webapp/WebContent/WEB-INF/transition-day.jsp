@@ -19,6 +19,7 @@
         <label class="col-sm-3 control-label">Last Closing Date:</label>
         <div class="col-sm-9">
           <p class="form-control-static">${fn:escapeXml(lastClosingDateDisp)}</p>
+          <input type="hidden" name="lastClosingDateISO" value="${fn:escapeXml(lastClosingDateISO)}">
         </div>
       </div>
       <div class="form-group">

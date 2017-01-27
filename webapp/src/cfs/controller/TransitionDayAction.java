@@ -45,14 +45,20 @@ public class TransitionDayAction extends Action {
         try {
             Fund[] funds = fundDAO.match();
             request.setAttribute("funds", funds);
-            // TODO get the real closing date
-            // String lastClosingDate = "2017-01-17";
             String lastClosingDate = fundPriceHistoryDAO.getLastClosingDate();
-            LocalDate date = LocalDate.parse(lastClosingDate, DateTimeFormatter.ISO_DATE);
-            LocalDate minDate = date.plusDays(1);
-            request.setAttribute("lastClosingDateDisp",
-                    date.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", new Locale("en", "US"))));
-            request.setAttribute("minClosingDateISO", minDate.format(DateTimeFormatter.ISO_DATE));
+            if (lastClosingDate != null) {
+                request.setAttribute("lastClosingDateISO", lastClosingDate);
+                LocalDate date = LocalDate.parse(lastClosingDate, DateTimeFormatter.ISO_DATE);
+                LocalDate minDate = date.plusDays(1);
+                request.setAttribute("lastClosingDateDisp",
+                        date.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", new Locale("en", "US"))));
+                request.setAttribute("minClosingDateISO", minDate.format(DateTimeFormatter.ISO_DATE));
+            } else {
+                request.setAttribute("lastClosingDateISO", "N/A");
+                request.setAttribute("lastClosingDateDisp", "N/A");
+                LocalDate minDate = LocalDate.now();
+                request.setAttribute("minClosingDateISO", minDate.format(DateTimeFormatter.ISO_DATE));
+            }
         } catch (RollbackException e) {
             request.setAttribute("error", e.getMessage());
             return "error.jsp";
@@ -65,20 +71,18 @@ public class TransitionDayAction extends Action {
                 List<String> validationErrors = form.getValidationErrors();
                 if (validationErrors.size() > 0) {
                     request.setAttribute("error", validationErrors.get(0));
-                    System.out.println("here 1");
                 	return "transition-day.jsp";
                 }
-                String executeDate = form.getClosingDate();
+                String lastTransitionDate = form.getLastClosingDate();
+                String transitionDate = form.getClosingDate();
                 Map<Integer, Double> prices = form.getPriceForFundMap();
 
-                System.out.println("Closing: " + executeDate);
+                System.out.println("Transition: " + lastTransitionDate + " -> " + transitionDate);
                 prices.forEach((fundId, closingPrice) -> {
                     System.out.println("\tFund " + fundId + ": " + closingPrice);
                 });
 
-                fundPriceHistoryDAO.updatePrice(prices, executeDate);
-                // TODO: Do not pass prices and executeDate into processTransaction.
-                // fundPriceHistoryDAO passed for getting the latest prices and date
+                fundPriceHistoryDAO.updatePrice(prices, transitionDate, lastTransitionDate);
                 transactionDAO.processTransaction(fundPriceHistoryDAO, customerDAO, customerPositionDAO);
             } catch (Exception e) {
                 e.printStackTrace();
