@@ -6,7 +6,6 @@ import org.genericdao.GenericDAO;
 import org.genericdao.GenericViewDAO;
 import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
-import org.genericdao.Transaction;
 
 import cfs.databean.Position;
 import cfs.viewbean.PositionView;
@@ -41,17 +40,6 @@ public class CustomerPositionDAO extends GenericDAO<Position> {
             return exshare;
         }
     }
-
-    public void updatePosition(Position p) throws RollbackException{
-		try{
-    		Transaction.begin();
-    		super.update(p);
-    		Transaction.commit();
-		} finally {
-			if (Transaction.isActive())
-				Transaction.rollback();
-		}
-	}
 
     public PositionView[] getPositionViews(int customerId) throws RollbackException {
         String sql = "SELECT position.fundId             AS fundId" +

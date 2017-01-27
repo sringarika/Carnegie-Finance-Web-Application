@@ -58,8 +58,17 @@ public class ResetPasswordAction extends Action {
                 ResetPasswordForm form = FormBeanFactory.getInstance(ResetPasswordForm.class).create(request);
                 List<String> validationErrors = form.getValidationErrors();
                 if (validationErrors.size() > 0) {
-                    throw new Exception(validationErrors.get(0));
+                    request.setAttribute("error", validationErrors.get(0));
+                    return "reset-password.jsp";
                 }
+                
+                String newPsw = form.getNewPassword();
+                if (request.getSession().getAttribute("customerId") != null) {
+                    customerdao.changePassword(customerId, newPsw);
+                    request.setAttribute("message", "Password changed successfully!");
+                    return "success.jsp";
+                }
+                
                 System.out.println("New Password:" + form.getNewPassword());
                 System.out.println("Confirm Password:" + form.getConfirmPassword());
                 // TODO
@@ -67,7 +76,7 @@ public class ResetPasswordAction extends Action {
             return "success.jsp";
             } catch (Exception e) {
                 request.setAttribute("error", e.getMessage());
-                return "reset-password.jsp";
+                return "error.jsp";
             }
         } else {
             return null;

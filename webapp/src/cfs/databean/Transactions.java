@@ -7,6 +7,15 @@ import org.genericdao.PrimaryKey;
 
 @PrimaryKey("transactionId")
 public class Transactions {
+    public static final String PENDING = "Pending";
+    public static final String PROCESSED = "Processed";
+    public static final String REJECTED = "Rejected";
+
+    public static final Object DEPOSIT_CHECK = "Deposit Check";
+    public static final Object REQUEST_CHECK = "Request Check";
+    public static final Object BUY = "Buy";
+    public static final Object SELL = "Sell";
+
     private int transactionId;
     private int customerId;
     private int fundId;

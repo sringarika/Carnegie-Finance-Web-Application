@@ -2,12 +2,18 @@ package cfs.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.genericdao.RollbackException;
+
 import cfs.model.Model;
+import cfs.model.TransactionDAO;
+import cfs.viewbean.TransactionHistoryView;
 
 public class TransactionListAction extends Action {
 
+    private TransactionDAO transactionDAO;
+
     public TransactionListAction(Model model) {
-        // TODO Auto-generated constructor stub
+        transactionDAO = model.getTransactionDAO();
     }
 
     @Override
@@ -17,7 +23,14 @@ public class TransactionListAction extends Action {
 
     @Override
     public String perform(HttpServletRequest request) {
-        return "transaction-list.jsp";
+        try {
+            TransactionHistoryView[] transactions = transactionDAO.showAll();
+            request.setAttribute("transactions", transactions);
+            return "transaction-list.jsp";
+        } catch (RollbackException e) {
+            request.setAttribute("error", e.getMessage());
+            return "error.jsp";
+        }
     }
 
     @Override

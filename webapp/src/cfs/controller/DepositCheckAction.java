@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.genericdao.Transaction;
 import org.mybeans.form.FormBeanFactory;
 
+import cfs.databean.Customer;
 import cfs.databean.Transactions;
 import cfs.formbean.DepositCheckForm;
 import cfs.model.CustomerDAO;
@@ -41,28 +42,18 @@ public class DepositCheckAction extends Action {
         if (request.getMethod().equals("GET")) {
             return "deposit-check.jsp";
         } else if (request.getMethod().equals("POST")) {
-        //	System.out.println(request.getParameter("amount"));
         	try {
                 DepositCheckForm form = FormBeanFactory.getInstance(DepositCheckForm.class).create(request);
                 List<String> validationErrors = form.getValidationErrors();
+                System.out.println("checkpoint 1 with error size: "+validationErrors.size());
                 if (validationErrors.size() > 0) {
                     throw new Exception(validationErrors.get(0));
                 }
-                double amount = form.getRequestAmount();
-
-				//Add to pending list
-				Transaction.begin();
-				Transactions transaction = new Transactions();
-	            transaction.setCustomerId(form.getCustomerIdVal());
-	            transaction.setType("Deposit Check");
-	            transaction.setAmount(amount);
-	            transaction.setStatus("Pending");
-	            transactionDAO.create(transaction);
-	            Transaction.commit();
+                System.out.println("now here");
+            queueTransaction(customerId,form);
             request.setAttribute("message", "Check deposited successfully! The transaction will be processed by the end of the business day.");
             return "success.jsp";
         } catch (Exception e) {
-            e.printStackTrace();
             request.setAttribute("error", e.getMessage());
             return "deposit-check.jsp";
         }
@@ -70,7 +61,25 @@ public class DepositCheckAction extends Action {
             return null;
         }
     }
-
+    
+    private void queueTransaction(int customerId,DepositCheckForm form) throws Exception {
+        try {
+            double amount = form.getRequestAmount();
+            //record a transaction
+            System.out.println("amount is "+amount);
+            Transaction.begin();
+			Transactions transaction = new Transactions();
+            transaction.setCustomerId(form.getCustomerIdVal());
+            transaction.setType("Deposit Check");
+            transaction.setAmount(amount);
+            transaction.setStatus("Pending");
+            transactionDAO.create(transaction);
+            Transaction.commit();
+        } finally {
+            if (Transaction.isActive()) Transaction.rollback();
+        }
+    }
+    
     @Override
     public AccessControlLevel getAccessControlLevel() {
         return AccessControlLevel.Employee;

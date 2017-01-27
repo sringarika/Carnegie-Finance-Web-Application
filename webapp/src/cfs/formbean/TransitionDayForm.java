@@ -12,12 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 public class TransitionDayForm {
     private String closingDateISO;
     private String closingDate;
+    private String lastClosingDateISO;
+    private String lastClosingDate;
     private String[] closingPrices;
     private String[] fundIds;
     private Map<Integer, Double> priceForFund;
 
     public TransitionDayForm(HttpServletRequest request) {
         closingDateISO = request.getParameter("closingDateISO");
+        lastClosingDateISO = request.getParameter("lastClosingDateISO");
         fundIds = request.getParameterValues("fundIds");
         closingPrices = request.getParameterValues("closingPrices");
     }
@@ -25,6 +28,9 @@ public class TransitionDayForm {
     public List<String> getValidationErrors() {
         if (closingDateISO == null || closingDateISO.isEmpty()) {
             return Collections.singletonList("Closing date is required!");
+        }
+        if (lastClosingDateISO == null || lastClosingDateISO.isEmpty()) {
+            return Collections.singletonList("Last closing date is required!");
         }
         if (fundIds == null || fundIds.length == 0) {
             return Collections.singletonList("Fund IDs are required!");
@@ -38,6 +44,21 @@ public class TransitionDayForm {
             closingDate = date.format(DateTimeFormatter.ISO_DATE);
         } catch (Exception e) {
             return Collections.singletonList("Invalid closing date!");
+        }
+
+        if (lastClosingDateISO.equals("N/A")) {
+            lastClosingDate = null;
+        } else {
+            try {
+                LocalDate date = LocalDate.parse(lastClosingDateISO, DateTimeFormatter.ISO_DATE);
+                lastClosingDate = date.format(DateTimeFormatter.ISO_DATE);
+            } catch (Exception e) {
+                return Collections.singletonList("Invalid last closing date!");
+            }
+
+            if (closingDate.compareTo(lastClosingDate) <= 0) {
+                return Collections.singletonList("Closing date must be later than last closing date!");
+            }
         }
 
         Map<Integer, Double> priceForFund = new HashMap<Integer, Double>();
@@ -78,4 +99,9 @@ public class TransitionDayForm {
     public String getClosingDate() {
         return closingDate;
     }
+
+    public String getLastClosingDate() {
+        return lastClosingDate;
+    }
+
 }
