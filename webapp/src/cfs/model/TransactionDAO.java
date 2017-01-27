@@ -23,6 +23,7 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     public Transactions[] showHistory(int CustomerId) throws RollbackException {
         Transactions[] history = match(MatchArg.equals("customerId", CustomerId));
         Comparator<Transactions> tranComparator = new Comparator<Transactions>() {
+            @Override
             public int compare(Transactions tran1, Transactions tran2) {
                 return tran1.getTransactionId() - tran2.getTransactionId();
             }
@@ -30,11 +31,12 @@ public class TransactionDAO extends GenericDAO<Transactions> {
         Arrays.sort(history, tranComparator);
         return history;
     }
-    
+
     // TODO fix bugs for the initial conditions and buy and sell fund
     public void processTransaction(FundPriceHistoryDAO fundPriceHistoryDAO,
             CustomerDAO customerDAO, CustomerPositionDAO customerPositionDAO) throws RollbackException {
         Comparator<Transactions> tranComparator = new Comparator<Transactions>() {
+            @Override
             public int compare(Transactions tran1, Transactions tran2) {
                 return tran1.getTransactionId() - tran2.getTransactionId();
             }
@@ -158,7 +160,7 @@ public class TransactionDAO extends GenericDAO<Transactions> {
 
     // could call this method from prev code
     public void updatePos(int custId, int fundId, double shares, String fundType,
-            CustomerPositionDAO customerPositionDAO) throws Exception { 
+            CustomerPositionDAO customerPositionDAO) throws Exception {
         //fund trans can be buy or sell
         //include this in above cases sell fund so that this happens simultaneously
         //will be the same for any type of transaction
@@ -192,8 +194,8 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     // calculate the pending amount for updating available cash
     public double pendingAmount(int customerId) throws RollbackException {
         double result = 0.00;
-        Transactions[] pendingAmounts = match(MatchArg.and(MatchArg.equals("customerId", customerId), 
-                MatchArg.equals("status", "Pending"), MatchArg.equals("type", "Buy")));
+        Transactions[] pendingAmounts = match(MatchArg.and(MatchArg.equals("customerId", customerId),
+                MatchArg.equals("status", "Pending"), MatchArg.lessThan("amount", 0.0)));
         if (pendingAmounts == null) {
             return result;
         } else {
@@ -203,12 +205,12 @@ public class TransactionDAO extends GenericDAO<Transactions> {
             return result;
         }
     }
-    
+
     // calculate the pending shares for updating available shares for each fund of each customer
     public double pendingShares(int customerId, int fundId) throws RollbackException {
         double result = 0.000;
         Transactions[] pendingShares = match(MatchArg.and(MatchArg.equals("customerId", customerId),
-                MatchArg.equals("status", "Pending"), MatchArg.equals("fundId", fundId), MatchArg.equals("type", "Buy")));
+                MatchArg.equals("status", "Pending"), MatchArg.equals("fundId", fundId), MatchArg.lessThan("shares", 0.0)));
         if (pendingShares == null) {
             return result;
         } else {
