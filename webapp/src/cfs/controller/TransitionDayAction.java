@@ -65,6 +65,7 @@ public class TransitionDayAction extends Action {
                 List<String> validationErrors = form.getValidationErrors();
                 if (validationErrors.size() > 0) {
                     request.setAttribute("error", validationErrors.get(0));
+                    System.out.println("here 1");
                 	return "transition-day.jsp";
                 }
                 String executeDate = form.getClosingDate();
@@ -80,7 +81,9 @@ public class TransitionDayAction extends Action {
                 // fundPriceHistoryDAO passed for getting the latest prices and date
                 transactionDAO.processTransaction(fundPriceHistoryDAO, customerDAO, customerPositionDAO);
             } catch (Exception e) {
+                e.printStackTrace();
                 request.setAttribute("error", e.getMessage());
+                System.out.println("here 2");
                 return "transition-day.jsp";
             }
             request.setAttribute("message", "Business day has ended. Transactions executed successfully.");

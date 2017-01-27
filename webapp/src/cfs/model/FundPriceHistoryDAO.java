@@ -20,7 +20,7 @@ public class FundPriceHistoryDAO extends GenericDAO <FundPriceHistory> {
     public Double latestFundPRice(int fundId, String executeDate) throws RollbackException {
     	FundPriceHistory[] fundPrice = match(MatchArg.and(MatchArg.equals("executeDate", executeDate),
     	        MatchArg.equals("fundId", fundId)));
-    	if (fundPrice == null) {
+    	if (fundPrice.length == 0) {
     		return null;
     	}
     	return fundPrice[0].getPrice();
@@ -35,31 +35,26 @@ public class FundPriceHistoryDAO extends GenericDAO <FundPriceHistory> {
     	return prices;
     }
     
-    public void updatePrice (Map<Integer, Double> closingPrice, String transitionDate) throws RollbackException {
-    	FundPriceHistory[] fundPrices = match();
-    	for (FundPriceHistory fundPrice : fundPrices) {
-    		if (closingPrice.get(fundPrice.getFundId()) == null) {
-    			throw new RollbackException("Fund no longer exists!");
-    		} else {
-    			fundPrice.setExecuteDate(transitionDate);
-    			fundPrice.setPrice(closingPrice.get(fundPrice.getFundId()));
-    			try {
-    	    		Transaction.begin();
-    	    		update(fundPrice);
-    	    		Transaction.commit();
-        		} finally {
-                    if (Transaction.isActive()) Transaction.rollback();
-                }
-    		}
+    public void updatePrice(Map<Integer, Double> closingPrice, String transitionDate) throws RollbackException {
+    	for (int fundId : closingPrice.keySet()) {
+	        FundPriceHistory fundPrice = new FundPriceHistory(transitionDate, fundId, closingPrice.get(fundId));
+	        try {
+                Transaction.begin();
+                create(fundPrice);
+                Transaction.commit();
+            } finally {
+                if (Transaction.isActive()) Transaction.rollback();
+            }
     	}
     }
     
     // return the last closing date
     public String getLastClosingDate() throws RollbackException {
         FundPriceHistory[] history = match(MatchArg.max("executeDate"));
-        if (history == null) {
-            return "No transition day before!";
+        if (history.length == 0) {
+            return "1999-01-01";
+        } else {
+            return history[0].getExecuteDate();
         }
-        return history[0].getExecuteDate();
     }
 }
