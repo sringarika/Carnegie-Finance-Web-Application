@@ -5,9 +5,11 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.genericdao.RollbackException;
+import org.genericdao.Transaction;
 import org.mybeans.form.FormBeanFactory;
 
 import cfs.databean.Fund;
+import cfs.databean.Transactions;
 import cfs.formbean.CreateFundForm;
 import cfs.model.FundDAO;
 import cfs.model.Model;
@@ -47,8 +49,10 @@ public class CreateFundAction extends Action {
             // TODO        	
         	System.out.println("POST");
         	try {
+        		Transaction.begin(); //not yet sure of the most appropriate position to start
                 CreateFundForm form = FormBeanFactory.getInstance(CreateFundForm.class).create(request);
                 List<String> validationErrors = form.getValidationErrors();
+                
                 fn = FundDAO.match();
                 request.setAttribute("fundList", fn);
                 if (validationErrors.size() > 0) {
@@ -68,14 +72,20 @@ public class CreateFundAction extends Action {
 			   return "create-fund.jsp";
              } 
              //not sure if ticker should be exclusive too
-           /*  System.out.println("checkpoint2");
-             Fund[] tiname = FundDAO.fundTicker(ticker);
-             if(tiname != null && tiname[0].getName().equals(ticker)) {
+            System.out.println("checkpoint2");
+             boolean tflag = FundDAO.fundTicker(ticker);
+             if(tflag) {
             	 System.out.println("ticker exists");
-            	 request.setAttribute("message", "Ticker exists!");
+            	 request.setAttribute("error", "Ticker exists!");
   			   return "create-fund.jsp";
-             }*/
+             }
              System.out.println("checkpoint3");
+             //INSERT FUND NAME AND FUND VALUE INTO THE FUNCTION
+             Fund newfund = new Fund();
+             newfund.setName(fundname);
+             newfund.setTicker(ticker);
+             FundDAO.create(newfund);
+             Transaction.commit();
             request.setAttribute("message", "Fund created successfully!");
             return "success.jsp";
         } catch (Exception e) {

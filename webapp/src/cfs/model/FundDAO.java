@@ -32,13 +32,10 @@ public class FundDAO extends GenericDAO<Fund> {
      * @return fund price
      * @throws RollbackException
      */
-    public Fund[] fundTicker(String fundTicker) throws RollbackException {
+    public boolean fundTicker(String fundTicker) throws RollbackException {
         Fund[] funds = match(MatchArg.equals("ticker", fundTicker));
-        if (funds == null) {
-            return null;
-        }
-        System.out.println("ticker inside dao is: "+funds[0].getTicker());
-        return funds;
+        if(funds.length > 0) return true;
+        return false;
     }
 
     public Integer findIdByName(String fundName) throws RollbackException {
