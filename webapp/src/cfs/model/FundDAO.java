@@ -19,12 +19,11 @@ public class FundDAO extends GenericDAO<Fund> {
      * @return fund name
      * @throws RollbackException
      */
-    public Fund[] fundName(String fundName) throws RollbackException {
+    public boolean fundName(String fundName) throws RollbackException {
     	System.out.println("begin");
         Fund[] fundn = match(MatchArg.equals("name", fundName));
-        System.out.println("done with this");
-        System.out.println(fundn.length);
-        return fundn;
+        if(fundn.length > 0) return true;
+        return false;
     }
 
     /**

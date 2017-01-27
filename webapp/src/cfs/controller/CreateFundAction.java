@@ -60,9 +60,9 @@ public class CreateFundAction extends Action {
 				}
 				System.out.println("checkpoint1");
 				System.out.println("looking for: "+fundname);
-             Fund[] funame = FundDAO.fundName(fundname);
+             boolean flag = FundDAO.fundName(fundname);
              System.out.println("before entering condition");
-             if(funame != null && funame[0].getName().equals(fundname)) {
+             if(flag) {
             	 System.out.println("funds exists");
                request.setAttribute("error", "Fund exists!");
 			   return "create-fund.jsp";
