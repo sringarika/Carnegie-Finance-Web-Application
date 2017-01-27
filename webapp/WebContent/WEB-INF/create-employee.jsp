@@ -24,7 +24,7 @@
       </div>
       <div class="form-group">
         <label for="password">Confirm Password </label>
-        <input type="password" class="form-control" id="confirmPassword" name="confPassword" placeholder="">
+        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="">
       </div>
       <button type="submit" class="btn btn-primary">Create Employee Account</button>
     </form>
