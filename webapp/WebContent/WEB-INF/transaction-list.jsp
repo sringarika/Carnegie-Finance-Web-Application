@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="header.jsp" %>
   <main>
-    <h2>Transaction List for ${firstName} ${lastName}</h2>
+    <h2>Transaction List</h2>
     <p style="font-size: 12pt; font-weight: bold; color: red"> ${error} </p>
     <table class="table table-bordered table-striped">
   	  <thead>
@@ -21,16 +21,6 @@
 	  </thead>
 	  <tbody>
 	  <tr>
-	    <c:forEach var="transaction" items="${transactions}">
-	      <th>"${transaction.transactionId}"</th>
-	      <th>"${transaction.executeDate}"</th>
-	      <th>"${transaction.type}"</th>
-	      <th>"${transaction.fundName}"</th>
-	      <th>"${transaction.shares}"</th>
-	      <th>"${transaction.price}"</th>
-	      <th>"${transaction.amount}"</th>
-	      <th>"${transaction.status}"</th>
-	    </c:forEach>
 	  <tr>
 	  </tbody>
 	</table>
