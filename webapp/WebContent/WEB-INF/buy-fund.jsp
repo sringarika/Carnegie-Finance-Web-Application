@@ -25,7 +25,7 @@
         <div class="input-group">
           <div class="input-group-addon">$</div>
           <fmt:formatNumber var="maxAmountStr" value="${availableCash>1000000.00 ? 1000000.00 : availableCash}" groupingUsed="false" minFractionDigits="2" maxFractionDigits="2"/>
-          <input type="number" class="form-control" id="amount" name="amount" placeholder="${maxAmountStr}" step="0.01" min="1.00" max="${maxAmountStr}" required>
+          <input type="number" class="form-control" id="amount" name="amount" placeholder="${maxAmountStr}" step="0.01" min="10.00" max="${maxAmountStr}" required>
         </div>
       </div>
       <div>

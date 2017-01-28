@@ -20,7 +20,7 @@
       </div>
       <div class="form-group">
         <label for="shares">Shares to sell</label>
-        <input type="number" class="form-control" id="shares" name="shares" placeholder="1.000" step="0.001" min="1.000" max="1000000.000" required>
+        <input type="number" class="form-control" id="shares" name="shares" placeholder="1.000" step="0.001" min="0.001" max="1000000.000" required>
         
         <%-- The following datalist is for JavaScript validation. --%>
         <datalist id="fund-ids" style="display: none;">

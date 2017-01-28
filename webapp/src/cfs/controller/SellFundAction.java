@@ -1,5 +1,7 @@
 package cfs.controller;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +13,7 @@ import org.genericdao.RollbackException;
 import org.genericdao.Transaction;
 import org.mybeans.form.FormBeanFactory;
 
+import cfs.databean.Position;
 import cfs.databean.Transactions;
 import cfs.formbean.SellFundForm;
 import cfs.model.CustomerPositionDAO;
@@ -41,7 +44,6 @@ public class SellFundAction extends Action {
         int customerId = (int) request.getSession().getAttribute("customerId");
         try {
             PositionView[] positions = customerPositionDAO.getPositionViews(customerId);
-            request.setAttribute("positions", positions);
 
             Map<Integer, PositionView> positionForFundId = new HashMap<Integer, PositionView>();
             for (int i = 0; i < positions.length; i++) {
@@ -57,9 +59,19 @@ public class SellFundAction extends Action {
                 int fundId = transactions[i].getFundId();
                 if (positionForFundId.containsKey(fundId)) {
                     PositionView position = positionForFundId.get(fundId);
-                    position.setShares(position.getShares() + transactions[i].getShares());
+                    double availableShares = position.getShares() + transactions[i].getShares();
+                    position.setShares(Position.sharesFromDouble(availableShares).doubleValue());
                 }
             }
+
+            List<PositionView> availablePositions = new ArrayList<PositionView>();
+            for (PositionView position : positions) {
+                if (position.getShares() > 0) {
+                    availablePositions.add(position);
+                }
+            }
+            request.setAttribute("positions", availablePositions);
+
         } catch (RollbackException e) {
             request.setAttribute("error", e.getMessage());
             return "error.jsp";
@@ -79,7 +91,6 @@ public class SellFundAction extends Action {
                 request.setAttribute("error", e.getMessage());
                 return "sell-fund.jsp";
             }
-            // TODO
             request.setAttribute("message", "Transaction scheduled. It will be processed by the end of the business day.");
             return "success.jsp";
         } else {
@@ -87,16 +98,18 @@ public class SellFundAction extends Action {
         }
     }
 
-    private void queueTransaction(int customerId, int fundId, double shares) throws Exception {
+    private void queueTransaction(int customerId, int fundId, BigDecimal shares) throws Exception {
         try {
             Transaction.begin();
             if (fundDAO.read(fundId) == null) {
                 throw new Exception("Fund does not exist!");
             }
-            double existingShares = customerPositionDAO.existingShare(customerId, fundId);
-            double pendingShares = transactionDAO.pendingShares(customerId, fundId);
-            double availableShares = existingShares + pendingShares;
-            if (shares > availableShares) {
+            BigDecimal existingShares = customerPositionDAO.existingShare(customerId, fundId);
+            BigDecimal pendingShares = transactionDAO.pendingShares(customerId, fundId);
+            BigDecimal availableShares = existingShares.add(pendingShares);
+            System.out.println(shares);
+            System.out.println(availableShares);
+            if (shares.compareTo(availableShares) > 0) {
                 throw new Exception("Not enough available shares!");
             }
             Transactions sellFund = new Transactions();
@@ -104,7 +117,7 @@ public class SellFundAction extends Action {
             sellFund.setType("Sell");
             sellFund.setCustomerId(customerId);
             sellFund.setFundId(fundId);
-            sellFund.setShares(-shares);
+            sellFund.setShares(-shares.doubleValue());
             transactionDAO.create(sellFund);
             Transaction.commit();
         } finally {

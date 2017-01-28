@@ -1,5 +1,6 @@
 package cfs.model;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -10,6 +11,8 @@ import org.genericdao.GenericViewDAO;
 import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 
+import cfs.databean.Customer;
+import cfs.databean.Position;
 import cfs.databean.Transactions;
 import cfs.viewbean.TransactionHistoryView;
 
@@ -79,32 +82,32 @@ public class TransactionDAO extends GenericDAO<Transactions> {
     }
 
     // calculate the pending amount for updating available cash
-    public double pendingAmount(int customerId) throws RollbackException {
-        double result = 0.00;
-        Transactions[] pendingAmounts = match(MatchArg.and(MatchArg.equals("customerId", customerId),
+    public BigDecimal pendingAmount(int customerId) throws RollbackException {
+        BigDecimal result = BigDecimal.ZERO;
+        Transactions[] transactions = match(MatchArg.and(MatchArg.equals("customerId", customerId),
                 MatchArg.equals("status", "Pending"), MatchArg.lessThan("amount", 0.0)));
-        if (pendingAmounts == null) {
+        if (transactions == null) {
             return result;
         } else {
-            for (Transactions transaction : pendingAmounts) {
-                result += transaction.getAmount();
+            for (Transactions transaction : transactions) {
+                result = result.add(Customer.amountFromDouble(transaction.getAmount()));
             }
             return result;
         }
     }
 
     // calculate the pending shares for updating available shares for each fund of each customer
-    public double pendingShares(int customerId, int fundId) throws RollbackException {
-        double result = 0.000;
-        Transactions[] pendingShares = match(MatchArg.and(MatchArg.equals("customerId", customerId),
+    public BigDecimal pendingShares(int customerId, int fundId) throws RollbackException {
+        BigDecimal pendingShares = BigDecimal.ZERO;
+        Transactions[] transactions = match(MatchArg.and(MatchArg.equals("customerId", customerId),
                 MatchArg.equals("status", "Pending"), MatchArg.equals("fundId", fundId), MatchArg.lessThan("shares", 0.0)));
-        if (pendingShares == null) {
-            return result;
+        if (transactions == null) {
+            return pendingShares;
         } else {
-            for (Transactions transaction : pendingShares) {
-                result += transaction.getShares();
+            for (Transactions transaction : transactions) {
+                pendingShares = pendingShares.add(Position.sharesFromDouble(transaction.getShares()));
             }
-            return result;
+            return pendingShares;
         }
     }
 }
