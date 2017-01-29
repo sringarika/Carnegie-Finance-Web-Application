@@ -39,7 +39,6 @@
       </div>
       <table class="table table-striped table-bordered">
         <tr>
-          <th>Fund ID</th>
           <th>Fund Name</th>
           <th>Ticker</th>
           <th class="text-right">Last Closing Price</th>
@@ -47,7 +46,6 @@
         </tr>
         <c:forEach var="fund" items="${funds}">
           <tr>
-            <td>${fn:escapeXml(fund.fundId)}<input type="hidden" name="fundIds" value="${fn:escapeXml(fund.fundId)}"></td>
             <td>${fn:escapeXml(fund.name)}</td>
             <td>${fn:escapeXml(fund.ticker)}</td>
             <td class="text-right" data-last-price="${fn:escapeXml(lastPriceForFund[fund.fundId])}">
@@ -55,6 +53,7 @@
               <c:out value="${formattedPrice}" default="N/A"/>
             </td>
             <td>
+              <input type="hidden" name="fundIds" value="${fn:escapeXml(fund.fundId)}">
               <input type="number" class="form-control" name="closingPrices" step="0.01" min="10.00" max="1000.00" required>
             </td>
           </tr>
