@@ -11,10 +11,10 @@ public class Transactions {
     public static final String PROCESSED = "Processed";
     public static final String REJECTED = "Rejected";
 
-    public static final Object DEPOSIT_CHECK = "Deposit Check";
-    public static final Object REQUEST_CHECK = "Request Check";
-    public static final Object BUY = "Buy";
-    public static final Object SELL = "Sell";
+    public static final String DEPOSIT_CHECK = "Deposit Check";
+    public static final String REQUEST_CHECK = "Request Check";
+    public static final String BUY = "Buy";
+    public static final String SELL = "Sell";
 
     private int transactionId;
     private int customerId;

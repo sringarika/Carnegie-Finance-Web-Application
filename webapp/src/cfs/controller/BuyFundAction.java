@@ -85,8 +85,8 @@ public class BuyFundAction extends Action {
                 throw new Exception("Not enough available cash!");
             }
             Transactions buyFund = new Transactions();
-            buyFund.setStatus("Pending");
-            buyFund.setType("Buy");
+            buyFund.setStatus(Transactions.PENDING);
+            buyFund.setType(Transactions.BUY);
             buyFund.setCustomerId(customer.getCustomerId());
             buyFund.setFundId(fundId);
             buyFund.setAmount(-amount.doubleValue());

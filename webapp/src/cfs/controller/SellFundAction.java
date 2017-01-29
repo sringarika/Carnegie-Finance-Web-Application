@@ -107,14 +107,12 @@ public class SellFundAction extends Action {
             BigDecimal existingShares = customerPositionDAO.existingShare(customerId, fundId);
             BigDecimal pendingShares = transactionDAO.pendingShares(customerId, fundId);
             BigDecimal availableShares = existingShares.add(pendingShares);
-            System.out.println(shares);
-            System.out.println(availableShares);
             if (shares.compareTo(availableShares) > 0) {
                 throw new Exception("Not enough available shares!");
             }
             Transactions sellFund = new Transactions();
-            sellFund.setStatus("Pending");
-            sellFund.setType("Sell");
+            sellFund.setStatus(Transactions.PENDING);
+            sellFund.setType(Transactions.SELL);
             sellFund.setCustomerId(customerId);
             sellFund.setFundId(fundId);
             sellFund.setShares(-shares.doubleValue());
