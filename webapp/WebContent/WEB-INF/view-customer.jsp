@@ -32,7 +32,11 @@
     </tr>
     <tr>
       <td>Cash Balance</td>
-      <td><fmt:formatNumber value="${showCustomer.cash}" type="currency"/></td>
+      <td class="text-right"><fmt:formatNumber value="${showCustomer.cash}" type="currency"/></td>
+    </tr>
+    <tr>
+      <td>Available Cash</td>
+      <td class="text-right"><fmt:formatNumber value="${availableCash}" type="currency"/></td>
     </tr>
     </table>
     

@@ -1,5 +1,6 @@
 package cfs.controller;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -8,10 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.genericdao.RollbackException;
 
+import cfs.databean.Customer;
 import cfs.model.CustomerDAO;
 import cfs.model.CustomerPositionDAO;
 import cfs.model.FundPriceHistoryDAO;
 import cfs.model.Model;
+import cfs.model.TransactionDAO;
 import cfs.viewbean.PositionView;
 
 public class ViewCustomerAction extends Action {
@@ -19,11 +22,13 @@ public class ViewCustomerAction extends Action {
     private CustomerPositionDAO customerPositionDAO;
     private CustomerDAO customerDAO;
     private FundPriceHistoryDAO fundPriceHistoryDAO;
+    private TransactionDAO transactionDAO;
 
     public ViewCustomerAction(Model model) {
         customerPositionDAO = model.getCustomerPositionDAO();
         customerDAO = model.getCustomerDAO();
         fundPriceHistoryDAO = model.getFundPriceHistoryDAO();
+        transactionDAO = model.getTransactionDAO();
     }
 
     @Override
@@ -54,7 +59,13 @@ public class ViewCustomerAction extends Action {
             } else {
                 request.setAttribute("lastTradingDateDisp", "N/A");
             }
-            request.setAttribute("showCustomer", customerDAO.read(customerId));
+            Customer customer = customerDAO.read(customerId);
+            request.setAttribute("showCustomer", customer);
+
+            BigDecimal pendingAmount = transactionDAO.pendingAmount(customerId);
+            BigDecimal availableCash = Customer.amountFromDouble(customer.getCash()).add(pendingAmount);
+            request.setAttribute("availableCash", availableCash);
+
             PositionView[] positions = customerPositionDAO.getPositionViews(customerId);
             request.setAttribute("positions", positions);
             return "view-customer.jsp";
