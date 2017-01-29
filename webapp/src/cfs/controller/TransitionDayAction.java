@@ -97,7 +97,7 @@ public class TransitionDayAction extends Action {
                     System.out.println("\tFund " + fundId + ": " + closingPrice);
                 });
 
-                fundPriceHistoryDAO.updatePrice(prices, transitionDate, lastTransitionDate);
+                fundPriceHistoryDAO.updatePrice(prices, transitionDate, lastTransitionDate, fundDAO);
                 transactionProcessor.transitionDay(transitionDate);
                 transactionProcessor.processPendingTransactions();
             } catch (Exception e) {
