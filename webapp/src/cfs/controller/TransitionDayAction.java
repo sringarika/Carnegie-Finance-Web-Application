@@ -1,7 +1,9 @@
 package cfs.controller;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -12,6 +14,7 @@ import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 
 import cfs.databean.Fund;
+import cfs.databean.FundPriceHistory;
 import cfs.databean.Transactions;
 import cfs.formbean.TransitionDayForm;
 import cfs.model.FundDAO;
@@ -49,14 +52,22 @@ public class TransitionDayAction extends Action {
             }
             Fund[] funds = fundDAO.match();
             request.setAttribute("funds", funds);
-            String lastClosingDate = fundPriceHistoryDAO.getLastClosingDate();
-            if (lastClosingDate != null) {
+            FundPriceHistory[] lastPrices = fundPriceHistoryDAO.match(MatchArg.max("executeDate"));
+
+            if (lastPrices != null && lastPrices.length > 0) {
+                String lastClosingDate = lastPrices[0].getExecuteDate();
                 request.setAttribute("lastClosingDateISO", lastClosingDate);
                 LocalDate date = LocalDate.parse(lastClosingDate, DateTimeFormatter.ISO_DATE);
                 LocalDate minDate = date.plusDays(1);
                 request.setAttribute("lastClosingDateDisp",
                         date.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", new Locale("en", "US"))));
                 request.setAttribute("minClosingDateISO", minDate.format(DateTimeFormatter.ISO_DATE));
+
+                Map<Integer, Double> lastPriceForFund = new HashMap<Integer, Double>();
+                for (FundPriceHistory price : lastPrices) {
+                    lastPriceForFund.put(price.getFundId(), price.getPrice());
+                }
+                request.setAttribute("lastPriceForFund", lastPriceForFund);
             } else {
                 request.setAttribute("lastClosingDateISO", "N/A");
                 request.setAttribute("lastClosingDateDisp", "N/A");
@@ -79,7 +90,7 @@ public class TransitionDayAction extends Action {
                 }
                 String lastTransitionDate = form.getLastClosingDate();
                 String transitionDate = form.getClosingDate();
-                Map<Integer, Double> prices = form.getPriceForFundMap();
+                Map<Integer, BigDecimal> prices = form.getPriceForFundMap();
 
                 System.out.println("Transition: " + lastTransitionDate + " -> " + transitionDate);
                 prices.forEach((fundId, closingPrice) -> {

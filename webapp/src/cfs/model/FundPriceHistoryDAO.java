@@ -1,5 +1,6 @@
 package cfs.model;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import org.genericdao.ConnectionPool;
@@ -25,7 +26,7 @@ public class FundPriceHistoryDAO extends GenericDAO <FundPriceHistory> {
     	return prices;
     }
 
-    public void updatePrice(Map<Integer, Double> closingPrice, String transitionDate, String lastTransitionDate) throws RollbackException {
+    public void updatePrice(Map<Integer, BigDecimal> prices, String transitionDate, String lastTransitionDate) throws RollbackException {
         try {
             Transaction.begin();
             String realLastTransitionDate = getLastClosingDate();
@@ -39,8 +40,8 @@ public class FundPriceHistoryDAO extends GenericDAO <FundPriceHistory> {
 
                 }
             }
-            for (int fundId : closingPrice.keySet()) {
-    	        FundPriceHistory fundPrice = new FundPriceHistory(transitionDate, fundId, closingPrice.get(fundId));
+            for (int fundId : prices.keySet()) {
+    	        FundPriceHistory fundPrice = new FundPriceHistory(transitionDate, fundId, prices.get(fundId).doubleValue());
                 create(fundPrice);
             }
             Transaction.commit();

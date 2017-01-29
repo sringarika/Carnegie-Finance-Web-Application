@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="header.jsp" %>
   <main>
@@ -41,14 +42,21 @@
           <th>Fund ID</th>
           <th>Fund Name</th>
           <th>Ticker</th>
-          <th>Last Closing Price</th>
+          <th class="text-right">Last Closing Price</th>
+          <th>New Closing Price</th>
         </tr>
         <c:forEach var="fund" items="${funds}">
           <tr>
             <td>${fn:escapeXml(fund.fundId)}<input type="hidden" name="fundIds" value="${fn:escapeXml(fund.fundId)}"></td>
             <td>${fn:escapeXml(fund.name)}</td>
             <td>${fn:escapeXml(fund.ticker)}</td>
-            <td><input type="number" class="form-control" name="closingPrices" placeholder="10000.00" step="0.01" min="1.00" max="10000.00" required></td>
+            <td class="text-right">
+              <fmt:formatNumber var="formattedPrice" type="currency" value="${lastPriceForFund[fund.fundId]}" />
+              <c:out value="${formattedPrice}" default="N/A"/>
+            </td>
+            <td>
+              <input type="number" class="form-control" name="closingPrices" step="0.01" min="10.00" max="1000.00" required>
+            </td>
           </tr>
         </c:forEach>
       </table>
