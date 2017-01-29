@@ -16,7 +16,7 @@
         <label for="fundId">Fund</label>
         <select class="form-control" id="fundId" name="fundId" required>
           <c:forEach var="fund" items="${funds}">
-            <option value="${fn:escapeXml(fund.fundId)}">${fn:escapeXml(fund.name)}</option>
+            <option class="js-fund-option" value="${fn:escapeXml(fund.fundId)}">${fn:escapeXml(fund.name)}</option>
           </c:forEach>
         </select>
       </div>
@@ -37,4 +37,21 @@
       <button type="submit" class="btn btn-primary">Buy</button>
     </form>
   </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var defaultOption = null;
+      if (location.search.indexOf("?fundId=") === 0) {
+        var defaultFundId = parseInt(location.search.split(/[=&]/)[1]);
+        if (!isNaN(defaultFundId)) defaultOption = document.querySelector(
+            '.js-fund-option[value="' + defaultFundId + '"]');
+      }
+      if (!defaultOption) {
+        defaultOption = document.querySelector('.js-fund-option');
+      }
+      if (!defaultOption) return;
+      var fundIdSelect = document.getElementById('fundId');
+      if (!fundIdSelect) return;
+      fundIdSelect.value = defaultOption.getAttribute('value');
+    });
+  </script>
 <%@ include file="footer.jsp" %>

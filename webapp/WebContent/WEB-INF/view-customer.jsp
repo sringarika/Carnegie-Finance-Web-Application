@@ -40,7 +40,20 @@
     </tr>
     </table>
     
-    <jsp:include page="position-table.jsp"></jsp:include>
+    <c:if test="${(empty positions) && isMyAccount}">
+      <div class="alert alert-info">
+        You don't have position in any fund right now.
+        Do you wish to <a class="alert-link" href="buy-fund.do">buy some funds</a>?
+      </div>
+    </c:if>
+    <c:if test="${(empty positions) && !isMyAccount}">
+      <div class="alert alert-info">
+        This customer does not have any position.
+      </div>
+    </c:if>
+    <c:if test="${(!empty positions)}">
+      <jsp:include page="position-table.jsp"></jsp:include>
+    </c:if>
     
   </main>
 <%@ include file="footer.jsp" %>
