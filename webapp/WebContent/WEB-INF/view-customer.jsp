@@ -9,7 +9,7 @@
       <h2>My Account</h2>
     </c:if>
     <c:if test="${not isMyAccount}">
-      <h2>View Customer Account: ${fn:escapeXml(showCustomer.username)}</h2>
+      <h2>View Customer Account: ${fn:escapeXml(showCustomer.firstname)} ${fn:escapeXml(showCustomer.lastname)}</h2>
     </c:if>
     <table class="table table-striped table-bordered">
     <tr>

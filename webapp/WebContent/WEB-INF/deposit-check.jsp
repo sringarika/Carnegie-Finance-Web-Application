@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="header.jsp" %>
 <main>
-  <h2>Deposit Check</h2>
+    <h2>Deposit Check for ${fn:escapeXml(customer.firstname)} ${fn:escapeXml(customer.lastname)}</h2>
   <c:if test="${(!empty error)}">
     <div class="alert alert-danger">${fn:escapeXml(error)}</div>
   </c:if>
