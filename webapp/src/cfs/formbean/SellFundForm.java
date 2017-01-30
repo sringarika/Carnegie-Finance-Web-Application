@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.mybeans.form.FormBean;
 
-import cfs.databean.Customer;
+import cfs.databean.Position;
 
 public class SellFundForm extends FormBean {
     private String fundId;
@@ -45,7 +45,7 @@ public class SellFundForm extends FormBean {
             return Collections.singletonList("Invalid fundId!");
         }
         try {
-            sharesVal = Customer.amountFromStr(shares);
+            sharesVal = Position.sharesFromStr(shares);
         } catch (ArithmeticException e) {
             return Collections.singletonList("Shares can not be more than 3 decimal places!");
         } catch (Exception e) {
