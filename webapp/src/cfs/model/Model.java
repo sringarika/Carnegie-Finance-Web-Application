@@ -10,7 +10,6 @@ import org.genericdao.RollbackException;
 import cfs.databean.Customer;
 import cfs.databean.Employee;
 import cfs.databean.Fund;
-import cfs.databean.Position;
 
 public class Model {
     private CustomerDAO customerDAO;
@@ -72,24 +71,22 @@ public class Model {
     public void seed() {
         try {
             if (customerDAO.findByUsername("bob") == null) {
-                Customer customer = new Customer("bob", "Bob", "Brown", "1");
+                Customer customer = new Customer("bob", "Bob", "Brown",
+                        "whatever you think is the strongest password");
                 customer.setAddrLine1("5000 Forbes Ave");
                 customer.setCity("Pittsburgh");
                 customer.setState("PA");
                 customer.setZip("15213");
                 customer.setCash(1000.00);
                 customerDAO.create(customer);
-                int customerId = customerDAO.findByUsername("bob").getCustomerId();
                 Fund fund1 = new Fund("Long-Term Treasury", "LTT");
                 Fund fund2 = new Fund("Carnegie Mellon U", "CMU");
                 fundDAO.create(fund1);
                 fundDAO.create(fund2);
-                int fundId = fundDAO.findIdByName("Long-Term Treasury");
-                Position position = new Position(customerId, fundId, 1000.000);
-                customerPositionDAO.create(position);
             }
             if (employeeDAO.findByUsername("admin") == null) {
-                Employee employee = new Employee("admin", "Alice", "Admin", "1");
+                Employee employee = new Employee("admin", "Alice", "Admin",
+                        "whatever you think is the strongest password");
                 employeeDAO.create(employee);
             }
         } catch (RollbackException e) {
