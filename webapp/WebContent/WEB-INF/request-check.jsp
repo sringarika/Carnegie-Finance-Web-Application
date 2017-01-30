@@ -18,7 +18,7 @@
     </div>
 
     <div class="form-group">
-        <label for="amount">Amount to withdraw (in dollars)</label>
+        <label for="amount">Amount to Withdraw (in dollars)</label>
         <div class="input-group">
         <div class="input-group-addon">$</div>
         <fmt:formatNumber var="maxAmountStr" value="${availableCash>1000000.00 ? 1000000.00 : availableCash}" groupingUsed="false" minFractionDigits="2" maxFractionDigits="2"/>
@@ -27,7 +27,7 @@
     </div>
      <h3> </h3>
     <div class="alert alert-info" role="alert">
-        The amount you withdraw cannot exceed the available cash.
+        The amount you want to withdraw cannot exceed the amount of your available cash.
     </div>
     <h3> </h3>
     <button type="submit" class="btn btn-primary">Submit Request</button>

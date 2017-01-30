@@ -6,9 +6,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.genericdao.RollbackException;
 import org.genericdao.Transaction;
 import org.mybeans.form.FormBeanFactory;
 
+import cfs.databean.Customer;
 import cfs.databean.Transactions;
 import cfs.formbean.DepositCheckForm;
 import cfs.model.CustomerDAO;
@@ -41,6 +43,12 @@ public class DepositCheckAction extends Action {
         }
         request.setAttribute("customerId", customerId);
         if (request.getMethod().equals("GET")) {
+            try {
+                Customer customer = customerDAO.read(customerId);
+                request.setAttribute("customer", customer);
+            } catch (RollbackException e) {
+                e.printStackTrace();
+            }
             return "deposit-check.jsp";
         } else if (request.getMethod().equals("POST")) {
             try {

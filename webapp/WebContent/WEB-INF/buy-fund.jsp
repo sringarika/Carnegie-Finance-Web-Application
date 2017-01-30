@@ -13,7 +13,7 @@
     </c:if>
     <form action="buy-fund.do" method="POST">
       <div class="form-group">
-        <label for="fundId">Fund</label>
+        <label for="fundId">Select Fund</label>
         <select class="form-control" id="fundId" name="fundId" required>
           <c:forEach var="fund" items="${funds}">
             <option class="js-fund-option" value="${fn:escapeXml(fund.fundId)}">${fn:escapeXml(fund.name)}</option>

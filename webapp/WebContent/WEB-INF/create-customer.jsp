@@ -19,7 +19,7 @@
         <input type="text" class="form-control" id="lastname" name="lastName" placeholder="">
       </div>
       <div class="form-group">
-        <label for="amount">Amount to be deposited(in dollars)</label>
+        <label for="amount">Amount to Be Deposited (in dollars)</label>
         <div class="input-group">
           <div class="input-group-addon">$</div>
           <fmt:formatNumber var="maxAmountStr" value="${availableCash>1000000.00 ? 1000000.00 : availableCash}" groupingUsed="false" minFractionDigits="2" maxFractionDigits="2"/>

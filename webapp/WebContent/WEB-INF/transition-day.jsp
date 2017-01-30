@@ -34,7 +34,7 @@
       <div class="form-group">
         <label class="col-sm-3 control-label" for="password">Current Closing Date: </label>
         <div class="col-sm-9">
-          <input type="date" class="form-control" name="closingDateISO" value="${minClosingDateISO}" min="${minClosingDateISO}" data-format="MM/dd/yyyy" required>
+          <input type="date" class="form-control" name="closingDateISO" value="${minClosingDateISO}" min="${minClosingDateISO}" data-format="MM/dd/yyyy" data-polyfill="all" required>
         </div>
       </div>
       <table class="table table-striped table-bordered">
