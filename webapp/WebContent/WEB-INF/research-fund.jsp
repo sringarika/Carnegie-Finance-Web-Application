@@ -27,27 +27,7 @@
       </tr>
       </c:forEach>
     </table>
-<table>
-<tr>
-    <th>Date</th>
-    <th>Price</th>
-</tr>
-<tr>
- <c:forEach items="${mapList}" var="map">
-           <tr>
-   			 <th>Date</th>
-   			 <th>Price</th>
-		   </tr>
-           <c:forEach items="${priceHistoryMap}" var="entry">
-           <tr>
-                      <td>${entry.key}</td>
-                      <td>${entry.value}</td>
-           </tr>
-           </c:forEach>
-<br><br>
- </c:forEach>
-</tr>
-</table>
+
 <h3>${fn:escapeXml(message)}</h3>
 </main>
 <%@ include file="footer.jsp" %>

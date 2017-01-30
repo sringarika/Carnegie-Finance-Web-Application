@@ -40,22 +40,10 @@ public class ResearchFundAction extends Action {
                 request.setAttribute("message", "Currently we have no fund.");
                 return "research-fund.jsp";
             }
-            FundPriceHistory[] historyList = fundPriceHistoryDAO.match();
-
-            //TODO
-            // add a command that when mouse click on price, it shows a pop out graph.
-            Map<String, Double> priceHistoryMap = new HashMap<String, Double>();
+            
             List<Map<String, Double>> mapList = new ArrayList<Map<String, Double>>();
-            
-            List<String> dates = new ArrayList<String>();
             List<List<String>> dateList = new ArrayList<List<String>>();
-            
-            // 先遍历一边找出所有的fundId，将fundId sort 为ascending order，然后根据fundId get所有的date和price的map，
-            //将date排序，用array存起来，输出时用date去get map里的price
-            if (historyList.length == 0 || historyList == null) {
-                request.setAttribute("message", "No fund transaction history");
-                return "research-fund.jsp";
-            }
+
             int[] fundIdList = new int[funds.length];
             for (int i = 0; i < funds.length; i++) {
                 fundIdList[i] = funds[i].getFundId();
@@ -63,25 +51,32 @@ public class ResearchFundAction extends Action {
             Arrays.sort(fundIdList);
             
             for (int i = 0; i < fundIdList.length; i++) {
-                if (historyList[i].getFundId() == fundIdList[i]) {
-                    priceHistoryMap.put(historyList[i].getExecuteDate(), historyList[i].getPrice());
-                    dates.add(historyList[i].getExecuteDate());
+                Map<String, Double> priceHistoryMap = new HashMap<String, Double>();
+                List<String> dates = new ArrayList<String>();
+                FundPriceHistory[] history = fundPriceHistoryDAO.priceTrend(fundIdList[i]);
+                if (history == null || history.length == 0) {
+                    priceHistoryMap.put("N/A", null);
+                    dates.add("N/A");
+                    System.out.println(dates);
+                }
+                for (int j = 0; j < history.length; j++) {
+                    priceHistoryMap.put(history[j].getExecuteDate(), history[j].getPrice());
+                    dates.add(history[j].getExecuteDate());
+                    System.out.println(dates);
                 }
                 mapList.add(priceHistoryMap);
+                if (dates.size() > 1) {
                 Collections.sort(dates);
+                }
                 dateList.add(dates);
             }
             
             ResearchFundView[] researchFundList = new ResearchFundView[funds.length];
             for (int i = 0; i < researchFundList.length; i++) {
                 Fund fund = fundDAO.read(fundIdList[i]);
-                FundPriceHistory[] history = fundPriceHistoryDAO.priceTrend(fundIdList[i]);
-                if (history == null || history.length == 0) {
-                    request.setAttribute("message", "The fund has no history");
-                    return "research-fund.jsp";
-                }
                 List<String> datesOfFund = dateList.get(i);
-                String lastDate = datesOfFund.get(datesOfFund.size() - 1);
+            System.out.println(datesOfFund.size());
+                String lastDate = datesOfFund.get(datesOfFund.size() -1);
                 Map<String, Double> mapOfFund = mapList.get(i);
                 Double price = mapOfFund.get(lastDate);
                 ResearchFundView researchFund = merge(fund, lastDate, price);
@@ -89,7 +84,7 @@ public class ResearchFundAction extends Action {
             }
             
             request.setAttribute("researchFundList", researchFundList);
-            request.setAttribute("priceHistoryMap", priceHistoryMap);
+            //request.setAttribute("priceHistoryMap", priceHistoryMap);
             request.setAttribute("mapList", mapList);
             
             return "research-fund.jsp";
