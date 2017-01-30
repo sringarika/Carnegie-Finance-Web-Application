@@ -40,6 +40,10 @@ public class CreateEmployeeAction extends Action {
                 }
                 Employee newEmployee = new Employee();
                 newEmployee.setUsername(form.getUsername());
+                if (employeedao.findByUsername(form.getUsername()) != null) {
+                    request.setAttribute("error", "This username already exists!");
+                    return "create-employee.jsp";
+                }
                 newEmployee.setPassword(form.getPassword());
                 newEmployee.setFirstname(form.getFirstname());
                 newEmployee.setLastname(form.getLastname());

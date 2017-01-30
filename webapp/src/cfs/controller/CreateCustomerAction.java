@@ -44,6 +44,10 @@ public class CreateCustomerAction extends Action {
                 System.out.println("password is : "+form.getPassword());
                 Customer newCustomer = new Customer();
                 newCustomer.setUsername(form.getUsername());
+                if (customerdao.findByUsername(form.getUsername()) != null) {
+                    request.setAttribute("error", "This username already exists!");
+                    return "create-customer.jsp";
+                }
                 newCustomer.setPassword(form.getPassword());
                 newCustomer.setFirstname(form.getFirstName());
                 newCustomer.setLastname(form.getLastName());
@@ -64,13 +68,6 @@ public class CreateCustomerAction extends Action {
 //                    return "create-customer.jsp";
 //                }
                System.out.println("First Name:" + form.getFirstName());
-//                System.out.println("Last Name:" + form.getLastName());
-//                System.out.println("Username:" + form.getUsername());
-//                System.out.println("Address Line 1:" + form.getAddress1());
-//                System.out.println("Address Line 2:" + form.getAddress2());
-//                System.out.println("Amount:" + form.getAmount());
-//                System.out.println("New Password:" + form.getPassword());
-//                System.out.println("Confirm Password:" + form.getConfirmPassword());
                 // TODO
             request.setAttribute("message", "Customer created successfully!");
             return "success.jsp";
