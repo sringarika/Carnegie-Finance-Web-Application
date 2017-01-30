@@ -2,6 +2,8 @@ package cfs.controller;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,26 +40,55 @@ public class ResearchFundAction extends Action {
                 request.setAttribute("message", "Currently we have no fund.");
                 return "research-fund.jsp";
             }
-            FundPriceHistory[] history = fundPriceHistoryDAO.match();
-            ResearchFundView[] fundList = merge(funds, history, request);
-            request.setAttribute("fundList", fundList);
+            FundPriceHistory[] historyList = fundPriceHistoryDAO.match();
+
             //TODO
             // add a command that when mouse click on price, it shows a pop out graph.
             Map<String, Double> priceHistoryMap = new HashMap<String, Double>();
             List<Map<String, Double>> mapList = new ArrayList<Map<String, Double>>();
-            if (history.length == 0 || history == null) {
-                request.setAttribute("message", "The fund has no history");
+            
+            List<String> dates = new ArrayList<String>();
+            List<List<String>> dateList = new ArrayList<List<String>>();
+            
+            // 先遍历一边找出所有的fundId，将fundId sort 为ascending order，然后根据fundId get所有的date和price的map，
+            //将date排序，用array存起来，输出时用date去get map里的price
+            if (historyList.length == 0 || historyList == null) {
+                request.setAttribute("message", "No fund transaction history");
                 return "research-fund.jsp";
             }
-            for (int i = 1; i <= history.length; i++) {
-                int id = i;
-                for (int j = 0; j < history.length; j++) {
-                    if (history[j].getFundId() == id && history[j].getExecuteDate() != null) {
-                        priceHistoryMap.put(history[j].getExecuteDate(), history[j].getPrice());
-                    }
+            int[] fundIdList = new int[funds.length];
+            for (int i = 0; i < funds.length; i++) {
+                fundIdList[i] = funds[i].getFundId();
+            }
+            Arrays.sort(fundIdList);
+            
+            for (int i = 0; i < fundIdList.length; i++) {
+                if (historyList[i].getFundId() == fundIdList[i]) {
+                    priceHistoryMap.put(historyList[i].getExecuteDate(), historyList[i].getPrice());
+                    dates.add(historyList[i].getExecuteDate());
                 }
                 mapList.add(priceHistoryMap);
+                Collections.sort(dates);
+                dateList.add(dates);
             }
+            
+            ResearchFundView[] researchFundList = new ResearchFundView[funds.length];
+            for (int i = 0; i < researchFundList.length; i++) {
+                Fund fund = fundDAO.read(fundIdList[i]);
+                FundPriceHistory[] history = fundPriceHistoryDAO.priceTrend(fundIdList[i]);
+                if (history == null || history.length == 0) {
+                    request.setAttribute("message", "The fund has no history");
+                    return "research-fund.jsp";
+                }
+                List<String> datesOfFund = dateList.get(i);
+                String lastDate = datesOfFund.get(datesOfFund.size() - 1);
+                Map<String, Double> mapOfFund = mapList.get(i);
+                Double price = mapOfFund.get(lastDate);
+                ResearchFundView researchFund = merge(fund, lastDate, price);
+                researchFundList[i] = researchFund;
+            }
+            
+            request.setAttribute("researchFundList", researchFundList);
             request.setAttribute("priceHistoryMap", priceHistoryMap);
             request.setAttribute("mapList", mapList);
             
@@ -68,33 +99,16 @@ public class ResearchFundAction extends Action {
         }
         return "research-fund.jsp";
     }
-    
-    private ResearchFundView[] merge(Fund[] funds, FundPriceHistory[] history, HttpServletRequest request) {
-        ResearchFundView[] fundList = new ResearchFundView[funds.length];
-        if (fundList.length == 0 || fundList == null) {
-            request.setAttribute("message", "Currently we have no fund.");
-            return fundList;
-        }
-        for (int i = 0; i < fundList.length; i++) {
-            ResearchFundView fund = new ResearchFundView();
-            fund.setFundId(funds[i].getFundId());
-            fund.setFundName(funds[i].getName());
-            fund.setTicker(funds[i].getTicker());
-            if (history == null || history.length == 0) {
-                fund.setLastClosingDate("0/0/0");
-                fund.setPrice(0.00);
-                fundList[i] = fund;
-                return fundList;
-            } else if (fund.getFundId() == history[i].getFundId()){
-                fund.setLastClosingDate(history[i].getExecuteDate());
-                fund.setPrice(history[i].getPrice());
-                fundList[i] = fund;
-            }
-        }
-
-        return fundList;
+    private ResearchFundView merge (Fund fund, String lastDate, Double price) {
+        ResearchFundView researchFund = new ResearchFundView();
+        researchFund.setFundId(fund.getFundId());
+        researchFund.setFundName(fund.getName());
+        researchFund.setTicker(fund.getTicker());
+        researchFund.setLastClosingDate(lastDate);
+        researchFund.setPrice(price);
+        return researchFund;      
     }
-    
+ 
     @Override
     public AccessControlLevel getAccessControlLevel() {
         return AccessControlLevel.Customer;

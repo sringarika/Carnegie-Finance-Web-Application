@@ -17,13 +17,13 @@
          <th>Price</th>
          </tr>
       </thread>
-      <c:forEach var="fund" items="${fundList}">
+      <c:forEach var="researchFund" items="${researchFundList}">
       <tr>
-      	  <td>${fn:escapeXml(fund.fundId)}</td>
-          <td>${fn:escapeXml(fund.fundName)}</td>
-          <td>${fn:escapeXml(fund.ticker)}</td>
-          <td>${fn:escapeXml(fund.lastClosingDate)}</td>
-          <td>${fn:escapeXml(fund.price)}</td>
+      	  <td>${fn:escapeXml(researchFund.fundId)}</td>
+          <td>${fn:escapeXml(researchFund.fundName)}</td>
+          <td>${fn:escapeXml(researchFund.ticker)}</td>
+          <td>${fn:escapeXml(researchFund.lastClosingDate)}</td>
+          <td>${fn:escapeXml(researchFund.price)}</td>
       </tr>
       </c:forEach>
     </table>
