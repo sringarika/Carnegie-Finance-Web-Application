@@ -8,7 +8,6 @@
     
     <table class="table table-bordered table-striped">
       <tr>
-        <th>ID</th>
         <th>Username</th>
         <th>First Name</th>
         <th>Last Name</th>
@@ -16,7 +15,6 @@
       </tr>
       <c:forEach var="customer" items="${customers}">
         <tr>
-          <td>${fn:escapeXml(customer.customerId)}</td>
           <td>${fn:escapeXml(customer.username)}</td>
           <td>${fn:escapeXml(customer.firstname)}</td>
           <td>${fn:escapeXml(customer.lastname)}</td>

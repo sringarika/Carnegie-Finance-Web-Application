@@ -9,6 +9,7 @@
   <title>CFS Mutual Funds</title>
   <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="static/bootstrap/css/bootstrap-theme.min.css">
+  <style>.cfs-vert-align>td{vertical-align: middle !important;}</style>
   <script src="static/jquery-3.1.1.min.js"></script>
   <script src="static/bootstrap/js/bootstrap.min.js"></script>
   <script src="static/better-dom.js"></script>

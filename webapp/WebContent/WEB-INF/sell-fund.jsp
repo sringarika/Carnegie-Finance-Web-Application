@@ -11,30 +11,38 @@
         ${fn:escapeXml(error)}
       </div>
     </c:if>
-    <form action="sell-fund.do" method="POST">
-      <div class="form-group">
-        <label for="fundId">Please select fund to sell</label>
-        <jsp:include page="position-table.jsp">
-          <jsp:param name="radioInput" value="fundId"/>
-        </jsp:include>
+    <c:if test="${(empty positions)}">
+      <div class="alert alert-info">
+        You don't have available shares for any fund right now.
+        Do you wish to <a class="alert-link" href="buy-fund.do">buy some funds</a>?
       </div>
-      <div class="form-group">
-        <label for="shares">Shares to sell</label>
-        <input type="number" class="form-control" id="shares" name="shares" placeholder="1.000" step="0.001" min="1.000" max="1000000.000" required>
-        
-        <%-- The following datalist is for JavaScript validation. --%>
-        <datalist id="fund-ids" style="display: none;">
-          <c:forEach var="position" items="${positions}">
-            <fmt:formatNumber var="availSharesStr" value="${position.shares}" groupingUsed="false" minFractionDigits="3" maxFractionDigits="3"/>
-            <option value="${fn:escapeXml(position.fundId)}" data-avail-shares="${fn:escapeXml(availSharesStr)}"></option>
-          </c:forEach>
-        </datalist>
-      </div>
-      <div class="alert alert-info" role="alert">
-        The transaction will be processed on the end of the trading day. The cash amount depends on the closing price of the fund at that time.
-      </div>
-      <button type="submit" class="btn btn-primary">Sell</button>
-    </form>
+    </c:if>
+    <c:if test="${(!empty positions)}">
+      <form action="sell-fund.do" method="POST">
+        <div class="form-group">
+          <label for="fundId">Please select fund to sell</label>
+          <jsp:include page="position-table.jsp">
+            <jsp:param name="radioInput" value="fundId"/>
+          </jsp:include>
+        </div>
+        <div class="form-group">
+          <label for="shares">Shares to sell</label>
+          <input type="number" class="form-control" id="shares" name="shares" placeholder="1.000" step="0.001" min="0.001" max="1000000.000" required>
+          
+          <%-- The following datalist is for JavaScript validation. --%>
+          <datalist id="fund-ids" style="display: none;">
+            <c:forEach var="position" items="${positions}">
+              <fmt:formatNumber var="availSharesStr" value="${position.shares}" groupingUsed="false" minFractionDigits="3" maxFractionDigits="3"/>
+              <option value="${fn:escapeXml(position.fundId)}" data-avail-shares="${fn:escapeXml(availSharesStr)}"></option>
+            </c:forEach>
+          </datalist>
+        </div>
+        <div class="alert alert-info" role="alert">
+          The transaction will be processed on the end of the trading day. The cash amount depends on the closing price of the fund at that time.
+        </div>
+        <button type="submit" class="btn btn-primary">Sell</button>
+      </form>
+    </c:if>
   </main>
   <script>
     (function() {
@@ -51,7 +59,14 @@
         }
         var checkedInput = document.querySelector('input[name="fundId"]:checked');
         if (!checkedInput) {
-          checkedInput = document.querySelector('input[name="fundId"]');
+          if (location.search.indexOf("?fundId=") === 0) {
+            var defaultFundId = parseInt(location.search.split(/[=&]/)[1]);
+            if (!isNaN(defaultFundId)) checkedInput = document.querySelector(
+                'input[name="fundId"][value="' + defaultFundId + '"]');
+          }
+          if (!checkedInput) {
+            checkedInput = document.querySelector('input[name="fundId"]');
+          }
           if (!checkedInput) return;
           checkedInput.checked = true;
         }
