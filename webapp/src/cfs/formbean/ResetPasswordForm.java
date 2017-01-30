@@ -7,14 +7,14 @@ import org.mybeans.form.FormBean;
 
 public class ResetPasswordForm extends FormBean {
     //private String oldPassword;
-    private String newPassword;
+    private String password;
     private String confirmPassword;
 
     public String getNewPassword() {
-        return newPassword;
+        return password;
     }
     public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
+        this.password = newPassword;
     }
     public String getConfirmPassword() {
         return confirmPassword;
@@ -26,13 +26,13 @@ public class ResetPasswordForm extends FormBean {
     @Override
     public List<String> getValidationErrors() {
         
-        if (newPassword == null || newPassword.isEmpty()) {
+        if (password == null || password.isEmpty()) {
             return Collections.singletonList("New password is required!");
         }
         if (confirmPassword == null || confirmPassword.isEmpty()) {
             return Collections.singletonList("Confirm password is required!");
         }
-        if (!newPassword.equals(confirmPassword)) {
+        if (!password.equals(confirmPassword)) {
             return Collections.singletonList("Confirm password does not match new password!");
         }
         return Collections.emptyList();

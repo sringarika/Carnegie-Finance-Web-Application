@@ -61,19 +61,18 @@ public class ResetPasswordAction extends Action {
                     request.setAttribute("error", validationErrors.get(0));
                     return "reset-password.jsp";
                 }
-                
                 String newPsw = form.getNewPassword();
                 if (request.getSession().getAttribute("customerId") != null) {
                     customerdao.changePassword(customerId, newPsw);
                     request.setAttribute("message", "Password changed successfully!");
                     return "success.jsp";
-                }
+                } 
                 
-                System.out.println("New Password:" + form.getNewPassword());
-                System.out.println("Confirm Password:" + form.getConfirmPassword());
+//                System.out.println("New Password:" + form.getNewPassword());
+//                System.out.println("Confirm Password:" + form.getConfirmPassword());
                 // TODO
-            request.setAttribute("message", "Customer password reset successfully.");
-            return "success.jsp";
+//            request.setAttribute("message", "Customer password reset successfully.");
+//            return "success.jsp";
             } catch (Exception e) {
                 request.setAttribute("error", e.getMessage());
                 return "error.jsp";
