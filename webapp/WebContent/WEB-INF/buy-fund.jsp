@@ -13,10 +13,10 @@
     </c:if>
     <form action="buy-fund.do" method="POST">
       <div class="form-group">
-        <label for="fundId">Fund</label>
+        <label for="fundId">Select Fund</label>
         <select class="form-control" id="fundId" name="fundId" required>
           <c:forEach var="fund" items="${funds}">
-            <option value="${fn:escapeXml(fund.fundId)}">${fn:escapeXml(fund.name)}</option>
+            <option class="js-fund-option" value="${fn:escapeXml(fund.fundId)}">${fn:escapeXml(fund.name)}</option>
           </c:forEach>
         </select>
       </div>
@@ -25,7 +25,7 @@
         <div class="input-group">
           <div class="input-group-addon">$</div>
           <fmt:formatNumber var="maxAmountStr" value="${availableCash>1000000.00 ? 1000000.00 : availableCash}" groupingUsed="false" minFractionDigits="2" maxFractionDigits="2"/>
-          <input type="number" class="form-control" id="amount" name="amount" placeholder="${maxAmountStr}" step="0.01" min="1.00" max="${maxAmountStr}" required>
+          <input type="number" class="form-control" id="amount" name="amount" placeholder="${maxAmountStr}" step="0.01" min="10.00" max="${maxAmountStr}" required>
         </div>
       </div>
       <div>
@@ -37,4 +37,21 @@
       <button type="submit" class="btn btn-primary">Buy</button>
     </form>
   </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var defaultOption = null;
+      if (location.search.indexOf("?fundId=") === 0) {
+        var defaultFundId = parseInt(location.search.split(/[=&]/)[1]);
+        if (!isNaN(defaultFundId)) defaultOption = document.querySelector(
+            '.js-fund-option[value="' + defaultFundId + '"]');
+      }
+      if (!defaultOption) {
+        defaultOption = document.querySelector('.js-fund-option');
+      }
+      if (!defaultOption) return;
+      var fundIdSelect = document.getElementById('fundId');
+      if (!fundIdSelect) return;
+      fundIdSelect.value = defaultOption.getAttribute('value');
+    });
+  </script>
 <%@ include file="footer.jsp" %>

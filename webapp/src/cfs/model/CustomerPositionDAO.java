@@ -1,5 +1,7 @@
 package cfs.model;
 
+import java.math.BigDecimal;
+
 import org.genericdao.ConnectionPool;
 import org.genericdao.DAOException;
 import org.genericdao.GenericDAO;
@@ -28,16 +30,16 @@ public class CustomerPositionDAO extends GenericDAO<Position> {
         return positions;
     }
 
-    public double existingShare(int customerId, int fundId) throws RollbackException{
+    public BigDecimal existingShare(int customerId, int fundId) throws RollbackException{
         Position[] positions = match(MatchArg.and(MatchArg.equals("customerId", customerId),MatchArg.equals("fundId", fundId)));
-        double exshare =  0.00;
+        BigDecimal existingShare = BigDecimal.ZERO;
         if (positions == null) {
-            return exshare;
+            return existingShare;
         } else {
             for (Position pos : positions) {
-            	exshare += pos.getShares();
+                existingShare = existingShare.add(Position.sharesFromDouble(pos.getShares()));
             }
-            return exshare;
+            return existingShare;
         }
     }
 
