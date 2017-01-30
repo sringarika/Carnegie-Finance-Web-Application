@@ -11,7 +11,7 @@
   <form action="deposit-check.do" method="POST">
     <input type="hidden" name="customerId" value="${customerId}">
     <div class="form-group">
-      <label for="amount">Amount to be deposited(in dollars)</label>
+      <label for="amount">Amount to be Deposited (in dollars)</label>
       <div class="input-group">
         <div class="input-group-addon">$</div>
         <input type="number" class="form-control" id="amount"

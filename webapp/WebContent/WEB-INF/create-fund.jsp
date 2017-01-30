@@ -7,7 +7,7 @@
     <h2>Create Fund</h2>
     
     <br>
-    <h4>List of available funds</h4>
+    <h4>List of Available Funds</h4>
     
     <table class="table table-bordered table-striped">
       <tr>

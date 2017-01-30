@@ -43,7 +43,7 @@
     <c:if test="${(empty positions) && isMyAccount}">
       <div class="alert alert-info">
         You don't have position in any fund right now.
-        Do you wish to <a class="alert-link" href="buy-fund.do">buy some funds</a>?
+        Do you want to <a class="alert-link" href="buy-fund.do">buy some funds</a>?
       </div>
     </c:if>
     <c:if test="${(empty positions) && !isMyAccount}">
