@@ -34,17 +34,18 @@ public class CreateFundForm extends FormBean{
 	public List<String> getValidationErrors() {
 		List<String> errors = new ArrayList<String>();
 
-		if (fund == null || fund.trim().length() == 0)
+		//all error validations are done in jsp itself
+	/*	if (fund == null || fund.trim().length() == 0) //required field is used for validation henceforth
 			errors.add("Fundname is required");
 		
 		if (ticker == null || ticker.trim().length() == 0)
-			errors.add("Tickername is required");
+			errors.add("Tickername is required");*/
 		
-    	if(fund.length() > 20) {
+    /*	if(fund.length() > 20) {
     		errors.add("Fund name should be lesser than 20 characters!");
     	}
     	if (ticker.trim().length() < 1 || ticker.trim().length() > 5) 
-    		errors.add("Ticker Name should be between 1-5 characters");
+    		errors.add("Ticker Name should be between 1-5 characters");*/
         
 		if (errors.size() > 0)
 			return errors;
