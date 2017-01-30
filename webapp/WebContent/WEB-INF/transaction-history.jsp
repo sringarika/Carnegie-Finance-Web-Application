@@ -5,7 +5,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="header.jsp" %>
   <main>
-    <h2>Transaction History for ${fn:escapeXml(firstName)} ${fn:escapeXml(lastName)}</h2>
+    <c:if test="${isMyAccount}">
+      <h2>Transaction History</h2>
+    </c:if>
+    <c:if test="${not isMyAccount}">
+      <h2>Transaction History for ${fn:escapeXml(firstName)} ${fn:escapeXml(lastName)}</h2>
+    </c:if>
     <table class="table table-bordered table-striped">
       <thead>
         <tr>
@@ -34,5 +39,7 @@
         <tr>
       </tbody>
     </table>
+    <h4>Cash Balance: <fmt:formatNumber value="${cashBalance}" type="currency"/></h4>
+    <h4>Available Cash: <fmt:formatNumber value="${availableCash}" type="currency"/></h4>
   </main>
 <%@ include file="footer.jsp" %>

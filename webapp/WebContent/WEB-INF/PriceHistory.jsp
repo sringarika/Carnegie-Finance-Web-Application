@@ -18,8 +18,8 @@
     <th>Price</th>
 </tr>
            <c:forEach items="${priceHistoryMap}" var="entry">
-                      ${entry.key}<br>
-                      ${entry.value}<br>
+                      ${fn:escapeXml(entry.key)}<br>
+                      ${fn:escapeXml(entry.value)}<br>
            </c:forEach>
 <br><br>
  </c:forEach>

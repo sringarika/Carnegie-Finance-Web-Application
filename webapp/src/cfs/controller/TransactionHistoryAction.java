@@ -1,5 +1,7 @@
 package cfs.controller;
 
+import java.math.BigDecimal;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -40,12 +42,18 @@ public class TransactionHistoryAction extends Action {
             }
         } else {
             customerId = (int) session.getAttribute("customerId");
+            request.setAttribute("isMyAccount", true);
         }
         try {
             TransactionHistoryView[] transactions = transactionDAO.showHistoryView(customerId);
             Customer customer = customerDAO.read(customerId);
             String firstName = customer.getFirstname();
             String lastName = customer.getLastname();
+            BigDecimal pendingAmount = transactionDAO.pendingAmount(customerId);
+            BigDecimal availableCash = Customer.amountFromDouble(customer.getCash()).add(pendingAmount);
+            double cashBalance = customer.getCash();
+            request.setAttribute("availableCash", availableCash);
+            request.setAttribute("cashBalance", cashBalance);
             request.setAttribute("transactions", transactions);
             request.setAttribute("firstName", firstName);
             request.setAttribute("lastName", lastName);
