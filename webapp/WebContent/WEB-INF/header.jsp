@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<fmt:setLocale value="en_US" scope="request"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +11,7 @@
   <title>CFS Mutual Funds</title>
   <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="static/bootstrap/css/bootstrap-theme.min.css">
+  <style>.cfs-vert-align>td{vertical-align: middle !important;}</style>
   <script src="static/jquery-3.1.1.min.js"></script>
   <script src="static/bootstrap/js/bootstrap.min.js"></script>
   <script src="static/better-dom.js"></script>

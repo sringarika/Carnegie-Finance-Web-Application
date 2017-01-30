@@ -1,15 +1,18 @@
 package cfs.formbean;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
 import org.mybeans.form.FormBean;
 
+import cfs.databean.Position;
+
 public class SellFundForm extends FormBean {
     private String fundId;
     private String shares;
     private int fundIdVal;
-    private double sharesVal;
+    private BigDecimal sharesVal;
 
     public String getFundId() {
         return fundId;
@@ -26,7 +29,7 @@ public class SellFundForm extends FormBean {
     public void setShares(String shares) {
         this.shares = shares;
     }
-    
+
     @Override
     public List<String> getValidationErrors() {
         if (fundId == null || fundId.isEmpty()) {
@@ -35,25 +38,27 @@ public class SellFundForm extends FormBean {
         if (shares == null || shares.isEmpty()) {
             return Collections.singletonList("Shares are required!");
         }
-        
+
         try {
             fundIdVal = Integer.parseInt(fundId);
         } catch (Exception e) {
             return Collections.singletonList("Invalid fundId!");
         }
         try {
-            sharesVal = Double.parseDouble(shares);
+            sharesVal = Position.sharesFromStr(shares);
+        } catch (ArithmeticException e) {
+            return Collections.singletonList("Shares can not be more than 3 decimal places!");
         } catch (Exception e) {
             return Collections.singletonList("Invalid shares!");
         }
-        
-        if (sharesVal < 1.000) {
-            return Collections.singletonList("Shares must be at least 1.000!");
+
+        if (sharesVal.compareTo(BigDecimal.ZERO) <= 0) {
+            return Collections.singletonList("Shares must be positive!");
         }
-        if (sharesVal > 1000000.000) {
+        if (sharesVal.compareTo(new BigDecimal("1000000.000")) > 0) {
             return Collections.singletonList("Shares must not be more than 1,000,000.000!");
         }
-        
+
         return Collections.emptyList();
     }
 
@@ -61,7 +66,7 @@ public class SellFundForm extends FormBean {
         return fundIdVal;
     }
 
-    public double getSharesVal() {
+    public BigDecimal getSharesVal() {
         return sharesVal;
     }
 

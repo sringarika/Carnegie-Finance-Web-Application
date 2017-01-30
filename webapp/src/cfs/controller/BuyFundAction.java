@@ -1,5 +1,6 @@
 package cfs.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,8 +40,9 @@ public class BuyFundAction extends Action {
         Customer customer = (Customer) request.getAttribute("customer");
 
         try {
-            double pendingAmount = transactionDAO.pendingAmount(customer.getCustomerId());
-            request.setAttribute("availableCash", customer.getCash() + pendingAmount);
+            BigDecimal pendingAmount = transactionDAO.pendingAmount(customer.getCustomerId());
+            BigDecimal availableCash = Customer.amountFromDouble(customer.getCash()).add(pendingAmount);
+            request.setAttribute("availableCash", availableCash);
             Fund[] funds = fundDAO.match();
             request.setAttribute("funds", funds);
         } catch (RollbackException e) {
@@ -70,24 +72,24 @@ public class BuyFundAction extends Action {
         }
     }
 
-    private void queueTransaction(int customerId, int fundId, double amount) throws Exception {
+    private void queueTransaction(int customerId, int fundId, BigDecimal amount) throws Exception {
         try {
             Transaction.begin();
             if (fundDAO.read(fundId) == null) {
                 throw new Exception("Fund does not exist!");
             }
-            double pendingAmount = transactionDAO.pendingAmount(customerId);
+            BigDecimal pendingAmount = transactionDAO.pendingAmount(customerId);
             Customer customer = customerDAO.read(customerId);
-            double availableCash = customer.getCash() + pendingAmount;
-            if (amount > availableCash) {
+            BigDecimal availableCash = Customer.amountFromDouble(customer.getCash()).add(pendingAmount);
+            if (amount.compareTo(availableCash) > 0) {
                 throw new Exception("Not enough available cash!");
             }
             Transactions buyFund = new Transactions();
-            buyFund.setStatus("Pending");
-            buyFund.setType("Buy");
+            buyFund.setStatus(Transactions.PENDING);
+            buyFund.setType(Transactions.BUY);
             buyFund.setCustomerId(customer.getCustomerId());
             buyFund.setFundId(fundId);
-            buyFund.setAmount(-amount);
+            buyFund.setAmount(-amount.doubleValue());
             transactionDAO.create(buyFund);
             Transaction.commit();
         } finally {

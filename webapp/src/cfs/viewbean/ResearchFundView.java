@@ -1,14 +1,11 @@
 package cfs.viewbean;
 
-import java.util.List;
-
-
 public class ResearchFundView {
 	 private int fundId;
 	 private String fundName;
 	 private String ticker;
 	 private String lastClosingDate;
-	 private double price;
+	 private Double price;
 	 
 	 public int getFundId() {
 		 return fundId;
@@ -28,7 +25,7 @@ public class ResearchFundView {
      public void setTicker(String ticker) {
          this.ticker = ticker;
      }
-     public double getPrice() {
+     public Double getPrice() {
          return price;
      }
      public void setPrice(Double price) {

@@ -1,5 +1,6 @@
 package cfs.formbean;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -9,6 +10,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import cfs.databean.Customer;
+
 public class TransitionDayForm {
     private String closingDateISO;
     private String closingDate;
@@ -16,7 +19,7 @@ public class TransitionDayForm {
     private String lastClosingDate;
     private String[] closingPrices;
     private String[] fundIds;
-    private Map<Integer, Double> priceForFund;
+    private Map<Integer, BigDecimal> priceForFund;
 
     public TransitionDayForm(HttpServletRequest request) {
         closingDateISO = request.getParameter("closingDateISO");
@@ -61,27 +64,30 @@ public class TransitionDayForm {
             }
         }
 
-        Map<Integer, Double> priceForFund = new HashMap<Integer, Double>();
+        Map<Integer, BigDecimal> priceForFund = new HashMap<Integer, BigDecimal>();
 
         for (int i = 0; i < fundIds.length; i++) {
             int fundIdVal;
-            double closingPriceVal;
             try {
                 fundIdVal = Integer.parseInt(fundIds[i]);
             } catch (Exception e) {
                 return Collections.singletonList("Invalid fundId!");
             }
+
+            BigDecimal closingPriceVal;
             try {
-                closingPriceVal = Double.parseDouble(closingPrices[i]);
+                closingPriceVal = Customer.amountFromStr(closingPrices[i]);
+            } catch (ArithmeticException e) {
+                return Collections.singletonList("Price can not be more than 2 decimal places!");
             } catch (Exception e) {
-                return Collections.singletonList("Invalid shares!");
+                return Collections.singletonList("Invalid price!");
             }
 
-            if (closingPriceVal < 1.000) {
-                return Collections.singletonList("Closing price must be at least $1.00!");
+            if (closingPriceVal.compareTo(new BigDecimal("10.00")) < 0) {
+                return Collections.singletonList("Price must not be below $10.00 per share!");
             }
-            if (closingPriceVal > 10000.000) {
-                return Collections.singletonList("Closing price must not be more than $10,000.00!");
+            if (closingPriceVal.compareTo(new BigDecimal("1000.00")) > 0) {
+                return Collections.singletonList("Price must not be above $1,000.00 per share!");
             }
 
             priceForFund.put(fundIdVal, closingPriceVal);
@@ -92,7 +98,7 @@ public class TransitionDayForm {
         return Collections.emptyList();
     }
 
-    public Map<Integer, Double> getPriceForFundMap() {
+    public Map<Integer, BigDecimal> getPriceForFundMap() {
         return this.priceForFund;
     }
 

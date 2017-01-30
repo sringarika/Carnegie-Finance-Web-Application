@@ -9,7 +9,7 @@
       <h2>My Account</h2>
     </c:if>
     <c:if test="${not isMyAccount}">
-      <h2>View Customer Account: ${fn:escapeXml(showCustomer.username)}</h2>
+      <h2>View Customer Account: ${fn:escapeXml(showCustomer.firstname)} ${fn:escapeXml(showCustomer.lastname)}</h2>
     </c:if>
     <table class="table table-striped table-bordered">
     <tr>
@@ -32,11 +32,28 @@
     </tr>
     <tr>
       <td>Cash Balance</td>
-      <td><fmt:formatNumber value="${showCustomer.cash}" type="currency"/></td>
+      <td class="text-right"><fmt:formatNumber value="${showCustomer.cash}" type="currency"/></td>
+    </tr>
+    <tr>
+      <td>Available Cash</td>
+      <td class="text-right"><fmt:formatNumber value="${availableCash}" type="currency"/></td>
     </tr>
     </table>
     
-    <jsp:include page="position-table.jsp"></jsp:include>
+    <c:if test="${(empty positions) && isMyAccount}">
+      <div class="alert alert-info">
+        You don't have position in any fund right now.
+        Do you want to <a class="alert-link" href="buy-fund.do">buy some funds</a>?
+      </div>
+    </c:if>
+    <c:if test="${(empty positions) && !isMyAccount}">
+      <div class="alert alert-info">
+        This customer does not have any position.
+      </div>
+    </c:if>
+    <c:if test="${(!empty positions)}">
+      <jsp:include page="position-table.jsp"></jsp:include>
+    </c:if>
     
   </main>
 <%@ include file="footer.jsp" %>

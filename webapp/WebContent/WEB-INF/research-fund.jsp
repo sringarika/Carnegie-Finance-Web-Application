@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="header.jsp" %>
-  <main>
+<main>
     <h2>Research Funds</h2>
 <div>
 </div>
@@ -17,15 +17,17 @@
          <th>Price</th>
          </tr>
       </thread>
-      <c:forEach var="fund" items="${fundList}">
+      <c:forEach var="researchFund" items="${researchFundList}">
       <tr>
-      	  <td>${fn:escapeXml(fund.fundId)}</td>
-          <td>${fn:escapeXml(fund.fundName)}</td>
-          <td>${fn:escapeXml(fund.ticker)}</td>
-          <td>${fn:escapeXml(fund.lastClosingDate)}</td>
-          <td>${fn:escapeXml(fund.price)}</td>
+      	  <td>${fn:escapeXml(researchFund.fundId)}</td>
+          <td>${fn:escapeXml(researchFund.fundName)}</td>
+          <td>${fn:escapeXml(researchFund.ticker)}</td>
+          <td>${fn:escapeXml(researchFund.lastClosingDate)}</td>
+          <td>${fn:escapeXml(researchFund.price)}</td>
       </tr>
       </c:forEach>
     </table>
-  </main>
+
+<h3>${fn:escapeXml(message)}</h3>
+</main>
 <%@ include file="footer.jsp" %>

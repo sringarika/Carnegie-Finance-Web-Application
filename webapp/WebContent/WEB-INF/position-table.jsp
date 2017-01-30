@@ -21,10 +21,13 @@
             </th>
           <th class="text-right">Last Closing Price</th>
           <th class="text-right">Total Value</th>
+          <c:if test="${isMyAccount}">
+            <th>Actions</th>
+          </c:if>
         </tr>
       </thead>
       <c:forEach var="position" items="${positions}">
-        <tr>
+        <tr class="cfs-vert-align">
           <c:if test="${not empty param.radioInput}">
             <td><input type="radio" name="${param.radioInput}" value="${fn:escapeXml(position.fundId)}" required></td>
           </c:if>
@@ -37,6 +40,12 @@
           </c:if>
           <c:if test="${not position.priceAvailable}">
             <td colspan="2" class="warning text-center">Not Available</td>
+          </c:if>
+          <c:if test="${isMyAccount}">
+            <td>
+              <a href="buy-fund.do?fundId=${fn:escapeXml(position.fundId)}" class="btn btn-sm btn-success">Buy</a>
+              <a href="sell-fund.do?fundId=${fn:escapeXml(position.fundId)}" class="btn btn-sm btn-danger">Sell</a>
+            </td>
           </c:if>
         </tr>
       </c:forEach>

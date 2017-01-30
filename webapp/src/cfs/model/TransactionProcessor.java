@@ -175,46 +175,49 @@ public class TransactionProcessor {
                     " on " + transaction.getExecuteDate() + "!");
         }
 
+        // Amount should be negative by definition.
         BigDecimal amount = new BigDecimal(-transaction.getAmount());
-        BigDecimal price = new BigDecimal(fundPrice.getPrice());
-        // Keep track of three digits for amount. Round down to avoid problems.
-        BigDecimal shares = amount.divide(price, 3, RoundingMode.DOWN);
 
-        if (shares.compareTo(BigDecimal.ZERO) <= 0) {
+        // The customer is always charged the amount he/she pays. No rounding involved.
+        BigDecimal newBalance = Customer.amountFromDouble(customer.getCash()).subtract(amount);
+        if (newBalance.compareTo(BigDecimal.ZERO) < 0) {
+            // Doing so would result in a negative balance.
+            transaction.setStatus(Transactions.REJECTED);
+            transactionDAO.update(transaction);
+            return;
+        }
+
+        BigDecimal price = new BigDecimal(fundPrice.getPrice());
+        BigDecimal buyingShares = sharesForAmount(amount, price);
+
+        // If the minimum amount is $10.00 and the maximum price is $1,000.00 per
+        // share, the customer should get at least 0.010 share. But just in case...
+        if (buyingShares.compareTo(BigDecimal.ZERO) <= 0) {
             // We end up with zero shares or negative shares.
             transaction.setStatus(Transactions.REJECTED);
             transactionDAO.update(transaction);
             return;
         }
 
-        BigDecimal actualAmount = shares.multiply(price);
-        actualAmount = actualAmount.setScale(2, RoundingMode.HALF_UP);
-
-        double newBalance = customer.getCash() - actualAmount.doubleValue();
-        if (newBalance < 0) {
-            // Doing so would result in a negative balance.
-            transaction.setStatus(Transactions.REJECTED);
-            transactionDAO.update(transaction);
-            return;
-        }
-        customer.setCash(newBalance);
-        customerDAO.update(customer);
-
         Position position = customerPositionDAO.read(customer.getCustomerId(), transaction.getFundId());
         if (position == null) {
             position = new Position();
             position.setCustomerId(customer.getCustomerId());
             position.setFundId(transaction.getFundId());
-            position.setShares(shares.doubleValue());
+            position.setShares(buyingShares.doubleValue());
             customerPositionDAO.create(position);
         } else {
-            position.setShares(position.getShares() + shares.doubleValue());
+            BigDecimal positionShares = Position.sharesFromDouble(position.getShares());
+            BigDecimal newShares = positionShares.add(buyingShares);
+            position.setShares(newShares.doubleValue());
             customerPositionDAO.update(position);
         }
 
+        customer.setCash(newBalance.doubleValue());
+        customerDAO.update(customer);
+
         transaction.setStatus(Transactions.PROCESSED);
-        transaction.setAmount(actualAmount.doubleValue());
-        transaction.setShares(shares.doubleValue());
+        transaction.setShares(buyingShares.doubleValue());
         transactionDAO.update(transaction);
     }
 
@@ -222,6 +225,13 @@ public class TransactionProcessor {
         Customer customer = customerDAO.read(transaction.getCustomerId());
         if (customer == null) {
             throw new RollbackException("Customer does not exist!");
+        }
+
+        FundPriceHistory fundPrice = fundPriceHistoryDAO.read(transaction.getFundId(), transaction.getExecuteDate());
+
+        if (fundPrice == null) {
+            throw new RollbackException("Cannot find price for Fund ID" + transaction.getFundId() +
+                    " on " + transaction.getExecuteDate() + "!");
         }
 
         Position position = customerPositionDAO.read(customer.getCustomerId(), transaction.getFundId());
@@ -232,27 +242,24 @@ public class TransactionProcessor {
             return;
         }
 
-        // Shares should be negative by definition. Just add it in.
-        double remainingShares = position.getShares() + transaction.getShares();
-        if (remainingShares < 0) {
+        BigDecimal positionShares = Position.sharesFromDouble(position.getShares());
+        // Shares should be negative by definition.
+        BigDecimal sellingShares = Position.sharesFromDouble(-transaction.getShares());
+
+        // The customer's position should be deducted by the exact number of shares he/she wants to sell.
+        BigDecimal remainingShares = positionShares.subtract(sellingShares);
+        if (remainingShares.compareTo(BigDecimal.ZERO) < 0) {
             // Doing so would result in negative shares.
             transaction.setStatus(Transactions.REJECTED);
             transactionDAO.update(transaction);
             return;
         }
 
-        FundPriceHistory fundPrice = fundPriceHistoryDAO.read(transaction.getFundId(), transaction.getExecuteDate());
+        BigDecimal price = Customer.amountFromDouble(fundPrice.getPrice());
+        BigDecimal amount = amountForShares(sellingShares, price);
 
-        if (fundPrice == null) {
-            throw new RollbackException("Cannot find price for Fund ID" + transaction.getFundId() +
-                    " on " + transaction.getExecuteDate() + "!");
-        }
-
-        BigDecimal shares = new BigDecimal(-transaction.getShares());
-        BigDecimal price = new BigDecimal(fundPrice.getPrice());
-        BigDecimal amount = shares.multiply(price);
-        amount = amount.setScale(2, RoundingMode.HALF_UP);
-
+        // If the minimum price per share is $10.00, the customer should always get some money
+        // even if only 0.001 share is sold. But just in case...
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             // We end up with zero amount or negative amount.
             transaction.setStatus(Transactions.REJECTED);
@@ -260,19 +267,29 @@ public class TransactionProcessor {
             return;
         }
 
-        if (remainingShares == 0) {
-            customerPositionDAO.delete(customer.getCustomerId(), transaction.getFundId());
-        } else {
-            position.setShares(remainingShares);
-            customerPositionDAO.update(position);
-        }
+        position.setShares(remainingShares.doubleValue());
+        customerPositionDAO.update(position);
 
-        double newBalance = customer.getCash() + amount.doubleValue();
-        customer.setCash(newBalance);
+        BigDecimal newBalance = Customer.amountFromDouble(customer.getCash()).add(amount);
+        customer.setCash(newBalance.doubleValue());
         customerDAO.update(customer);
 
         transaction.setStatus(Transactions.PROCESSED);
         transaction.setAmount(amount.doubleValue());
         transactionDAO.update(transaction);
+    }
+
+    public BigDecimal sharesForAmount(BigDecimal amount, BigDecimal price) {
+        // Shares are tracked to three digits after the decimal point.
+        // HALF_EVEN must be used according to requirements.
+        // It is okay for the customer to gain or lose some shares in rounding.
+        return amount.divide(price, 3, RoundingMode.HALF_EVEN);
+    }
+
+    public BigDecimal amountForShares(BigDecimal shares, BigDecimal price) {
+        // Amount are tracked to two digits after the decimal point.
+        // HALF_EVEN must be used according to requirements.
+        // It is okay for the customer to gain or lose less than a cent in rounding.
+        return shares.multiply(price).setScale(2, RoundingMode.HALF_EVEN);
     }
 }
