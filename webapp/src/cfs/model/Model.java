@@ -70,6 +70,11 @@ public class Model {
 
     public void seed() {
         try {
+            if (employeeDAO.findByUsername("admin") == null) {
+                Employee employee = new Employee("admin", "Alice", "Admin",
+                        "whatever you think is the strongest password");
+                employeeDAO.create(employee);
+            }
             if (customerDAO.findByUsername("bob") == null) {
                 Customer customer = new Customer("bob", "Bob", "Brown",
                         "whatever you think is the strongest password");
@@ -79,18 +84,17 @@ public class Model {
                 customer.setZip("15213");
                 customer.setCash(1000.00);
                 customerDAO.create(customer);
+            }
+            if (!fundDAO.fundTicker("LTT")) {
                 Fund fund1 = new Fund("Long-Term Treasury", "LTT");
-                Fund fund2 = new Fund("Carnegie Mellon U", "CMU");
                 fundDAO.create(fund1);
+            }
+            if (!fundDAO.fundTicker("CMU")) {
+                Fund fund2 = new Fund("Long-Term Treasury", "CMU");
                 fundDAO.create(fund2);
             }
-            if (employeeDAO.findByUsername("admin") == null) {
-                Employee employee = new Employee("admin", "Alice", "Admin",
-                        "whatever you think is the strongest password");
-                employeeDAO.create(employee);
-            }
         } catch (RollbackException e) {
-            System.out.println("something is wrong");
+            e.printStackTrace();
         }
     }
 
