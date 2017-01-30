@@ -12,15 +12,18 @@ import cfs.databean.Customer;
 import cfs.formbean.CreateCustomerForm;
 import cfs.formbean.ResetPasswordForm;
 import cfs.model.CustomerDAO;
+import cfs.model.EmployeeDAO;
 import cfs.model.Model;
 
 
 public class CreateCustomerAction extends Action {
     private CustomerDAO customerdao;
+    private EmployeeDAO employeedao;
 
     public CreateCustomerAction(Model model) {
         // TODO Auto-generated constructor stub
         customerdao= model.getCustomerDAO();
+        employeedao= model.getEmployeeDAO();
     }
 
     @Override
@@ -44,7 +47,7 @@ public class CreateCustomerAction extends Action {
                 System.out.println("password is : "+form.getPassword());
                 Customer newCustomer = new Customer();
                 newCustomer.setUsername(form.getUsername());
-                if (customerdao.findByUsername(form.getUsername()) != null) {
+                if (customerdao.findByUsername(form.getUsername()) != null || employeedao.findByUsername(form.getUsername()) != null ) {
                     request.setAttribute("error", "This username already exists!");
                     return "create-customer.jsp";
                 }
