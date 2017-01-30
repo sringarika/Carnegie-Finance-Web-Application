@@ -267,12 +267,8 @@ public class TransactionProcessor {
             return;
         }
 
-        if (remainingShares.equals(BigDecimal.ZERO)) {
-            customerPositionDAO.delete(customer.getCustomerId(), transaction.getFundId());
-        } else {
-            position.setShares(remainingShares.doubleValue());
-            customerPositionDAO.update(position);
-        }
+        position.setShares(remainingShares.doubleValue());
+        customerPositionDAO.update(position);
 
         BigDecimal newBalance = Customer.amountFromDouble(customer.getCash()).add(amount);
         customer.setCash(newBalance.doubleValue());
