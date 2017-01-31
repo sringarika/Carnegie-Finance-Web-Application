@@ -62,20 +62,20 @@ public class ResearchFundAction extends Action {
                 for (int j = 0; j < history.length; j++) {
                     priceHistoryMap.put(history[j].getExecuteDate(), history[j].getPrice());
                     dates.add(history[j].getExecuteDate());
-                    System.out.println(dates);
                 }
                 mapList.add(priceHistoryMap);
+                request.setAttribute("priceHistoryMap", priceHistoryMap);
                 if (dates.size() > 1) {
                 Collections.sort(dates);
                 }
                 dateList.add(dates);
+                request.setAttribute("dates", dates);
             }
             
             ResearchFundView[] researchFundList = new ResearchFundView[funds.length];
             for (int i = 0; i < researchFundList.length; i++) {
                 Fund fund = fundDAO.read(fundIdList[i]);
                 List<String> datesOfFund = dateList.get(i);
-            System.out.println(datesOfFund.size());
                 String lastDate = datesOfFund.get(datesOfFund.size() -1);
                 Map<String, Double> mapOfFund = mapList.get(i);
                 Double price = mapOfFund.get(lastDate);
@@ -84,9 +84,9 @@ public class ResearchFundAction extends Action {
             }
             
             request.setAttribute("researchFundList", researchFundList);
-            //request.setAttribute("priceHistoryMap", priceHistoryMap);
             request.setAttribute("mapList", mapList);
-            
+            request.setAttribute("dateList", dateList);
+            System.out.println(mapList);
             return "research-fund.jsp";
         } catch (RollbackException e) {
             e.printStackTrace();
