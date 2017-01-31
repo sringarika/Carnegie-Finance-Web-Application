@@ -6,7 +6,18 @@
 <%@ include file="header.jsp" %>
   <main>
     <h2>Transaction List</h2>
-    <p style="font-size: 12pt; font-weight: bold; color: red"> ${error} </p>
+    <div class="panel panel-default">
+      <div class="panel-body text-center">
+        <span>
+          <span class="label label-info">${fn:escapeXml(pendingCount)}</span>
+          Pending Transaction(s)
+        </span>
+        <span style="padding-left: 2em;">
+          <span class="label label-default">${fn:escapeXml(processedCount)}</span>
+          Processed Transaction(s)
+        </span>
+      </div>
+    </div>
     <table class="table table-bordered table-striped">
       <thead>
         <tr>

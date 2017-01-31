@@ -37,14 +37,14 @@ public class LoginAction extends Action {
         // if GET request, return the login page
         if (request.getMethod().equals("GET")) {
             return "login.jsp";
-          
+
         // if POST request, return the account
         } else if (request.getMethod().equals("POST")) {
         	HttpSession session = request.getSession();
         	// if a customer already logged in, switch to the account page
             if (session.getAttribute("customerId") != null) {
         		return "account.do";
-        	
+
             // if employee already logged in, switch to the employee page
         	} else if (session.getAttribute("employeeId") != null) {
         		return "employee.do";
@@ -57,12 +57,13 @@ public class LoginAction extends Action {
                 	return "login.jsp";
                 }
                 // check for login validation
-                if (customerDAO.findByUsername(form.getUsername()) == null && employeeDAO.findByUsername(form.getUsername()) == null) {
+                Customer customer = customerDAO.findByUsername(form.getUsername());
+                Employee employee = employeeDAO.findByUsername(form.getUsername());
+                if (customer == null && employee == null) {
                     request.setAttribute("error", "The user doesn't exist.");
                     return "login.jsp";
                 }
-                if (customerDAO.findByUsername(form.getUsername()) != null) {
-                	Customer customer = customerDAO.findByUsername(form.getUsername());
+                if (customer != null) {
                 	if (!customer.getPassword().equals(form.getPassword())) {
                 		request.setAttribute("error", "Wrong password!");
                         return "login.jsp";
@@ -72,7 +73,6 @@ public class LoginAction extends Action {
                         return "account.do";
                 	}
                 } else {
-                	Employee employee = employeeDAO.findByUsername(form.getUsername());
                 	if (!employee.getPassword().equals(form.getPassword())) {
                 		request.setAttribute("error", "Wrong password!");
                         return "login.jsp";
