@@ -42,7 +42,7 @@
     </c:if>
     <br>
         <div class="alert alert-info" role="alert">
-        Disclaimer:The first closing day price for the fund is not provided until the next Transition Day.
+        Note: The first closing day price for the fund is not provided until the next Transition Day.
       </div>
      <br>
            <button type="submit" class="btn btn-primary">Create Fund</button>
