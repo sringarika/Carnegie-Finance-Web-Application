@@ -82,7 +82,7 @@ public class CreateCustomerAction extends Action {
                 Transactions transaction = new Transactions();
                 transaction.setCustomerId(newCustomer.getCustomerId());
                 transaction.setType(Transactions.DEPOSIT_CHECK);
-                transaction.setAmount(Double.parseDouble(form.getAmount()));
+                transaction.setAmount(form.getAmount().doubleValue());
                 transaction.setStatus(Transactions.PENDING);
                 transactiondao.create(transaction);
                 Transaction.commit();

@@ -14,7 +14,7 @@ public class CreateCustomerForm extends FormBean {
     private String city;
     private String state;
     private String zipcode;
-    private String amount;
+    private BigDecimal amount;
     public String getPassword() {
         return password;
     }
@@ -75,10 +75,10 @@ public class CreateCustomerForm extends FormBean {
     public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
-    public void setAmount(String amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
-    public String getAmount() {
+    public BigDecimal getAmount() {
         System.out.println(amount);
         return amount;
     }
@@ -127,13 +127,13 @@ public class CreateCustomerForm extends FormBean {
             return Collections.singletonList("Last Name cannot contain special characters.");
             
         }
-        double a;
+        //double a;
         try {
-            a = Double.parseDouble(amount);
-            if(a < 0) {
-                return Collections.singletonList("Amount must atleast be $0.00!");
+           // a = Double.parseDouble(amount);
+            if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+                return Collections.singletonList("Amount must be positive!");
             }
-            if (a > 1000000.00) {
+            if (amount.compareTo(new BigDecimal("1000000.00")) > 0) {
                 return Collections.singletonList("Amount must not be more than $1,000,000.00!");
             }
         } catch(NumberFormatException num){
