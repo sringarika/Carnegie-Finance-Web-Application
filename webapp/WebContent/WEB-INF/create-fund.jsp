@@ -40,9 +40,8 @@
         ${fn:escapeXml(error)}
       </div>
     </c:if>
-    <br>
         <div class="alert alert-info" role="alert">
-        Note: The first closing day price for the fund is not provided until the next Transition Day.
+        Note: Fund Name and Ticker must be unique.
       </div>
      <br>
            <button type="submit" class="btn btn-primary">Create Fund</button>
