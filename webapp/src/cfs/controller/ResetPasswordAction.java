@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.mybeans.form.FormBeanFactory;
 
 import cfs.databean.Customer;
-import cfs.formbean.ChangePasswordForm;
 import cfs.formbean.ResetPasswordForm;
 import cfs.model.CustomerDAO;
 import cfs.model.Model;
@@ -35,9 +34,9 @@ public class ResetPasswordAction extends Action {
             return "error.jsp";
         }
         request.setAttribute("customerId", customerId);
-        
+
         if (request.getMethod().equals("GET")) {
-            
+
             // TODO: Maybe get some information (e.g. name) for display?
             try {
             Customer customer = customerdao.read(customerId);
@@ -61,19 +60,11 @@ public class ResetPasswordAction extends Action {
                     request.setAttribute("error", validationErrors.get(0));
                     return "reset-password.jsp";
                 }
-                
+
                 String newPsw = form.getNewPassword();
-                if (request.getSession().getAttribute("customerId") != null) {
-                    customerdao.changePassword(customerId, newPsw);
-                    request.setAttribute("message", "Password changed successfully!");
-                    return "success.jsp";
-                }
-                
-                System.out.println("New Password:" + form.getNewPassword());
-                System.out.println("Confirm Password:" + form.getConfirmPassword());
-                // TODO
-            request.setAttribute("message", "Customer password reset successfully.");
-            return "success.jsp";
+                customerdao.changePassword(customerId, newPsw);
+                request.setAttribute("message", "Customer password reset successfully.");
+                return "success.jsp";
             } catch (Exception e) {
                 request.setAttribute("error", e.getMessage());
                 return "error.jsp";
