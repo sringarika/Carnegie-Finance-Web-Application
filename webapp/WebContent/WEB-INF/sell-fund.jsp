@@ -20,7 +20,7 @@
     <c:if test="${(!empty positions)}">
       <form action="sell-fund.do" method="POST">
         <div class="form-group">
-          <label for="fundId">Please select fund to sell</label>
+          <label for="fundId">Please Select Fund to Sell</label>
           <jsp:include page="position-table.jsp">
             <jsp:param name="radioInput" value="fundId"/>
           </jsp:include>

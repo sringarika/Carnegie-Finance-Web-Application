@@ -90,7 +90,7 @@ public class Model {
                 fundDAO.create(fund1);
             }
             if (!fundDAO.fundTicker("CMU")) {
-                Fund fund2 = new Fund("Long-Term Treasury", "CMU");
+                Fund fund2 = new Fund("Carnegie Mellon U", "CMU");
                 fundDAO.create(fund2);
             }
         } catch (RollbackException e) {

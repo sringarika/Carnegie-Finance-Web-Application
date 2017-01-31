@@ -30,11 +30,11 @@ public class CreateFundForm extends FormBean{
 	}
 
 
-
 	public List<String> getValidationErrors() {
 		List<String> errors = new ArrayList<String>();
 
-		if (fund == null || fund.trim().length() == 0)
+		//all error validations are done in jsp itself
+		if (fund == null || fund.trim().length() == 0) //required field is used for validation henceforth
 			errors.add("Fundname is required");
 		
 		if (ticker == null || ticker.trim().length() == 0)

@@ -9,7 +9,7 @@
       <h2>My Account</h2>
     </c:if>
     <c:if test="${not isMyAccount}">
-      <h2>View Customer Account: ${fn:escapeXml(showCustomer.username)}</h2>
+      <h2>View Customer Account: ${fn:escapeXml(showCustomer.firstname)} ${fn:escapeXml(showCustomer.lastname)}</h2>
     </c:if>
     <table class="table table-striped table-bordered">
     <tr>
@@ -43,7 +43,7 @@
     <c:if test="${(empty positions) && isMyAccount}">
       <div class="alert alert-info">
         You don't have position in any fund right now.
-        Do you wish to <a class="alert-link" href="buy-fund.do">buy some funds</a>?
+        Do you want to <a class="alert-link" href="buy-fund.do">buy some funds</a>?
       </div>
     </c:if>
     <c:if test="${(empty positions) && !isMyAccount}">
