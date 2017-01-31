@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="header.jsp" %>
+
   <main>
     <h2>Create Fund</h2>
     
@@ -27,11 +28,11 @@
 	<form action="create-fund.do" method="POST">
       <div class="form-group">
         <label for="username">Fund Name</label>
-        <input type="text" class="form-control" id="fund" name = "fund" placeholder="">
+        <input type="text" class="form-control" id="fund" name = "fund" placeholder="" maxlength="20" required>
       </div>
       <div class="form-group">
         <label for="username">Ticker</label>
-        <input type="text" class="form-control" id="ticker" name = "ticker" placeholder="">
+        <input type="text" class="form-control" id="ticker" name = "ticker" placeholder="" maxlength="5" required>
       </div>
       <br>
       	     <c:if test="${(!empty error)}">
@@ -39,15 +40,11 @@
         ${fn:escapeXml(error)}
       </div>
     </c:if>
-    <br>
         <div class="alert alert-info" role="alert">
-        Disclaimer:The first closing day price for the fund is not provided until the next Transition Day.
+        Note: Fund Name and Ticker must be unique.
       </div>
-     <p>
      <br>
            <button type="submit" class="btn btn-primary">Create Fund</button>
-     
-    </p>
-</form>
+     </form>
   </main>
 <%@ include file="footer.jsp" %>

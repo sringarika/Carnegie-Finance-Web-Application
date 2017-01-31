@@ -18,6 +18,9 @@
         <a class="alert-link" href="transaction-list.do">Show transaction list...</a>
       </p>
     </c:if>
+    <div class="alert alert-info" role="alert">
+        Note: Price cannot be incremented by more than 100% or decremented by more than 50%!
+    </div>
     <c:if test="${(!empty error)}">
       <div class="alert alert-danger">
         ${fn:escapeXml(error)}
