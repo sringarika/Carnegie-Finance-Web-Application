@@ -3,6 +3,8 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import org.mybeans.form.FormBean;
+
+import cfs.databean.Customer;
 public class CreateCustomerForm extends FormBean {
     private String password;
     private String confpassword;
@@ -14,7 +16,8 @@ public class CreateCustomerForm extends FormBean {
     private String city;
     private String state;
     private String zipcode;
-    private BigDecimal amount;
+    private String amount;
+    private BigDecimal amountVal;
     public String getPassword() {
         return password;
     }
@@ -75,12 +78,15 @@ public class CreateCustomerForm extends FormBean {
     public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
-    public BigDecimal getAmount() {
+    public String getAmount() {
         System.out.println(amount);
         return amount;
+    }
+    public BigDecimal getAmountVal() {
+        return amountVal;
     }
     public List<String> getValidationErrors() {
         if (password == null || password.isEmpty()) {
@@ -114,6 +120,7 @@ public class CreateCustomerForm extends FormBean {
         if (zipcode == null || zipcode.isEmpty()) {
             return Collections.singletonList("Zipcode is required!");
         }
+        
         //testing special characters
         if(username.contains("$")) {
             return Collections.singletonList("Username cannot contain special characters.");
@@ -129,15 +136,21 @@ public class CreateCustomerForm extends FormBean {
         }
         //double a;
         try {
+            amountVal = Customer.amountFromStr(amount);
            // a = Double.parseDouble(amount);
-            if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            if (amountVal.compareTo(BigDecimal.ZERO) < 0) {
                 return Collections.singletonList("Amount must be positive!");
             }
-            if (amount.compareTo(new BigDecimal("1000000.00")) > 0) {
+            if (amountVal.compareTo(new BigDecimal("1000000.00")) > 0) {
                 return Collections.singletonList("Amount must not be more than $1,000,000.00!");
             }
         } catch(NumberFormatException num){
             return Collections.singletonList("Amount must be a valid number!");
+        }
+        catch (ArithmeticException e) {
+            return Collections.singletonList("Amount can not be more than 2 decimal places!");
+        } catch (Exception e) {
+            return Collections.singletonList("Invalid amount!");
         }
         return Collections.emptyList();
     }

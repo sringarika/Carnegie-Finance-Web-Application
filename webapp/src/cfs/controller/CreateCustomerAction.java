@@ -48,7 +48,6 @@ public class CreateCustomerAction extends Action {
                 CreateCustomerForm form = FormBeanFactory.getInstance(CreateCustomerForm.class).create(request);
                 List<String> validationErrors = form.getValidationErrors();
                 if (validationErrors.size() > 0) {
-                    request.setAttribute("error", validationErrors.get(0));
                     request.setAttribute("username", form.getUsername());
                     request.setAttribute("address1", form.getAddress1());
                     request.setAttribute("address2", form.getAddress2());
@@ -58,6 +57,7 @@ public class CreateCustomerAction extends Action {
                     request.setAttribute("zipcode", form.getZipcode());
                     request.setAttribute("firstname", form.getFirstName());
                     request.setAttribute("lastname", form.getLastName());
+                    request.setAttribute("error", validationErrors.get(0));
                     return "create-customer.jsp";
                 }
                 System.out.println("password is : "+form.getPassword());
@@ -82,7 +82,7 @@ public class CreateCustomerAction extends Action {
                 Transactions transaction = new Transactions();
                 transaction.setCustomerId(newCustomer.getCustomerId());
                 transaction.setType(Transactions.DEPOSIT_CHECK);
-                transaction.setAmount(form.getAmount().doubleValue());
+                transaction.setAmount(form.getAmountVal().doubleValue());
                 transaction.setStatus(Transactions.PENDING);
                 transactiondao.create(transaction);
                 Transaction.commit();
