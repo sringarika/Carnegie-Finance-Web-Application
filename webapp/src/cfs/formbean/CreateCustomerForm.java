@@ -1,4 +1,5 @@
 package cfs.formbean;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import org.mybeans.form.FormBean;
@@ -14,8 +15,6 @@ public class CreateCustomerForm extends FormBean {
     private String state;
     private String zipcode;
     private String amount;
-    //private String button;
-    
     public String getPassword() {
         return password;
     }
@@ -84,7 +83,6 @@ public class CreateCustomerForm extends FormBean {
         return amount;
     }
     public List<String> getValidationErrors() {
-        //List<String> errors = new ArrayList<String>();
         if (password == null || password.isEmpty()) {
             return Collections.singletonList("Password is required!");
         }
@@ -129,23 +127,14 @@ public class CreateCustomerForm extends FormBean {
             return Collections.singletonList("Last Name cannot contain special characters.");
             
         }
-        if(amount.contains("$")) {
-            return Collections.singletonList("Amount cannot contain special characters.");
-            
-        }
-
-        if (amount == null || amount.trim().length() == 0)
-            return Collections.singletonList("Amount is required");
-        
         double a;
         try {
             a = Double.parseDouble(amount);
-            if(a < 0.00) {
+            if(a < 0) {
                 return Collections.singletonList("Amount must atleast be $0.00!");
             }
-            System.out.println(a);
-            if(a > 1000000.00) {
-                return Collections.singletonList("Amount cannot be greater than $1,000,000.00!");
+            if (a > 1000000.00) {
+                return Collections.singletonList("Amount must not be more than $1,000,000.00!");
             }
         } catch(NumberFormatException num){
             return Collections.singletonList("Amount must be a valid number!");
