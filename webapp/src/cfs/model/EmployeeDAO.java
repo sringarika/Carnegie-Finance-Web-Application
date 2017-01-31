@@ -10,23 +10,23 @@ import org.genericdao.Transaction;
 import cfs.databean.Employee;
 
 public class EmployeeDAO extends GenericDAO<Employee> {
-	
+
     public EmployeeDAO(ConnectionPool cp, String tableName) throws DAOException {
         super(Employee.class, tableName, cp);
     }
-    
+
     /*
      * Check if employee exists
      */
     public Employee findByUsername(String username) throws RollbackException {
-    	Employee[] employee = match(MatchArg.equals("username", username));
+    	Employee[] employee = match(MatchArg.equalsIgnoreCase("username", username));
 		if (employee.length == 0) {
 			return null;
 		} else {
 			return employee[0];
 		}
     }
-    
+
     /**
      * Change password for employee
      * @param username
@@ -46,7 +46,7 @@ public class EmployeeDAO extends GenericDAO<Employee> {
             Transaction.commit();
             return user;
         } finally {
-            if (Transaction.isActive()) 
+            if (Transaction.isActive())
             	Transaction.rollback();
         }
     }
