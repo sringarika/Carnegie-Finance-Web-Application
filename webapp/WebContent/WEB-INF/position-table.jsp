@@ -20,7 +20,7 @@
             </c:if>
             </th>
           <th class="text-right">Last Closing Price</th>
-          <th class="text-right">Total Value</th>
+          <th class="text-right">Market Value</th>
           <c:if test="${isMyAccount}">
             <th>Actions</th>
           </c:if>
