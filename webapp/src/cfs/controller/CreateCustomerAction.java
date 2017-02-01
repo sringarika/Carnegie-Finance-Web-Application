@@ -55,8 +55,8 @@ public class CreateCustomerAction extends Action {
                     request.setAttribute("city", form.getCity());
                     request.setAttribute("state", form.getState());
                     request.setAttribute("zipcode", form.getZipcode());
-                    request.setAttribute("firstname", form.getFirstName());
-                    request.setAttribute("lastname", form.getLastName());
+                    request.setAttribute("firstName", form.getFirstName());
+                    request.setAttribute("lastName", form.getLastName());
                     request.setAttribute("error", validationErrors.get(0));
                     return "create-customer.jsp";
                 }
