@@ -79,17 +79,21 @@ public class CreateCustomerAction extends Action {
                 newCustomer.setZip(form.getZipcode());
                 customerdao.create(newCustomer);
                 //deposit initial amount
+                if (form.getAmountVal().compareTo(BigDecimal.ZERO)>0) {
                 Transactions transaction = new Transactions();
                 transaction.setCustomerId(newCustomer.getCustomerId());
                 transaction.setType(Transactions.DEPOSIT_CHECK);
                 transaction.setAmount(form.getAmountVal().doubleValue());
                 transaction.setStatus(Transactions.PENDING);
                 transactiondao.create(transaction);
+                }
                 Transaction.commit();
+                
                 } finally {
                     if (Transaction.isActive())
                         Transaction.rollback();
                 }
+                
                System.out.println("First Name:" + form.getFirstName());
                 // TODO
             request.setAttribute("message", "Customer created successfully!");

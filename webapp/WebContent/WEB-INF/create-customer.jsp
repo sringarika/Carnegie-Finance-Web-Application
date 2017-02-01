@@ -8,43 +8,43 @@
 	<form action="create-customer.do" method="POST">
       <div class="form-group">
         <label for="username">Username</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="" value=<%=request.getAttribute("username") != null  ? request.getAttribute("username"): "" %>>
+        <input type="text" class="form-control" id="username" name="username" placeholder="" value=${fn:escapeXml(username)}>
       </div>
       <div class="form-group">
         <label for="firstname">First Name</label>
-        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="" value=<%=request.getAttribute("firstName") != null  ? request.getAttribute("firstName"): "" %>>
+        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="" value=${fn:escapeXml(firstName)}>
       </div>
       <div class="form-group">
         <label for="lastname">Last Name</label>
-        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="" value=<%=request.getAttribute("lastName") != null  ? request.getAttribute("lastName"): "" %>>
+        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="" value=${fn:escapeXml(lastName)}>
       </div>
       <div class="form-group">
         <label for="amount">Amount to Be Deposited (in dollars)</label>
         <div class="input-group">
           <div class="input-group-addon">$</div>
           <fmt:formatNumber var="maxAmountStr" value="${availableCash>1000000.00 ? 1000000.00 : availableCash}" groupingUsed="false" minFractionDigits="2" maxFractionDigits="2"/>
-          <input type="number" class="form-control" id="amount" name="amount" placeholder="${maxAmountStr}" value=<%=request.getAttribute("amount") != null  ? request.getAttribute("amount"): "" %> step="0.01" min="0.00" max="1000000.00" required>
+          <input type="number" class="form-control" id="amount" name="amount" placeholder="${maxAmountStr}" value=${fn:escapeXml(amount)} step="0.01" min="0.00" max="1000000.00" required>
         </div>
       </div>
       <div class="form-group">
         <label for="address">Address Line 1</label>
-        <input type="text" class="form-control" id="address1" name="address1" placeholder="" value=<%=request.getAttribute("address1") != null  ? request.getAttribute("address1"): "" %>>
+        <input type="text" class="form-control" id="address1" name="address1" placeholder="" value=${fn:escapeXml(address1)}>
       </div>
       <div class="form-group">
         <label for="address2">Address Line 2</label>
-        <input type="text" class="form-control" id="address2" name="address2" placeholder="" value=<%=request.getAttribute("address2") != null  ? request.getAttribute("address2"): "" %>>
+        <input type="text" class="form-control" id="address2" name="address2" placeholder="" value=${fn:escapeXml(address2)}>
       </div>
       <div class="form-group">
         <label for="state">State</label>
-        <input type="text" class="form-control" id="state" name="state" placeholder="" value=<%=request.getAttribute("state") != null  ? request.getAttribute("state"): "" %>>
+        <input type="text" class="form-control" id="state" name="state" placeholder="" value=${fn:escapeXml(state)}>
       </div>
       <div class="form-group">
         <label for="zipcode">Zip code</label>
-        <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="" value=<%=request.getAttribute("zipcode") != null  ? request.getAttribute("zipcode"): "" %>>
+        <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="" value=${fn:escapeXml(zipcode)}>
       </div>
       <div class="form-group">
         <label for="city">City</label>
-        <input type="text" class="form-control" id="city" name="city" placeholder="" value=<%=request.getAttribute("city") != null  ? request.getAttribute("city"): "" %>>
+        <input type="text" class="form-control" id="city" name="city" placeholder="" value=${fn:escapeXml(city)}>
       </div>
       
       <div class="form-group">
