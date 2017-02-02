@@ -27,7 +27,7 @@
         <label for="amount">Amount to Be Deposited (in dollars)</label>
         <div class="input-group">
           <div class="input-group-addon">$</div>
-          <input type="number" class="form-control" id="amount" name="amount" placeholder="0.00 ~ 1,000,000.00" value="${fn:escapeXml(amount)}" step="0.01" min="0.00" max="1000000.00" required>
+          <input type="number" class="form-control" id="amount" name="amount" placeholder="$0.00 ~ $1,000,000.00" value="${fn:escapeXml(amount)}" step="0.01" min="0.00" max="1000000.00" required>
         </div>
       </div>
       <div class="form-group">

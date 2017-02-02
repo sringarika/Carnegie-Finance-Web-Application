@@ -11,31 +11,39 @@
         ${fn:escapeXml(error)}
       </div>
     </c:if>
-    <form action="buy-fund.do" method="POST">
-      <div class="form-group">
-        <label for="fundId">Select Fund</label>
-        <select class="form-control" id="fundId" name="fundId" required>
-          <c:forEach var="fund" items="${funds}">
-            <option class="js-fund-option" value="${fn:escapeXml(fund.fundId)}">${fn:escapeXml(fund.name)}</option>
-          </c:forEach>
-        </select>
+    <c:if test="${availableCash < 10}">
+      <div class="alert alert-info">
+        You don't have enough available cash to buy funds.
       </div>
-      <div class="form-group">
-        <label for="amount">Amount (in dollars)</label>
-        <div class="input-group">
-          <div class="input-group-addon">$</div>
-          <fmt:formatNumber var="maxAmountStr" value="${availableCash>1000000.00 ? 1000000.00 : availableCash}" groupingUsed="false" minFractionDigits="2" maxFractionDigits="2"/>
-          <input type="number" class="form-control" id="amount" name="amount" placeholder="${maxAmountStr}" step="0.01" min="10.00" max="${maxAmountStr}" required>
+    </c:if>
+    <c:if test="${availableCash >= 10}">
+      <form action="buy-fund.do" method="POST">
+        <div class="form-group">
+          <label for="fundId">Select Fund</label>
+          <select class="form-control" id="fundId" name="fundId" required>
+            <c:forEach var="fund" items="${funds}">
+              <option class="js-fund-option" value="${fn:escapeXml(fund.fundId)}">${fn:escapeXml(fund.name)}</option>
+            </c:forEach>
+          </select>
         </div>
-      </div>
-      <div>
-        <label for="cash">Available Cash: <fmt:formatNumber value="${availableCash}" type="currency"/></label>
-      </div>
-      <div class="alert alert-info" role="alert">
-        The transaction will be processed on the end of the trading day. The number of shares purchased depends on the closing price of the fund at that time.
-      </div>
-      <button type="submit" class="btn btn-primary">Buy</button>
-    </form>
+        <div class="form-group">
+          <label for="amount">Amount (in dollars)</label>
+          <div class="input-group">
+            <div class="input-group-addon">$</div>
+            <fmt:formatNumber var="maxAmountStr" value="${availableCash>1000000.00 ? 1000000.00 : availableCash}" groupingUsed="false" minFractionDigits="2" maxFractionDigits="2"/>
+            <fmt:formatNumber var="maxAmountDisp" value="${availableCash>1000000.00 ? 1000000.00 : availableCash}" type="currency"/>
+            <input type="number" class="form-control" id="amount" name="amount" placeholder="$10.00 ~ ${maxAmountDisp}" step="0.01" min="10.00" max="${maxAmountStr}" required>
+          </div>
+        </div>
+        <div>
+          <label for="cash">Available Cash: <fmt:formatNumber value="${availableCash}" type="currency"/></label>
+        </div>
+        <div class="alert alert-info" role="alert">
+          The transaction will be processed on the end of the trading day. The number of shares purchased depends on the closing price of the fund at that time.
+        </div>
+        <button type="submit" class="btn btn-primary">Buy</button>
+      </form>
+    </c:if>
   </main>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
