@@ -15,7 +15,7 @@
       <div class="input-group">
         <div class="input-group-addon">$</div>
         <input type="number" class="form-control" id="amount"
-          name="amount" placeholder="1000000.00" max="1000000.00"
+          name="amount" placeholder="$0.01 ~ $1,000,000.00" max="1000000.00"
           step="0.01" min="0.01" required>
       </div>
     </div>

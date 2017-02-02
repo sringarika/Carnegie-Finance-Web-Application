@@ -6,6 +6,14 @@
 <%@ include file="header.jsp" %>
 <main>
     <h2>Research Funds</h2>
+    <div class="alert alert-warning js-nochart-nojs">
+      Loading the chart... If the chart does not show up, please check your Internet connection and refresh the page.
+    </div>
+    <div class="alert alert-info js-nochart-nodata" style="display: none;">
+      There are not enough data to display the price chart. Please come back later when there are more data after a few transition days.
+    </div>
+    <div class="js-research-fund-chart"></div>
+    
     <h3>Latest Closing Price</h3>
     <table class="table table-bordered table-striped">
       <thead>
@@ -25,8 +33,6 @@
       </tr>
       </c:forEach>
     </table>
-    <h3>Price History</h3>
-    <div class="js-research-fund-chart"></div>
     <c:forEach var="priceHistoryMap" items="${mapList}" varStatus="status">
       <h4>${fn:escapeXml(researchFundList[status.index].fundName)}</h4>
       <table class="table table-bordered table-striped js-fund-table" data-ticker="${fn:escapeXml(researchFundList[status.index].ticker)}">
@@ -46,12 +52,14 @@
         </c:forEach>
       </table>
     </c:forEach>
-    <h3>${fn:escapeXml(message)}</h3>
 </main>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
-google.charts.load('current', {packages: ['corechart', 'bar']});
+google.charts.load('current', {packages: ['corechart', 'bar'], 'language': 'en'});
 google.charts.setOnLoadCallback(function drawTrendlines() {
+  document.querySelector('.js-nochart-nojs').style.display = 'none';
+  document.querySelector('.js-nochart-nodata').style.display = 'block';
+  
   var fundTables = document.querySelectorAll('.js-fund-table');
   if (fundTables.length == 0) return;
   
@@ -59,20 +67,34 @@ google.charts.setOnLoadCallback(function drawTrendlines() {
   var tickers = [];
   [].forEach.call(fundTables, function (table) {
     var ticker = table.getAttribute('data-ticker');
-    tickers.push(ticker);
     var fundDateEls = table.querySelectorAll('.js-fund-date');
+    var validDataCount = 0;
     [].forEach.call(fundDateEls, function (fundDateEl) {
       var priceEl = fundDateEl.parentElement.querySelector('.js-fund-price');
       if (!priceEl) return;
       var date = fundDateEl.getAttribute('data-date-iso');
+      if (date === "N/A") return;
+      validDataCount += 1;
       var price = parseFloat(priceEl.getAttribute('data-price'));
       var map = pricesForDate[date];
       if (!map) {
         pricesForDate[date] = map = {};
       }
-      map[ticker] = price;
+      var dateDisp = fundDateEl.innerHTML || date;
+      var priceDisp = priceEl.innerHTML || '$' + price.toFixed(2);
+      // Try to escape ticker.
+      var text = document.createTextNode(ticker);
+      var span = document.createElement('span');
+      span.appendChild(text);
+      var tickerHtml = span.innerHTML.trim();
+      var label = '<b>' + dateDisp.trim() + '</b><br>' + tickerHtml + ':<b>' + priceDisp.trim() + '</b>';
+      label = '<div style="padding: 5px">' + label + '</div>';
+      map[ticker] = [price, label];
     });
+    if (validDataCount > 0) tickers.push(ticker);
   });
+  
+  if (Object.keys(pricesForDate).length === 0) return;
 
   var data = new google.visualization.DataTable();
   data.addColumn('date', 'Date');
@@ -81,6 +103,7 @@ google.charts.setOnLoadCallback(function drawTrendlines() {
 
   tickers.forEach(function (ticker, i) {
     data.addColumn('number', ticker);
+    data.addColumn({type: 'string', role: 'tooltip', p: {html: true}});
     // trendlines[i] = {type: 'linear', lineWidth: 5, opacity: .3, pointSize: 0, pointsVisible: false, tooltip: false};
   });
   
@@ -89,9 +112,11 @@ google.charts.setOnLoadCallback(function drawTrendlines() {
     var row = [new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]))];
     tickers.forEach(function (ticker) {
       var price = pricesForDate[date][ticker];
-      if (typeof price == 'number') {
-        row.push(price);
+      if (typeof price !== 'undefined') {
+        row.push(price[0]);
+        row.push(price[1]);
       } else {
+        row.push(null);
         row.push(null);
       }
     });
@@ -109,6 +134,7 @@ google.charts.setOnLoadCallback(function drawTrendlines() {
       },
       vAxis: {
         title: 'Closing Price',
+        format:'$#,##0.00',
       },
       animation: {
         duration: 500,
@@ -116,6 +142,7 @@ google.charts.setOnLoadCallback(function drawTrendlines() {
       },
       pointSize: 2,
       height: 400,
+      tooltip: {isHtml: true},
   };
   
   if (rows.length < 2) {
@@ -127,19 +154,9 @@ google.charts.setOnLoadCallback(function drawTrendlines() {
 
   var chart = new google.visualization.LineChart(document.querySelector('.js-research-fund-chart'));
   chart.draw(data, options);
-  
-  var columns = [];
-  var series = {};
-  for (var i = 0; i < data.getNumberOfColumns(); i++) {
-      columns.push(i);
-      if (i > 0) {
-          series[i - 1] = {};
-      }
-  }
 
-  var view = new google.visualization.DataView(data);
-  // view.hideColumns([]);
-  chart.draw(view, options);
+  document.querySelector('.js-nochart-nojs').style.display = 'none';
+  document.querySelector('.js-nochart-nodata').style.display = 'none';
 });
 </script>
 <%@ include file="footer.jsp" %>
