@@ -80,9 +80,14 @@ google.charts.setOnLoadCallback(function drawTrendlines() {
       if (!map) {
         pricesForDate[date] = map = {};
       }
-      var dateDisp = fundDateEl.textContent || date;
-      var priceDisp = priceEl.textContent || '$' + price.toFixed(2);
-      var label = '<b>' + dateDisp.trim() + '</b><br>' + ticker + ':<b>' + priceDisp.trim() + '</b>';
+      var dateDisp = fundDateEl.innerHTML || date;
+      var priceDisp = priceEl.innerHTML || '$' + price.toFixed(2);
+      // Try to escape ticker.
+      var text = document.createTextNode(ticker);
+      var span = document.createElement('span');
+      span.appendChild(text);
+      var tickerHtml = span.innerHTML.trim();
+      var label = '<b>' + dateDisp.trim() + '</b><br>' + tickerHtml + ':<b>' + priceDisp.trim() + '</b>';
       label = '<div style="padding: 5px">' + label + '</div>';
       map[ticker] = [price, label];
     });
