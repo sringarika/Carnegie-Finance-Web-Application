@@ -119,11 +119,6 @@ public class TransitionDayAction extends Action {
                 String transitionDate = form.getClosingDate();
                 Map<Integer, BigDecimal> prices = form.getPriceForFundMap();
 
-                System.out.println("Transition: " + lastTransitionDate + " -> " + transitionDate);
-                prices.forEach((fundId, closingPrice) -> {
-                    System.out.println("\tFund " + fundId + ": " + closingPrice);
-                });
-
                 fundPriceHistoryDAO.updatePrice(prices, transitionDate, lastTransitionDate, fundDAO);
                 transactionProcessor.transitionDay(transitionDate);
                 transactionProcessor.processPendingTransactions();

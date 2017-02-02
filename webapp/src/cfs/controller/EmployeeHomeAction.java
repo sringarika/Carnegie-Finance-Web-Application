@@ -7,7 +7,6 @@ import cfs.model.Model;
 public class EmployeeHomeAction extends Action {
 
     public EmployeeHomeAction(Model model) {
-        // TODO Auto-generated constructor stub
     }
 
     @Override
@@ -17,7 +16,6 @@ public class EmployeeHomeAction extends Action {
 
     @Override
     public String perform(HttpServletRequest request) {
-        // TODO Get account information using DAO.
         return "employee-home.jsp";
     }
 

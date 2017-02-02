@@ -83,7 +83,6 @@ public class CreateCustomerForm extends FormBean {
         this.amount = amount;
     }
     public String getAmount() {
-        System.out.println(amount);
         return amount;
     }
     public BigDecimal getAmountVal() {
@@ -94,7 +93,6 @@ public class CreateCustomerForm extends FormBean {
         if (password == null || password.isEmpty()) {
             return Collections.singletonList("Password is required!");
         }
-    	System.out.println("Password is "+password);
         if (confpassword == null || confpassword.isEmpty()) {
             return Collections.singletonList("Confirm password is required!");
         }

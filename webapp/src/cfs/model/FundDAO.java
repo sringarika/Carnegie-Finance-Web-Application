@@ -20,7 +20,6 @@ public class FundDAO extends GenericDAO<Fund> {
      * @throws RollbackException
      */
     public boolean fundName(String fundName) throws RollbackException {
-    	System.out.println("begin");
         Fund[] fundn = match(MatchArg.equals("name", fundName));
         if(fundn.length > 0) return true;
         return false;
