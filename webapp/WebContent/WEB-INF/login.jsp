@@ -15,7 +15,7 @@
       <div class="form-group">
         <label for="username">Username</label>
         <input type="text" class="form-control" id="username" name="username" required
-          placeholder="Use 'admin' for employee, 'bob' for customer">
+          placeholder="Username">
       </div>
       <div class="form-group">
         <label for="password">Password</label>
