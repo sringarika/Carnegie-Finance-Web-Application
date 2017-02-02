@@ -7,7 +7,7 @@
   <main>
     <h2>Transition Day</h2>
     <c:if test="${pendingTransactionCount > 0}">
-      <p class="alert alert-info">
+      <p class="alert alert-success">
         There are ${fn:escapeXml(pendingTransactionCount)} transaction(s) pending.
         <a class="alert-link" href="transaction-list.do">Show details...</a>
       </p>
@@ -18,9 +18,6 @@
         <a class="alert-link" href="transaction-list.do">Show transaction list...</a>
       </p>
     </c:if>
-    <div class="alert alert-info" role="alert">
-        Note: Price cannot be incremented by more than 100% or decremented by more than 50%!
-    </div>
     <c:if test="${(!empty error)}">
       <div class="alert alert-danger">
         ${fn:escapeXml(error)}
@@ -40,6 +37,9 @@
           <input type="date" class="form-control" name="closingDateISO" value="${minClosingDateISO}" min="${minClosingDateISO}" data-format="MM/dd/yyyy" data-polyfill="all" required>
         </div>
       </div>
+      <div class="alert alert-info" role="alert">
+        Note: Prices must be between <b>$10.00 ~ $1,000.00</b>! Also, price for each fund cannot be incremented by more than <b>100%</b> or decremented by more than <b>50%</b>!
+      </div>
       <table class="table table-striped table-bordered">
         <tr>
           <th>Fund Name</th>
@@ -57,7 +57,15 @@
             </td>
             <td>
               <input type="hidden" name="fundIds" value="${fn:escapeXml(fund.fundId)}">
-              <input type="number" class="form-control" name="closingPrices" step="0.01" min="10.00" max="1000.00" required>
+              <div class="input-group">
+                <div class="input-group-addon">$</div>
+                <fmt:formatNumber var="minAmountStr" value="${minPriceForFund[fund.fundId]}" groupingUsed="false" minFractionDigits="2" maxFractionDigits="2"/>
+                <fmt:formatNumber var="minAmountDisp" value="${minPriceForFund[fund.fundId]}" type="currency"/>
+                <fmt:formatNumber var="maxAmountStr" value="${maxPriceForFund[fund.fundId]}" groupingUsed="false" minFractionDigits="2" maxFractionDigits="2"/>
+                <fmt:formatNumber var="maxAmountDisp" value="${maxPriceForFund[fund.fundId]}" type="currency"/>
+                <input type="number" class="form-control" name="closingPrices" step="0.01" min="${fn:escapeXml(minAmountStr)}" max="${fn:escapeXml(maxAmountStr)}"
+                  placeholder="${fn:escapeXml(minAmountDisp)} ~ ${fn:escapeXml(maxAmountDisp)}" required>
+              </div>
             </td>
           </tr>
         </c:forEach>
@@ -66,40 +74,4 @@
       <button type="submit" class="btn btn-primary js-transition-submit">Transition Day</button>
     </form>
   </main>
-  <script>
-    document.addEventListener('change', function(e) {
-      var error = null;
-      var element = e.target;
-      if (element.getAttribute('name') === 'closingPrices') {
-        [].forEach.call(document.querySelectorAll("input[name='closingPrices']"), checkError);
-        var alertEl = document.querySelector(".js-price-alert");
-        var submitEl = document.querySelector(".js-transition-submit");
-        if (error) {
-          alertEl.style.display = "block";
-          alertEl.textContent = error;
-          submitEl.disabled = true;
-        } else {
-          alertEl.style.display = "none";
-          submitEl.disabled = false;
-        }
-      }
-      
-      function checkError(input) {
-        var row = input;
-        if (input.validity && !input.validity.valid) return;
-        while (row && row.tagName !== "TR") row = row.parentElement;
-        if (!row) return;
-        var priceEl = row.querySelector('[data-last-price]');
-        if (!priceEl) return;
-        var price = Math.floor(parseFloat(priceEl.getAttribute("data-last-price")) * 100);
-        if (isNaN(price)) return;
-        var newPrice = Math.floor(parseFloat(input.value) * 100);
-        if (newPrice > price * 2) {
-          error = "Price cannot be incremented by more than 100%!";
-        } else if (newPrice < Math.floor(price * 0.5)) {
-          error = "Price cannot be decremented by more than 50%!";
-        }
-      }
-    });
-  </script>
 <%@ include file="footer.jsp" %>

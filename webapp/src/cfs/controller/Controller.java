@@ -21,7 +21,7 @@ import cfs.model.Model;
 public class Controller extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    
+
     private Model model;
 
     @Override
@@ -59,8 +59,15 @@ public class Controller extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String nextPage = performTheAction(request);
-        sendToNextPage(nextPage, request, response);
+        try {
+            String nextPage = performTheAction(request);
+            sendToNextPage(nextPage, request, response);
+        } catch (Exception e) {
+            String error = e.getMessage();
+            if (error == null || error.isEmpty()) error = "Unknown error!";
+            request.setAttribute("error", error);
+            sendToNextPage("error.jsp", request, response);
+        }
     }
 
     /*

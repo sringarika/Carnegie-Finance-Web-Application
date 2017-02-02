@@ -7,7 +7,6 @@ import org.genericdao.ConnectionPool;
 import org.genericdao.DAOException;
 import org.genericdao.RollbackException;
 
-import cfs.databean.Customer;
 import cfs.databean.Employee;
 import cfs.databean.Fund;
 
@@ -72,18 +71,8 @@ public class Model {
         try {
             if (employeeDAO.findByUsername("admin") == null) {
                 Employee employee = new Employee("admin", "Alice", "Admin",
-                        "whatever you think is the strongest password");
+                        "teambinary");
                 employeeDAO.create(employee);
-            }
-            if (customerDAO.findByUsername("bob") == null) {
-                Customer customer = new Customer("bob", "Bob", "Brown",
-                        "whatever you think is the strongest password");
-                customer.setAddrLine1("5000 Forbes Ave");
-                customer.setCity("Pittsburgh");
-                customer.setState("PA");
-                customer.setZip("15213");
-                customer.setCash(1000.00);
-                customerDAO.create(customer);
             }
             if (!fundDAO.fundTicker("LTT")) {
                 Fund fund1 = new Fund("Long-Term Treasury", "LTT");

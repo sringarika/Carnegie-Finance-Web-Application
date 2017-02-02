@@ -1,6 +1,7 @@
 package cfs.controller;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 
+import cfs.databean.Customer;
 import cfs.databean.Fund;
 import cfs.databean.FundPriceHistory;
 import cfs.databean.Transactions;
@@ -52,8 +54,12 @@ public class TransitionDayAction extends Action {
             }
             Fund[] funds = fundDAO.match();
             request.setAttribute("funds", funds);
-            FundPriceHistory[] lastPrices = fundPriceHistoryDAO.match(MatchArg.max("executeDate"));
 
+            Map<Integer, BigDecimal> lastPriceForFund = new HashMap<Integer, BigDecimal>();
+            Map<Integer, BigDecimal> minPriceForFund = new HashMap<Integer, BigDecimal>();
+            Map<Integer, BigDecimal> maxPriceForFund = new HashMap<Integer, BigDecimal>();
+
+            FundPriceHistory[] lastPrices = fundPriceHistoryDAO.match(MatchArg.max("executeDate"));
             if (lastPrices != null && lastPrices.length > 0) {
                 String lastClosingDate = lastPrices[0].getExecuteDate();
                 request.setAttribute("lastClosingDateISO", lastClosingDate);
@@ -63,17 +69,38 @@ public class TransitionDayAction extends Action {
                         date.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", new Locale("en", "US"))));
                 request.setAttribute("minClosingDateISO", minDate.format(DateTimeFormatter.ISO_DATE));
 
-                Map<Integer, Double> lastPriceForFund = new HashMap<Integer, Double>();
                 for (FundPriceHistory price : lastPrices) {
-                    lastPriceForFund.put(price.getFundId(), price.getPrice());
+                    BigDecimal lastPrice = Customer.amountFromDouble(price.getPrice());
+                    lastPriceForFund.put(price.getFundId(), lastPrice);
                 }
-                request.setAttribute("lastPriceForFund", lastPriceForFund);
             } else {
                 request.setAttribute("lastClosingDateISO", "N/A");
                 request.setAttribute("lastClosingDateDisp", "N/A");
                 LocalDate minDate = LocalDate.now();
                 request.setAttribute("minClosingDateISO", minDate.format(DateTimeFormatter.ISO_DATE));
             }
+            for (Fund fund : funds) {
+                BigDecimal lastPrice = lastPriceForFund.get(fund.getFundId());
+                BigDecimal minPrice = new BigDecimal("10.00");
+                BigDecimal maxPrice = new BigDecimal("1000.00");
+                if (lastPrice != null) {
+                    BigDecimal halfPrice = lastPrice.divide(new BigDecimal("2"), 2, RoundingMode.CEILING);
+                    BigDecimal doublePrice = lastPrice.multiply(new BigDecimal("2")).setScale(2, RoundingMode.FLOOR);
+                    // No more than double, no less than half, but still capped at the range.
+                    if (halfPrice.compareTo(minPrice) > 0) {
+                        minPrice = halfPrice;
+                    }
+                    if (doublePrice.compareTo(maxPrice) < 0) {
+                        maxPrice = doublePrice;
+                    }
+                }
+                minPriceForFund.put(fund.getFundId(), minPrice);
+                maxPriceForFund.put(fund.getFundId(), maxPrice);
+            }
+            request.setAttribute("lastPriceForFund", lastPriceForFund);
+            request.setAttribute("minPriceForFund", minPriceForFund);
+            request.setAttribute("maxPriceForFund", maxPriceForFund);
+
         } catch (RollbackException e) {
             request.setAttribute("error", e.getMessage());
             return "error.jsp";

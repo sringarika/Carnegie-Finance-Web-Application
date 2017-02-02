@@ -139,7 +139,7 @@ public class CreateCustomerForm extends FormBean {
             amountVal = Customer.amountFromStr(amount);
            // a = Double.parseDouble(amount);
             if (amountVal.compareTo(BigDecimal.ZERO) < 0) {
-                return Collections.singletonList("Amount must be positive!");
+                return Collections.singletonList("Amount must be non-negative");
             }
             if (amountVal.compareTo(new BigDecimal("1000000.00")) > 0) {
                 return Collections.singletonList("Amount must not be more than $1,000,000.00!");

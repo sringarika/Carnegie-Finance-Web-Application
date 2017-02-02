@@ -27,13 +27,15 @@
         </div>
         <div class="form-group">
           <label for="shares">Shares to sell</label>
-          <input type="number" class="form-control" id="shares" name="shares" placeholder="1.000" step="0.001" min="0.001" max="1000000.000" required>
+          <input type="number" class="form-control" id="shares" name="shares" placeholder="0.001 ~ 1,000,000.000" step="0.001" min="0.001" max="1000000.000" required>
           
           <%-- The following datalist is for JavaScript validation. --%>
           <datalist id="fund-ids" style="display: none;">
             <c:forEach var="position" items="${positions}">
               <fmt:formatNumber var="availSharesStr" value="${position.shares}" groupingUsed="false" minFractionDigits="3" maxFractionDigits="3"/>
-              <option value="${fn:escapeXml(position.fundId)}" data-avail-shares="${fn:escapeXml(availSharesStr)}"></option>
+              <fmt:formatNumber var="availSharesStrDisp" value="${position.shares}" groupingUsed="true" minFractionDigits="3" maxFractionDigits="3"/>
+              <option value="${fn:escapeXml(position.fundId)}" data-avail-shares="${fn:escapeXml(availSharesStr)}"
+                data-avail-shares-disp="${fn:escapeXml(availSharesStrDisp)}"></option>
             </c:forEach>
           </datalist>
         </div>
@@ -53,7 +55,8 @@
           document.querySelectorAll('#fund-ids option').forEach(function(option) {
             var fundId = option.getAttribute('value');
             var availShares = option.getAttribute('data-avail-shares');
-            availSharesForFund[fundId] = availShares;
+            var availSharesDisp = option.getAttribute('data-avail-shares-disp');
+            availSharesForFund[fundId] = [availShares, availSharesDisp];
           });
           console.log(availSharesForFund);
         }
@@ -71,12 +74,14 @@
           checkedInput.checked = true;
         }
         var fundId = checkedInput.value;
-        var availShares = availSharesForFund[fundId];
+        var pair = availSharesForFund[fundId];
+        var availShares = pair[0];
+        var availSharesDisp = pair[1];
         if (typeof availShares === 'undefined') return;
         var sharesInput = document.getElementById('shares');
         if (!sharesInput) return;
         sharesInput.max = availShares;
-        sharesInput.placeholder = availShares;
+        sharesInput.placeholder = '0.001 ~ ' + availSharesDisp;
       };
       document.addEventListener('change', function(e) {
         var element = e.target;

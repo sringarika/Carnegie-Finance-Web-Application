@@ -69,7 +69,7 @@ public class TransactionProcessor {
         do {
             try {
                 int transactionId = processNextPendingTransaction();
-                if (transactionId == lastTransactionId) {
+                if (transactionId > 0 && transactionId == lastTransactionId) {
                     // We are stuck on this transaction. Let's abort for now.
                     throw new RollbackException("Transaction " + transactionId + " cannot be processed!");
                 }
