@@ -55,7 +55,7 @@
 </main>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
-google.charts.load('current', {packages: ['corechart', 'bar']});
+google.charts.load('current', {packages: ['corechart', 'bar'], 'language': 'en'});
 google.charts.setOnLoadCallback(function drawTrendlines() {
   document.querySelector('.js-nochart-nojs').style.display = 'none';
   document.querySelector('.js-nochart-nodata').style.display = 'block';
@@ -80,7 +80,11 @@ google.charts.setOnLoadCallback(function drawTrendlines() {
       if (!map) {
         pricesForDate[date] = map = {};
       }
-      map[ticker] = price;
+      var dateDisp = fundDateEl.textContent || date;
+      var priceDisp = priceEl.textContent || '$' + price.toFixed(2);
+      var label = '<b>' + dateDisp.trim() + '</b><br>' + ticker + ':<b>' + priceDisp.trim() + '</b>';
+      label = '<div style="padding: 5px">' + label + '</div>';
+      map[ticker] = [price, label];
     });
     if (validDataCount > 0) tickers.push(ticker);
   });
@@ -94,6 +98,7 @@ google.charts.setOnLoadCallback(function drawTrendlines() {
 
   tickers.forEach(function (ticker, i) {
     data.addColumn('number', ticker);
+    data.addColumn({type: 'string', role: 'tooltip', p: {html: true}});
     // trendlines[i] = {type: 'linear', lineWidth: 5, opacity: .3, pointSize: 0, pointsVisible: false, tooltip: false};
   });
   
@@ -102,9 +107,11 @@ google.charts.setOnLoadCallback(function drawTrendlines() {
     var row = [new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]))];
     tickers.forEach(function (ticker) {
       var price = pricesForDate[date][ticker];
-      if (typeof price == 'number') {
-        row.push(price);
+      if (typeof price !== 'undefined') {
+        row.push(price[0]);
+        row.push(price[1]);
       } else {
+        row.push(null);
         row.push(null);
       }
     });
@@ -122,6 +129,7 @@ google.charts.setOnLoadCallback(function drawTrendlines() {
       },
       vAxis: {
         title: 'Closing Price',
+        format:'$#,##0.00',
       },
       animation: {
         duration: 500,
@@ -129,6 +137,7 @@ google.charts.setOnLoadCallback(function drawTrendlines() {
       },
       pointSize: 2,
       height: 400,
+      tooltip: {isHtml: true},
   };
   
   if (rows.length < 2) {
@@ -140,19 +149,6 @@ google.charts.setOnLoadCallback(function drawTrendlines() {
 
   var chart = new google.visualization.LineChart(document.querySelector('.js-research-fund-chart'));
   chart.draw(data, options);
-  
-  var columns = [];
-  var series = {};
-  for (var i = 0; i < data.getNumberOfColumns(); i++) {
-      columns.push(i);
-      if (i > 0) {
-          series[i - 1] = {};
-      }
-  }
-
-  var view = new google.visualization.DataView(data);
-  // view.hideColumns([]);
-  chart.draw(view, options);
 
   document.querySelector('.js-nochart-nojs').style.display = 'none';
   document.querySelector('.js-nochart-nodata').style.display = 'none';
