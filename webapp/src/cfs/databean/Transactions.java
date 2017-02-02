@@ -2,9 +2,6 @@ package cfs.databean;
 
 import org.genericdao.PrimaryKey;
 
-// TODO
-// declaration of status and type classes
-
 @PrimaryKey("transactionId")
 public class Transactions {
     public static final String PENDING = "Pending";
@@ -24,19 +21,6 @@ public class Transactions {
     private String executeDate;
     private String status;
     private String type;
-
-    public Transactions() {
-    }
-
-    // when a transaction is created, required input should include all three ids and the amount
-    // the shares and price will be available after transition day
-    // status should be pending when a transaction is created
-    public Transactions(int customerId, String type, double amount) {
-        this.customerId = customerId;
-        this.type = type;
-        this.amount = amount;
-        this.status = "Pending";
-    }
 
     public int getTransactionId() {
         return transactionId;

@@ -78,7 +78,7 @@ public class Controller extends HttpServlet {
      *
      * @return the next page (the view)
      */
-    private String performTheAction(HttpServletRequest request) throws ServletException {
+    private String performTheAction(HttpServletRequest request) throws ServletException, RollbackException {
         String servletPath = request.getServletPath();
         String action = getActionName(servletPath);
         request.setAttribute("activeLink", action);
@@ -87,26 +87,14 @@ public class Controller extends HttpServlet {
 
         if (session.getAttribute("employeeId") != null) {
             int employeeId = (int) session.getAttribute("employeeId");
-        	Employee employee;
-			try {
-				employee = model.getEmployeeDAO().read(employeeId);
-				request.setAttribute("employee", employee);
-	            request.setAttribute("greeting", employee.getFirstname() + " " + employee.getLastname());
-			} catch (RollbackException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+            Employee employee = model.getEmployeeDAO().read(employeeId);
+            request.setAttribute("employee", employee);
+            request.setAttribute("greeting", employee.getFirstname() + " " + employee.getLastname());
         } else if (session.getAttribute("customerId") != null) {
             int customerId = (int) session.getAttribute("customerId");
-            Customer customer;
-            try {
-                customer = model.getCustomerDAO().read(customerId);
-                request.setAttribute("customer", customer);
-                request.setAttribute("greeting", customer.getFirstname() + " " + customer.getLastname());
-            } catch (RollbackException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            Customer customer = model.getCustomerDAO().read(customerId);
+            request.setAttribute("customer", customer);
+            request.setAttribute("greeting", customer.getFirstname() + " " + customer.getLastname());
         } else {
             return Action.perform("login.do", request);
         }
@@ -122,7 +110,7 @@ public class Controller extends HttpServlet {
             HttpServletResponse response) throws IOException, ServletException {
         if (nextPage == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND,
-                    request.getServletPath());
+            request.getServletPath());
             return;
         }
 

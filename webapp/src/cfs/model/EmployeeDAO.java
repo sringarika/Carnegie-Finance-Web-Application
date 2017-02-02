@@ -19,12 +19,12 @@ public class EmployeeDAO extends GenericDAO<Employee> {
      * Check if employee exists
      */
     public Employee findByUsername(String username) throws RollbackException {
-    	Employee[] employee = match(MatchArg.equalsIgnoreCase("username", username));
-		if (employee.length == 0) {
-			return null;
-		} else {
-			return employee[0];
-		}
+        Employee[] employee = match(MatchArg.equalsIgnoreCase("username", username));
+        if (employee.length == 0) {
+            return null;
+        } else {
+            return employee[0];
+        }
     }
 
     /**
@@ -46,8 +46,7 @@ public class EmployeeDAO extends GenericDAO<Employee> {
             Transaction.commit();
             return user;
         } finally {
-            if (Transaction.isActive())
-            	Transaction.rollback();
+            if (Transaction.isActive()) Transaction.rollback();
         }
     }
 

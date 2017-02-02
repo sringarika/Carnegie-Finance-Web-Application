@@ -64,7 +64,6 @@ public class BuyFundAction extends Action {
                 request.setAttribute("error", e.getMessage());
                 return "buy-fund.jsp";
             }
-            // TODO
             request.setAttribute("message", "Transaction scheduled. It will be processed by the end of the business day.");
             return "success.jsp";
         } else {

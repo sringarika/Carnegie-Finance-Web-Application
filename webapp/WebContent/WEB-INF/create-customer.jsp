@@ -10,7 +10,7 @@
         ${fn:escapeXml(error)}
       </div>
     </c:if>
-	<form action="create-customer.do" method="POST">
+    <form action="create-customer.do" method="POST">
       <div class="form-group">
         <label for="username">Username</label>
         <input type="text" class="form-control" id="username" name="username" required maxlength="20" value="${fn:escapeXml(username)}">

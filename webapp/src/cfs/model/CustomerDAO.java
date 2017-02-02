@@ -14,14 +14,13 @@ public class CustomerDAO extends GenericDAO<Customer> {
         super(Customer.class, tableName, cp);
     }
 
-
     public Customer findByUsername(String username) throws RollbackException {
-    	Customer[] customer = match(MatchArg.equalsIgnoreCase("username", username));
-		if (customer.length == 0) {
-			return null;
-		} else {
-			return customer[0];
-		}
+        Customer[] customer = match(MatchArg.equalsIgnoreCase("username", username));
+        if (customer.length == 0) {
+            return null;
+        } else {
+            return customer[0];
+        }
     }
 
     public Customer changePassword(int customerId, String password) throws RollbackException {

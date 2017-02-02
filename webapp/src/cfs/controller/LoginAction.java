@@ -23,8 +23,8 @@ public class LoginAction extends Action {
     private EmployeeDAO employeeDAO;
 
     public LoginAction(Model model) {
-    	customerDAO = model.getCustomerDAO();
-    	employeeDAO = model.getEmployeeDAO();
+        customerDAO = model.getCustomerDAO();
+        employeeDAO = model.getEmployeeDAO();
     }
 
     @Override
@@ -37,24 +37,21 @@ public class LoginAction extends Action {
         // if GET request, return the login page
         if (request.getMethod().equals("GET")) {
             return "login.jsp";
-
-        // if POST request, return the account
         } else if (request.getMethod().equals("POST")) {
-        	HttpSession session = request.getSession();
-        	// if a customer already logged in, switch to the account page
+            HttpSession session = request.getSession();
             if (session.getAttribute("customerId") != null) {
-        		return "account.do";
-
-            // if employee already logged in, switch to the employee page
-        	} else if (session.getAttribute("employeeId") != null) {
-        		return "employee.do";
-        	}
+                // if a customer already logged in, switch to the account page
+                return "account.do";
+            } else if (session.getAttribute("employeeId") != null) {
+             // if employee already logged in, switch to the employee page
+                return "employee.do";
+            }
             try {
                 LoginForm form = formBeanFactory.create(request);
                 List<String> validationErrors = form.getValidationErrors();
                 if (validationErrors.size() > 0) {
                     request.setAttribute("error", validationErrors.get(0));
-                	return "login.jsp";
+                    return "login.jsp";
                 }
                 // check for login validation
                 Customer customer = customerDAO.findByUsername(form.getUsername());
@@ -64,23 +61,23 @@ public class LoginAction extends Action {
                     return "login.jsp";
                 }
                 if (customer != null) {
-                	if (!customer.getPassword().equals(form.getPassword())) {
-                		request.setAttribute("error", "Wrong password!");
+                    if (!customer.getPassword().equals(form.getPassword())) {
+                        request.setAttribute("error", "Wrong password!");
                         return "login.jsp";
-                	} else {
-                		request.getSession().removeAttribute("employeeId");
+                    } else {
+                        request.getSession().removeAttribute("employeeId");
                         request.getSession().setAttribute("customerId", customer.getCustomerId());
                         return "account.do";
-                	}
+                    }
                 } else {
-                	if (!employee.getPassword().equals(form.getPassword())) {
-                		request.setAttribute("error", "Wrong password!");
+                    if (!employee.getPassword().equals(form.getPassword())) {
+                        request.setAttribute("error", "Wrong password!");
                         return "login.jsp";
-                	} else {
-                		request.getSession().removeAttribute("customerId");
+                    } else {
+                        request.getSession().removeAttribute("customerId");
                         request.getSession().setAttribute("employeeId", employee.getEmployeeId());
                         return "employee.do";
-                	}
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();

@@ -17,7 +17,6 @@ public class CreateEmployeeAction extends Action {
     private EmployeeDAO employeedao;
     private CustomerDAO customerdao;
     public CreateEmployeeAction(Model model) {
-        // TODO Auto-generated constructor stub
         employeedao= model.getEmployeeDAO();
         customerdao= model.getCustomerDAO();
     }

@@ -93,7 +93,6 @@ public class ResearchFundAction extends Action {
             request.setAttribute("mapList", mapList);
             request.setAttribute("dateList", dateList);
             request.setAttribute("dateDispList", dateDispList);
-            System.out.println(mapList);
             return "research-fund.jsp";
         } catch (RollbackException e) {
             e.printStackTrace();

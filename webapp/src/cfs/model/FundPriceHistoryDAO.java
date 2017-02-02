@@ -20,11 +20,11 @@ public class FundPriceHistoryDAO extends GenericDAO <FundPriceHistory> {
 
     // return the  price history of input fund -- display trend
     public FundPriceHistory[] priceTrend(int fundId) throws RollbackException {
-    	FundPriceHistory[] prices= match(MatchArg.equals("fundId", fundId));
-    	if (prices == null) {
-    		return null;
-    	}
-    	return prices;
+        FundPriceHistory[] prices = match(MatchArg.equals("fundId", fundId));
+        if (prices == null) {
+            return null;
+        }
+        return prices;
     }
 
     public void updatePrice(Map<Integer, BigDecimal> prices, String transitionDate, String lastTransitionDate, FundDAO fundDAO) throws RollbackException {
