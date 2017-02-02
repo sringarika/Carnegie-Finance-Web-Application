@@ -1,7 +1,7 @@
 package cfs.formbean;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import org.mybeans.form.FormBean;
 public class CreateEmployeeForm extends FormBean{
     private String password;
@@ -39,9 +39,8 @@ public class CreateEmployeeForm extends FormBean{
     public void setLastname(String lastName) {
         this.lastname = lastName;
     }
+    @Override
     public List<String> getValidationErrors() {
-        //List<String> errors = new ArrayList<String>();
-        System.out.println(password);
         if (password == null || password.isEmpty()) {
             return Collections.singletonList("New password is required!");
         }
@@ -60,18 +59,9 @@ public class CreateEmployeeForm extends FormBean{
         if (lastname == null || lastname.isEmpty()) {
             return Collections.singletonList("Last Name is required!");
         }
-        //testing special characters
-        if(username.contains("$")) {
-            return Collections.singletonList("Username cannot contain special characters.");
-            
-        }
-        if(firstname.contains("$")) {
-            return Collections.singletonList("First Name cannot contain special characters.");
-            
-        }
-        if(lastname.contains("$")) {
-            return Collections.singletonList("Last Name cannot contain special characters.");
-            
+        if (!username.matches("[a-zA-Z0-9]+")) {
+            return Collections.singletonList("Username can only contain letters and numbers!");
+
         }
         return Collections.emptyList();
 }
