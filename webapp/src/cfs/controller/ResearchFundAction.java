@@ -98,8 +98,8 @@ public class ResearchFundAction extends Action {
         } catch (RollbackException e) {
             e.printStackTrace();
             request.setAttribute("error",e.toString());
+            return "error.jsp";
         }
-        return "research-fund.jsp";
     }
     private ResearchFundView merge (Fund fund, String lastDate, Double price) {
         ResearchFundView researchFund = new ResearchFundView();
@@ -112,6 +112,7 @@ public class ResearchFundAction extends Action {
     }
     private String dateDisp(String date) {
         if (date == null) return null;
+        if (date.equals("N/A")) return "N/A";
         LocalDate date1 = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
         return (date1.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", new Locale("en", "US"))));
     }
