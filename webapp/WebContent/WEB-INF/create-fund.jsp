@@ -28,11 +28,13 @@
 	<form action="create-fund.do" method="POST">
       <div class="form-group">
         <label for="username">Fund Name</label>
-        <input type="text" class="form-control" id="fund" name = "fund" placeholder="" maxlength="20" required>
+        <input type="text" class="form-control" id="fund" name = "fund" 
+        placeholder="Fund name can only contain letters, numbers and spaces, up to 20 characters" maxlength="20" required>
       </div>
       <div class="form-group">
         <label for="username">Ticker</label>
-        <input type="text" class="form-control" id="ticker" name = "ticker" placeholder="" maxlength="5" required>
+        <input type="text" class="form-control" id="ticker" name = "ticker"
+        placeholder="Ticker can only contain letters, up to 5 characters" maxlength="5" required>
       </div>
       <br>
       	     <c:if test="${(!empty error)}">

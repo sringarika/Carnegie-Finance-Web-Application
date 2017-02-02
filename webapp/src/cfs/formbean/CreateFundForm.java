@@ -1,6 +1,7 @@
 package cfs.formbean;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 //import javax.servlet.http.HttpServletRequest;
@@ -40,7 +41,15 @@ public class CreateFundForm extends FormBean{
 		if (ticker == null || ticker.trim().length() == 0)
 			errors.add("Tickername is required");
 		
-    	if(fund.length() > 20) {
+		if (!fund.matches("[a-zA-Z0-9 ]+")) {
+            return Collections.singletonList("Fund name can only contain letters, numbers and spaces!");
+            
+        }
+        if (!ticker.matches("[a-zA-Z]+")) {
+                return Collections.singletonList("Ticker can only contain letters!");
+                
+        }
+    	if (fund.length() > 20) {
     		errors.add("Fund name should be lesser than 20 characters!");
     	}
     	if (ticker.trim().length() < 1 || ticker.trim().length() > 5) 
