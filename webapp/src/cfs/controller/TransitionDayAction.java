@@ -26,15 +26,15 @@ import cfs.model.TransactionDAO;
 import cfs.model.TransactionProcessor;
 
 public class TransitionDayAction extends Action {
-	private FundPriceHistoryDAO fundPriceHistoryDAO;
+    private FundPriceHistoryDAO fundPriceHistoryDAO;
     private FundDAO fundDAO;
     private TransactionProcessor transactionProcessor;
     private TransactionDAO transactionDAO;
 
     public TransitionDayAction(Model model) {
-    	fundPriceHistoryDAO = model.getFundPriceHistoryDAO();
-    	fundDAO = model.getFundDAO();
-    	transactionProcessor = model.getTransactionProcessor();
+        fundPriceHistoryDAO = model.getFundPriceHistoryDAO();
+        fundDAO = model.getFundDAO();
+        transactionProcessor = model.getTransactionProcessor();
         transactionDAO = model.getTransactionDAO();
     }
 
@@ -109,11 +109,11 @@ public class TransitionDayAction extends Action {
             return "transition-day.jsp";
         } else if (request.getMethod().equals("POST")) {
             try {
-            	TransitionDayForm form = new TransitionDayForm(request);
+                TransitionDayForm form = new TransitionDayForm(request);
                 List<String> validationErrors = form.getValidationErrors();
                 if (validationErrors.size() > 0) {
                     request.setAttribute("error", validationErrors.get(0));
-                	return "transition-day.jsp";
+                    return "transition-day.jsp";
                 }
                 String lastTransitionDate = form.getLastClosingDate();
                 String transitionDate = form.getClosingDate();

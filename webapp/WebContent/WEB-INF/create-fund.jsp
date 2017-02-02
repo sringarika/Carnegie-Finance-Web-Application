@@ -25,7 +25,7 @@
     </table>
     
     
-	<form action="create-fund.do" method="POST">
+    <form action="create-fund.do" method="POST">
       <div class="form-group">
         <label for="username">Fund Name</label>
         <input type="text" class="form-control" id="fund" name = "fund" 
@@ -37,16 +37,16 @@
         placeholder="Ticker can only contain letters, up to 5 characters" maxlength="5" required>
       </div>
       <br>
-      	     <c:if test="${(!empty error)}">
-      <div class="alert alert-danger">
-        ${fn:escapeXml(error)}
-      </div>
-    </c:if>
-        <div class="alert alert-info" role="alert">
+      <c:if test="${(!empty error)}">
+        <div class="alert alert-danger">
+          ${fn:escapeXml(error)}
+        </div>
+      </c:if>
+      <div class="alert alert-info" role="alert">
         Note: Fund Name and Ticker must be unique.
       </div>
-     <br>
-           <button type="submit" class="btn btn-primary">Create Fund</button>
-     </form>
+      <br>
+      <button type="submit" class="btn btn-primary">Create Fund</button>
+    </form>
   </main>
 <%@ include file="footer.jsp" %>

@@ -15,11 +15,11 @@
         </servlet-class>
         <init-param>
           <param-name>    jdbcDriverName          </param-name> 
-	      <param-value>   com.mysql.jdbc.Driver   </param-value>
+          <param-value>   com.mysql.jdbc.Driver   </param-value>
         </init-param>
         <init-param>
           <param-name>    jdbcURL                 </param-name> 
-	      <param-value>   jdbc:mysql:///test?useSSL=false </param-value>
+          <param-value>   jdbc:mysql:///test?useSSL=false </param-value>
         </init-param>
     </servlet>
     

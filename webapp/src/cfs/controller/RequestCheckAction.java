@@ -17,9 +17,9 @@ import cfs.model.Model;
 import cfs.model.TransactionDAO;
 
 public class RequestCheckAction extends Action {
-	FormBeanFactory<RequestCheckForm> formBeanFactory = FormBeanFactory.getInstance(RequestCheckForm.class);
-	private CustomerDAO customerDAO;
-	private TransactionDAO transactionDAO;
+    FormBeanFactory<RequestCheckForm> formBeanFactory = FormBeanFactory.getInstance(RequestCheckForm.class);
+    private CustomerDAO customerDAO;
+    private TransactionDAO transactionDAO;
 
     public RequestCheckAction(Model model) {
         customerDAO = model.getCustomerDAO();
@@ -46,17 +46,18 @@ public class RequestCheckAction extends Action {
         if (request.getMethod().equals("GET")) {
             return "request-check.jsp";
         } else if (request.getMethod().equals("POST")) {
-        	try {
-				RequestCheckForm form = formBeanFactory.create(request);
-				 List<String> validationErrors = form.getValidationErrors();
-	                if (validationErrors.size() > 0) {
-	                    request.setAttribute("error", validationErrors.get(0));
-	                    return "request-check.jsp";
-	            }
-				queueTransaction(customer.getCustomerId(), form.getAmountVal());
-	            request.setAttribute("message", "Check requested. It will be processed by the end of the business day.");
-	            return "success.jsp";
-			} catch (Exception e) {
+            try {
+                RequestCheckForm form = formBeanFactory.create(request);
+                List<String> validationErrors = form.getValidationErrors();
+                if (validationErrors.size() > 0) {
+                    request.setAttribute("error", validationErrors.get(0));
+                    return "request-check.jsp";
+                }
+                queueTransaction(customer.getCustomerId(), form.getAmountVal());
+                request.setAttribute("message",
+                        "Check requested. It will be processed by the end of the business day.");
+                return "success.jsp";
+            } catch (Exception e) {
                 request.setAttribute("error", e.getMessage());
                 return "request-check.jsp";
             }

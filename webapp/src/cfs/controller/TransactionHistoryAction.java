@@ -15,12 +15,12 @@ import cfs.viewbean.TransactionHistoryView;
 
 public class TransactionHistoryAction extends Action {
 
-	private TransactionDAO transactionDAO;
-	private CustomerDAO customerDAO;
+    private TransactionDAO transactionDAO;
+    private CustomerDAO customerDAO;
 
     public TransactionHistoryAction(Model model) {
-    	transactionDAO = model.getTransactionDAO();
-    	customerDAO = model.getCustomerDAO();
+        transactionDAO = model.getTransactionDAO();
+        customerDAO = model.getCustomerDAO();
     }
 
     @Override

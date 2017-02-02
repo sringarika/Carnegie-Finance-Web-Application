@@ -10,7 +10,7 @@
         ${fn:escapeXml(error)}
       </div>
     </c:if>
-	<form action="change-password.do" method="POST">
+    <form action="change-password.do" method="POST">
       <div class="form-group">
         <label for="oldPassword">Current Password</label>
         <input type="password" class="form-control" id="oldPassword" name="oldPassword" placeholder="">
@@ -27,7 +27,3 @@
     </form>
   </main>
 <%@ include file="footer.jsp" %>
-
-
-
-

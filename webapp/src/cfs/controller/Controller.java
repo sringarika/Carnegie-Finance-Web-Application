@@ -87,8 +87,8 @@ public class Controller extends HttpServlet {
 
         if (session.getAttribute("employeeId") != null) {
             int employeeId = (int) session.getAttribute("employeeId");
-        	Employee employee = model.getEmployeeDAO().read(employeeId);
-			request.setAttribute("employee", employee);
+            Employee employee = model.getEmployeeDAO().read(employeeId);
+            request.setAttribute("employee", employee);
             request.setAttribute("greeting", employee.getFirstname() + " " + employee.getLastname());
         } else if (session.getAttribute("customerId") != null) {
             int customerId = (int) session.getAttribute("customerId");
@@ -110,7 +110,7 @@ public class Controller extends HttpServlet {
             HttpServletResponse response) throws IOException, ServletException {
         if (nextPage == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND,
-                    request.getServletPath());
+            request.getServletPath());
             return;
         }
 

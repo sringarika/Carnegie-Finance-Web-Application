@@ -4,9 +4,9 @@ import org.genericdao.PrimaryKey;
 
 @PrimaryKey("fundId,executeDate")
 public class FundPriceHistory {
-	private String executeDate;
-	private int fundId;
-	private double price;
+    private String executeDate;
+    private int fundId;
+    private double price;
 
     public FundPriceHistory() {
     }
