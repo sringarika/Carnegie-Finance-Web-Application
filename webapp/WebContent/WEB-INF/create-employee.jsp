@@ -17,19 +17,19 @@
       </div>
       <div class="form-group">
         <label for="firstname">First Name</label>
-        <input type="text" class="form-control" id="firstname" name="firstname" maxlength="40" placeholder="" value="${fn:escapeXml(firstname)}">
+        <input type="text" class="form-control" id="firstname" name="firstname" maxlength="40" required value="${fn:escapeXml(firstname)}">
       </div>
       <div class="form-group">
         <label for="lastname">Last Name</label>
-        <input type="text" class="form-control" id="lastname" name="lastname" maxlength="40" placeholder="" value="${fn:escapeXml(lastname)}">
+        <input type="text" class="form-control" id="lastname" name="lastname" maxlength="40" required value="${fn:escapeXml(lastname)}">
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" name="password" maxlength="100" placeholder="">
+        <input type="password" class="form-control" id="password" name="password" maxlength="100" required>
       </div>
       <div class="form-group">
         <label for="password">Confirm Password </label>
-        <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" maxlength="100" placeholder="">
+        <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" maxlength="100" required>
       </div>
       <button type="submit" class="btn btn-primary">Create Employee Account</button>
     </form>

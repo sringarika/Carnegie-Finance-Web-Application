@@ -2,6 +2,7 @@ package cfs.formbean;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+
 import org.mybeans.form.FormBean;
 
 import cfs.databean.Customer;
@@ -88,6 +89,7 @@ public class CreateCustomerForm extends FormBean {
     public BigDecimal getAmountVal() {
         return amountVal;
     }
+    @Override
     public List<String> getValidationErrors() {
         if (password == null || password.isEmpty()) {
             return Collections.singletonList("Password is required!");
@@ -120,24 +122,13 @@ public class CreateCustomerForm extends FormBean {
         if (zipcode == null || zipcode.isEmpty()) {
             return Collections.singletonList("Zipcode is required!");
         }
-        
-        //testing special characters
-        if(username.contains("$")) {
-            return Collections.singletonList("Username cannot contain special characters.");
-            
+
+        if (!username.matches("[a-zA-Z0-9]+")) {
+            return Collections.singletonList("Username can only contain letters and numbers!");
         }
-        if(firstName.contains("$")) {
-            return Collections.singletonList("First Name cannot contain special characters.");
-            
-        }
-        if(lastName.contains("$")) {
-            return Collections.singletonList("Last Name cannot contain special characters.");
-            
-        }
-        //double a;
+
         try {
             amountVal = Customer.amountFromStr(amount);
-           // a = Double.parseDouble(amount);
             if (amountVal.compareTo(BigDecimal.ZERO) < 0) {
                 return Collections.singletonList("Amount must be non-negative");
             }
